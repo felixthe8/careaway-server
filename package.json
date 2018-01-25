@@ -1,0 +1,42 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CrystalChun/careaway-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "_moduleAliases": {
+    "@root": ".",
+    "@account": "./services/account_management",
+    "@accountModels": "./services/account_management/app/models",
+    "@accountConfig": "./services/account_management/config/index.js",
+    "@accountAPI": "./services/account_management/config/app.js",
+    "@appointment": "./services/appointment_schueduling",
+    "@appointmentModels": "./services/appointment_scheduling/app/models",
+    "@appointmentConfig": "./services/appointment_scheduling/config/index.js",
+    "@appointmentAPI": "./services/appointment_scheduling/config/app.js",
+    "@treatment": "./services/treatment_management",
+    "@treatmentModels": "./services/treatment_management/app/models",
+    "@treatmentConfig": "./services/treatment_management/config/index.js",
+    "@treatmentAPI": "./services/treatment_management/config/app.js"
+  },
+  "bugs": {
+    "url": "https://github.com/CrystalChun/careaway-server/issues"
+  },
+  "homepage": "https://github.com/CrystalChun/careaway-server#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "helmet": "^3.10.0",
+    "module-alias": "^2.0.3",
+    "morgan": "^1.9.0"
+  }
+}
