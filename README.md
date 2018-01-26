@@ -1,6 +1,12 @@
 # careaway-server
 The server for the CareAway web application.
 
+## Setup 
+1. Clone the repository `git clone https://github.com/CrystalChun/careaway-server.git`
+2. Create a data folder to house your mongo data
+   * On terminal it's `mkdir data`
+3. Start mongodb database `mongod --port 27017 --data /path/to/data/folder/data`
+4. Go into the project's folder `cd careaway-server` and run `node services` to start the server
 ## Dependencies
 To install the dependencies available in package.json, run `npm install`. 
 
