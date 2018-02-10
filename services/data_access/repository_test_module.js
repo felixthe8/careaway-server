@@ -19,7 +19,7 @@ var db;
 
 //The test method to check all patientrepository function
 app.get('/', function (req, res) {
-    var userAccessTool = new PatientRepo(db);
+    var userAccessTool = new patientRepo(db);
     var newPatient = new patient(
         'req.body.fName',
         'req.body.lName',
@@ -34,7 +34,7 @@ app.get('/', function (req, res) {
         'req.body.medicalProCode',
         'salt.toString()'
        );
-    userAccessTool.Create(newPatient);
+    userAccessTool.Create(new Object());
        //Checking the query for information of data
     userAccessTool.GetOne("req.body.username").then(function(value){
         var list=value;

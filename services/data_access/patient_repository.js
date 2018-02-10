@@ -1,5 +1,6 @@
 const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
+const patientobj = require('./PatientModel');
 /**
  * Constructor of the Repository
  */
@@ -17,11 +18,18 @@ function UserAccess(dbConnection)
  */
 UserAccess.prototype.Create = function(patient)
 {     
-  const collection = this.db.collection('Patients');
-  collection.insertOne(patient, function(err, result)
+  if(patient instanceof patientobj)
   {
-      console.log("Inserted Patient");
-  });
+   const collection = this.db.collection('Patients');
+   collection.insertOne(patient, function(err, result)
+   {
+        console.log("Inserted Patient");
+   });
+  }
+  else
+  {
+    console.log("Object is not a Patient type")
+  }
 };
 /**
  * This function edits an existing patient document 
@@ -34,12 +42,19 @@ UserAccess.prototype.Create = function(patient)
  */
 UserAccess.prototype.Edit = function(username, user)
 {
-  const collection = this.db.collection('Patients');
-  collection.updateOne({'username' : username}, { $set: user} , 
-  function(err, result)
+  if(patient instanceof patientobj)
   {
-    console.log("Updated Document");
-  });
+    const collection = this.db.collection('Patients');
+    collection.updateOne({'username' : username}, { $set: user} , 
+    function(err, result)
+    {
+     console.log("Updated Document");
+    });
+  }
+  else
+  {
+    console.log("Object is not a Patient type")
+  }
 };
 /** 
 * This is the function to get all patient documents

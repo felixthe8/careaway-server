@@ -17,7 +17,6 @@ function Patient (fName, lName, username, password, SQ1, SQ2, SQ3, A1,A2,A3, med
 }
 //proper way of doing it
 Patient.prototype.printName = function () {
-    console.log("GET  CUCKED");
 	return this.fName + " " +this.lName;
 };
 
