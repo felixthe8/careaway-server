@@ -1,11 +1,12 @@
 const mongoClient = require('mongodb').MongoClient;
-const database = require('./db_connection.js');
+const promise = require('promise');
 /**
  * Constructor of the Repository
  */
-function UserAccess(){
+function UserAccess(dbConnection)
+{
   //fetches the database client connection
-  var db = new database();
+  this.db = dbConnection;
 }
 /**
  * This function inserts a new patient into the 
@@ -16,8 +17,9 @@ function UserAccess(){
  */
 UserAccess.prototype.Create = function(patient)
 {     
-  const collection = db.collection('Patients');
-  collection.insertOne(patient, function(err, result){
+  const collection = this.db.collection('Patients');
+  collection.insertOne(patient, function(err, result)
+  {
       console.log("Inserted Patient");
   });
 };
@@ -30,39 +32,64 @@ UserAccess.prototype.Create = function(patient)
  * 
  * @TODO test what happens if you put in a invalid username 
  */
-UserAccess.prototype.Edit = function(username, patient)
+UserAccess.prototype.Edit = function(username, user)
 {
-  collection.updateOne({'username' : username}, { $set: patient} , function(err, result){
+  const collection = this.db.collection('Patients');
+  collection.updateOne({'username' : username}, { $set: user} , 
+  function(err, result)
+  {
     console.log("Updated Document");
   });
 };
-/**
- * This is the function to get all patient documents
- * within the mongo database
- * @param {*} callback a callback function used to notify
- * the caller when the database is done collecting all the 
- * data
- */
-UserAccess.prototype.GetAll = function(callback){
-  const collection = db.collection('Patients');
-  collection.find({}).toArray(function(err, docs){
-    callback(docs);
+/** 
+* This is the function to get all patient documents
+* within the mongo database
+*/
+UserAccess.prototype.GetAll = function(){
+  const collection = this.db.collection('Patients');
+  return new promise(function(fullfill,reject)
+  {
+    collection.find({}).toArray(function(err, docs)
+    {
+      if(err)
+      {
+        console.log("Failed to get query");
+        reject(err);
+      }
+      else
+      {
+        console.log("Successfully got query");
+        fullfill(docs);
+      }
+    });
   });
 };
 /**
  * This is the function to get one patient documents
  * within the mongo database
- * @param {*} callback a callback function used to notify
- * the caller when the database is done collecting all the 
- * data
+ * @param {*} username the patient that is needed to be queried for information
+ * returns a promise in order to ensure that the data is received before doing
+ * any other operation
  */
-UserAccess.prototype.GetOne = function(username,callback)
+UserAccess.prototype.GetOne = function(username)
 {
-  const collection = db.collection('Patients');
-  collection.find({username : username}).toArray(function(err, docs) {
-    console.log(docs);
-      callback(docs);
+  const collection = this.db.collection('Patients');
+  return new promise(function(fullfill,reject)
+  { 
+    collection.find({username : username}).toArray(function(err, docs) 
+    {
+      if(err)
+      {
+        console.log("Failed to get query");
+        reject(err);
+      }
+      else
+      {
+        console.log("Successfully got query");
+        fullfill(docs);
+      }
     });
+  });
 };
 
 module.exports = UserAccess;

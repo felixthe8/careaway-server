@@ -1,27 +1,40 @@
 const MongoClient = require('mongodb').MongoClient;
-
-function Database(){
-    //This holds the mongo database connection
-    var db;
-}
+const promise = require('promise');
 /**
- * @TODO make this a static connection
- * Currently this fires off automatically due
- * to commonJS (exports and requires) we need to
- * make it one connection and reuse a static variable
+ * The object that holds the function
+ */
+function Database(){}
+/**
  * @TODO make the connection to the deployment 
  * database
  * 
  * This function is used to connected to a local Mongo
- * Database
- * 
+ * Databaseit returns a fucntion in order to ensure the
+ * connection to the database before proceeding to the next
+ * operation
  */
-Database.prototype.Connect = 
+Database.prototype.Connect = function()
+{
+  return new promise( function(fulfill,reject)
+  {
+  //conects to localhost
     MongoClient.connect('mongodb://localhost:27017', 
-    function(err, client){
+      function(err, client)
+      {
         console.log("Connected to DB");
-        db=client.db('CareAway');
-    });
-
+        var db=client.db('CareAway');
+        //return the error if some error happened
+        if(err)
+        { 
+          reject(err);
+        }
+        //return the connection
+        else{
+          fulfill(db) 
+        }
+      }
+    )
+  });
+}
 
 module.exports = Database;
