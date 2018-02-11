@@ -7,4 +7,4 @@ User.prototype.ResetPassword = function (newpassword) {
     this.password = newpassword;
 }
 
-module.exports = user;
+module.exports = User;

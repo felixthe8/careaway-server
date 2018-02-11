@@ -7,3 +7,5 @@ function SystemAdmin (username, password) {
 }
 
 SystemAdmin.prototype = Object.create(User.prototype);
+
+module.exports = SystemAdmin;
