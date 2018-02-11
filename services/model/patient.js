@@ -1,4 +1,4 @@
-var user = require('./user');
+var user = require('./users');
 var security = require('./security');
 
 function Patient (firstname, lastname, diagnosis, username, password, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3) {
@@ -37,3 +37,5 @@ var CONDITIONS = Object.freeze({
     5: "Panic Disorder",
     6: "Social Anxiety Disorder"
 });
+
+module.exports = Patient;

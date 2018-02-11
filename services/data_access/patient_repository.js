@@ -1,6 +1,6 @@
 const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
-const patientobj = require('./PatientModel');
+const patientobj = require('../model/patient');
 /**
  * Constructor of the Repository
  */
