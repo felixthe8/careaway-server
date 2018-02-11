@@ -7,4 +7,4 @@ function Security (securityQ1 , securityA1, securityQ2, securityA2, securityQ3, 
     this.securityA3 = securityA3 || '';
 }
 
-module.exports = security;
+module.exports = Security;

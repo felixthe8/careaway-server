@@ -20,3 +20,5 @@ MedicalProfessional.prototype = Object.create(User.prototype);
 MedicalProfessional.prototype.DisplayName = function ()  {
     return 'Dr. '+ this.firstname +' '+ this.lastname;
 };
+
+module.exports = MedicalProfessional;

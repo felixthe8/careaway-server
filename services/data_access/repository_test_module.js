@@ -7,7 +7,7 @@ var CryptoJS = require('crypto-js');
 
 var patientRepo = require('./patient_repository');
 //TODO: Change this directory to the actual Model Folder
-var patient = require('./PatientModel');
+var patient = require('../model/patient');
 var mongodb = require('./db_connection.js');
 
 app.use(bodyParser.json() );
@@ -23,6 +23,7 @@ app.get('/', function (req, res) {
     var newPatient = new patient(
         'req.body.fName',
         'req.body.lName',
+        '',
         'req.body.username',
         'CryptoJS.PBKDF2(req.body.password,salt, { keySize: 128/32, iterations: 1000 }).toString()',
         'req.body.SQ1',
@@ -31,10 +32,9 @@ app.get('/', function (req, res) {
         'CryptoJS.SHA256(req.body.A1).toString(CryptoJS.enc.Hex)',
         'CryptoJS.SHA256(req.body.A2).toString(CryptoJS.enc.Hex)',
         'CryptoJS.SHA256(req.body.A3).toString(CryptoJS.enc.Hex)',
-        'req.body.medicalProCode',
-        'salt.toString()'
+        'req.body.medicalProCode'
        );
-    userAccessTool.Create(new Object());
+    userAccessTool.Create(newPatient);
        //Checking the query for information of data
     userAccessTool.GetOne("req.body.username").then(function(value){
         var list=value;
