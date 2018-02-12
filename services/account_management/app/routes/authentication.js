@@ -9,4 +9,5 @@ module.exports = (app) => {
         res.send('Test for account management.');
     });
 
+    app.route('/patients_test').get(api.getPatients(models.User, models.db));
 }

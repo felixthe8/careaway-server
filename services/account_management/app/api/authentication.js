@@ -1,8 +1,18 @@
 const api = {};
 
+const patientRepo = require('@dataAccess/patient_repository');
+
 api.login = (User, db) => (req, res) => {
-    console.log('localhost:4100/account/api/authentication/')
-    console.log('did this actually do something');
+    
+}
+
+api.getPatients = (User, db) => (req, res) => {
+    db.then(database => {
+        new patientRepo(database).GetAll().then(result => {
+            console.log(result);
+            res.json({success: true, result: result});
+        });
+    });
 }
 
 
