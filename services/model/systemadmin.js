@@ -1,4 +1,4 @@
-var user = require('./user');
+var user = require('./users');
 var security = require('./security');
 
 function SystemAdmin (username, password) {
@@ -9,6 +9,6 @@ function SystemAdmin (username, password) {
     this.password = user.password || '';
 }
 
-SystemAdmin.prototype = Object.create(User.prototype);
+SystemAdmin.prototype = Object.create(user.prototype);
 
 module.exports = SystemAdmin;
