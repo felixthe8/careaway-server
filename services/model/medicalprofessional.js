@@ -1,7 +1,16 @@
-var user = require('./user');
+var user = require('./users');
 var security = require('./security');
 
 function MedicalProfessional (firstname, lastname , medicalcode, username, password, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3) {
+   user.username = username;
+   user.password = password;
+   security.securityQ1 = securityQ1;
+   security.securityA1 = securityA1;
+   security.securityQ2 = securityQ2;
+   security.securityA2 = securityA2;
+   security.securityQ3 = securityQ3;
+   security.securityA3 = securityA3;
+   
    this.firstname = firstname || '';
    this.lastname = lastname || '';
    this.medicalcode = medicalcode || '';
@@ -15,7 +24,7 @@ function MedicalProfessional (firstname, lastname , medicalcode, username, passw
    this.securityA3 = security.securityA3 || '';
 }
 
-MedicalProfessional.prototype = Object.create(User.prototype);
+MedicalProfessional.prototype = Object.create(user.prototype);
 
 MedicalProfessional.prototype.DisplayName = function ()  {
     return 'Dr. '+ this.firstname +' '+ this.lastname;
