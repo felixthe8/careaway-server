@@ -1,9 +1,9 @@
 const api = {};
 
-api.login = () => (req, res) => {
-
+api.login = (User, db) => (req, res) => {
+    console.log('localhost:4100/account/api/authentication/')
+    console.log('did this actually do something');
 }
 
-// comment for testing
 
 module.exports = api;

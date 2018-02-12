@@ -25,7 +25,9 @@
     "@treatment": "./services/treatment_management",
     "@treatmentModels": "./services/treatment_management/app/models",
     "@treatmentConfig": "./services/treatment_management/config/index.js",
-    "@treatmentAPI": "./services/treatment_management/config/app.js"
+    "@treatmentAPI": "./services/treatment_management/config/app.js",
+    "@models": "./services/model",
+    "@dataAccess": "./services/data_access"
   },
   "bugs": {
     "url": "https://github.com/CrystalChun/careaway-server/issues"
@@ -33,6 +35,7 @@
   "homepage": "https://github.com/CrystalChun/careaway-server#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "consign": "^0.1.6",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "helmet": "^3.11.0",
