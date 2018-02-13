@@ -1,4 +1,4 @@
-var user = require('./user');
+var user = require('./users');
 var security = require('./security');
 
 function MedicalProfessional (firstname, lastname , medicalcode, username, password, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3) {
@@ -24,7 +24,7 @@ function MedicalProfessional (firstname, lastname , medicalcode, username, passw
    this.securityA3 = security.securityA3 || '';
 }
 
-MedicalProfessional.prototype = Object.create(User.prototype);
+MedicalProfessional.prototype = Object.create(user.prototype);
 
 MedicalProfessional.prototype.DisplayName = function ()  {
     return 'Dr. '+ this.firstname +' '+ this.lastname;
