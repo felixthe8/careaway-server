@@ -4,6 +4,7 @@ const bodyParser = require('body-parser'); // Parses request bodies
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
+//const passport = require('passport');
 const consign = require('consign');
 
 // Allows only one cross origin site
@@ -17,7 +18,6 @@ app.use(helmet());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use(morgan('dev'));
 
 consign({ cwd: 'services' })
