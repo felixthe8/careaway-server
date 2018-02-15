@@ -17,8 +17,8 @@ module.exports = {
     }
 }
 
-// POST register patient (with username validation)
-// POST register mp (with username validation)
+// POST registerPatient (with username validation)
+// POST registerMedpro (with username validation)
 // POST authentication (patient and mp)
 // PUT reset credentials
 // PUT edit patient diagnosis data

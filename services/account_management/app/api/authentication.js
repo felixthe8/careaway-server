@@ -1,14 +1,12 @@
 const api = {};
 
 api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
-    // POST
-    // auth user credentials
-    // for now it only works with patient
-    // TODO also do medical professional
+    // grab username and password from body
     const username = req.body.username;
     const password = req.body.password;
 
     db.then(database => {
+        // query for patient with username
         new Patient.repo(database).GetOne(req.body.username).then(result => {
             console.log(result);
             if (result.length == 0) {
@@ -25,20 +23,10 @@ api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
     });
 }
 
-// might need validation for security questions
 
 api.resetCreds = (Patient, MedicalProfessional, db) => (req, res) => {
-    // PUT
-    // update credentials   
-}
-
-api.getPatients = (Patient, db) => (req, res) => {
-    db.then(database => {
-        new Patient.repo(database).GetAll().then(result => {
-            console.log(result);
-            res.json({success: true, result: result});
-        });
-    });
+    // TODO
+    // yes
 }
 
 
