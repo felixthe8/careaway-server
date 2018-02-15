@@ -33,30 +33,37 @@ appointmentServer.listen(appointmentPORT, () => {
   console.log(`Appointment manager API running on port ${appointmentPORT}.`);
 });
 
-// Starting the treatment manager server
+// Starting the treatment manager server.
 treatmentServer.listen(treatmentPORT, () => {
   console.log(`Treatment manager API running on port ${treatmentPORT}.`);
 });
 
+// Redirection URLs.
 const host = 'http://localhost:';
 const accountURL = `${host}${accountPORT}`;
 const treatmentURL = `${host}${treatmentPORT}`;
 const appointmentURL = `${host}${appointmentPORT}`;
 
-// Create proxy server
+
+// Proxy server uses these rules to redirect to the appropriate URL.
 const proxyRules = new httpProxyRules({
   rules: {
     '.*/login' : `${accountURL}${accountConfig.routes.login}`,
     '.*/create-appointment' : `${appointmentURL}${appointmentConfig.routes.create}`,
-    '.*/create-treatment' : `${treatmentURL}${treatmentConfig.routes.create}`
+    '.*/create-treatment' : `${treatmentURL}${treatmentConfig.routes.create}`,
+    '.*/breach':'breach'
+    
   },
   default: `${host}8080`
 });
-const proxy = httpProxy.createProxyServer({});
 
-const server = http.createServer((req, res) => {
-  let target = proxyRules.match(req);
-  console.log(target);
-  proxy.web(req, res, {target: target});
+// Proxy server.
+const proxyServer = require('./proxyserver');
+
+// Create the proxy server.
+const server = http.Server(proxyServer);
+
+// Start the proxy server.
+server.listen(8080, () => {
+  console.log('proxy server started');
 });
-server.listen(8080);

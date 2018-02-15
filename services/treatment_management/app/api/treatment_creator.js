@@ -1,5 +1,5 @@
 const api = {};
 api.create = () => (req, res) => {
-  console.log('create treatment');
+  console.log('Create treatment');
 }
 module.exports = api;
