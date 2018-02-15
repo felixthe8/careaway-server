@@ -1,3 +1,5 @@
+var CryptoJS = require('crypto-js');
+
 const api = {};
 
 const USER_FOUND = 1;
@@ -20,7 +22,9 @@ api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
             } else {
                 // patient was found, check password
                 const userPass = result[0].password;
-                if (password === userPass) {
+                const userSalt = result[0].salt;
+                const passHashed = CryptoJS.PBKDF2(password,userSalt, { keySize: 128/32, iterations: 1000 }).toString();
+                if (passHashed === userPass) {
                     res.json({success: true, accountType: 'patient'});
                 } else {
                     res.json({error: 'Wrong password.'})
@@ -40,7 +44,9 @@ api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
                 } else {
                     // med pro was found, check password
                     const userPass = result[0].password;
-                    if (password === userPass) {
+                    const userSalt = result[0].salt;
+                    const passHashed = CryptoJS.PBKDF2(password,userSalt, { keySize: 128/32, iterations: 1000 }).toString();
+                    if (passHashed === userPass) {
                         res.json({success: true, accountType: 'medical professional'});
                     } else {
                         res.json({error: 'Wrong password.'})
@@ -61,7 +67,9 @@ api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
                 } else {
                     // admin was found, check password
                     const userPass = result[0].password;
-                    if (password === userPass) {
+                    const userSalt = result[0].salt;
+                    const passHashed = CryptoJS.PBKDF2(password,userSalt, { keySize: 128/32, iterations: 1000 }).toString();
+                    if (passHashed === userPass) {
                         res.json({success: true, accountType: 'system admin'});
                     } else {
                         res.json({error: 'Wrong password.'})
@@ -168,9 +176,9 @@ api.securityQs = (Patient, MedicalProfessional, db) => (req, res) => {
 
 api.validateAs = (Patient, MedicalProfessional, db) => (req, res) => {
     const username = req.body.username;
-    const reqA1 = req.body.a1;
-    const reqA2 = req.body.a2;
-    const reqA3 = req.body.a3;
+    const reqA1 = req.body.securityA1;
+    const reqA2 = req.body.securityA2;
+    const reqA3 = req.body.securityA3;
 
     db.then(database => {
         // query for patient with username
@@ -184,10 +192,11 @@ api.validateAs = (Patient, MedicalProfessional, db) => (req, res) => {
                 const a1 = user.securityA1;
                 const a2 = user.securityA2;
                 const a3 = user.securityA3;
-                console.log(a1, reqA1);
-                console.log(a2, reqA2);
-                console.log(a3, reqA3);
-                if (a1 === reqA1 && a2 === reqA2 && a3 === reqA3) {
+                const a1Sha = CryptoJS.SHA256(reqA1).toString(CryptoJS.enc.Hex);
+                const a2Sha = CryptoJS.SHA256(reqA2).toString(CryptoJS.enc.Hex);
+                const a3Sha = CryptoJS.SHA256(reqA3).toString(CryptoJS.enc.Hex);
+                console.log(a1, a1Sha);
+                if (a1 === a1Sha && a2 === a2Sha && a3 === a3Sha) {
                     res.json({success: true});
                 } else {
                     res.json({error: 'Bad answers'});
@@ -210,7 +219,10 @@ api.validateAs = (Patient, MedicalProfessional, db) => (req, res) => {
                     const a1 = user.securityA1;
                     const a2 = user.securityA2;
                     const a3 = user.securityA3;
-                    if (a1 === reqA1 && a2 === reqA2 && a3 === reqA3) {
+                    const a1Sha = CryptoJS.SHA256(reqA1).toString(CryptoJS.enc.Hex);
+                    const a2Sha = CryptoJS.SHA256(reqA2).toString(CryptoJS.enc.Hex);
+                    const a3Sha = CryptoJS.SHA256(reqA3).toString(CryptoJS.enc.Hex);
+                    if (a1 === a1Sha && a2 === a2Sha && a3 === a3Sha) {
                         res.json({success: true});
                     } else {
                         res.json({error: 'Bad answers'});
@@ -242,8 +254,15 @@ api.resetCreds = (Patient, MedicalProfessional, db) => (req, res) => {
             } else {
                 // patient was found
                 var user = result[0];
-                const updatedPatient = new Patient.create(user.firstname, user.lastname, user.diagnosis, username, 
-                    password, user.salt, user.securityQ1, user.securityA1, 
+
+                const salt = CryptoJS.lib.WordArray.random(128/8);
+                const passHashed = CryptoJS.PBKDF2(password,salt, { keySize: 128/32, iterations: 1000 }).toString();
+
+                console.log(user.password);
+                console.log(passHashed);
+
+                const updatedPatient = new Patient.create('aaaaaa', user.lastname, user.diagnosis, username, 
+                    passHashed, salt, user.securityQ1, user.securityA1, 
                     user.securityQ2, user.securityA2, user.securityQ3, user.securityA3);
 
                 patientRepo.Edit(username,updatedPatient);
@@ -263,8 +282,12 @@ api.resetCreds = (Patient, MedicalProfessional, db) => (req, res) => {
                 } else {
                     // med pro was found, check password
                     var user = result[0];
+
+                    const salt = CryptoJS.lib.WordArray.random(128/8);
+                    const passHashed = CryptoJS.PBKDF2(password,salt, { keySize: 128/32, iterations: 1000 }).toString();
+
                     const updatedMedpro = new MedicalProfessional.create(user.firstname, user.lastname, user.medicalcode, username, 
-                        password, user.salt, user.securityQ1, user.securityA1, 
+                        passHashed, salt, user.securityQ1, user.securityA1, 
                         user.securityQ2, user.securityA2, user.securityQ3, user.securityA3);
 
                     medproRepo.Edit(username,updatedMedpro);
