@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
+const routes = require('./proxyRoutes');
 
 const corsOptions = {
   origin: 'http://localhost:8081',
@@ -16,9 +17,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(helmet()); 
 
+app.use('/register', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.register;
+  } 
+}));
+
 app.use('/login', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
-    return 'http://localhost:4100/account/api/authentication'
+    return routes.login;
   }
 }));
 
