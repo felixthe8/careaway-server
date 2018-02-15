@@ -38,25 +38,6 @@ treatmentServer.listen(treatmentPORT, () => {
   console.log(`Treatment manager API running on port ${treatmentPORT}.`);
 });
 
-// Redirection URLs.
-const host = 'http://localhost:';
-const accountURL = `${host}${accountPORT}`;
-const treatmentURL = `${host}${treatmentPORT}`;
-const appointmentURL = `${host}${appointmentPORT}`;
-
-
-// Proxy server uses these rules to redirect to the appropriate URL.
-const proxyRules = new httpProxyRules({
-  rules: {
-    '.*/login' : `${accountURL}${accountConfig.routes.login}`,
-    '.*/create-appointment' : `${appointmentURL}${appointmentConfig.routes.create}`,
-    '.*/create-treatment' : `${treatmentURL}${treatmentConfig.routes.create}`,
-    '.*/breach':'breach'
-    
-  },
-  default: `${host}8080`
-});
-
 // Proxy server.
 const proxyServer = require('./proxyserver');
 
