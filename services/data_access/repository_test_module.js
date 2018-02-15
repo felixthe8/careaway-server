@@ -71,6 +71,8 @@ var server = app.listen(8081, function () {
     var connection = new mongodb();
     connection.Connect().then(function(value){
         db=value;
+        console.log('db');
+        console.log(db);
         var userAccessTool = new patientRepo(db);
     var newPatient = new patient(
         'req.body.fName',

@@ -40,12 +40,12 @@ UserAccess.prototype.Create = function(patient)
  * 
  * @TODO test what happens if you put in a invalid username 
  */
-UserAccess.prototype.Edit = function(username, user)
+UserAccess.prototype.Edit = function(username, patient)
 {
   if(patient instanceof patientobj)
   {
     const collection = this.db.collection('Patients');
-    collection.updateOne({'username' : username}, { $set: user} , 
+    collection.updateOne({'username' : username}, { $set: patient} , 
     function(err, result)
     {
      console.log("Updated Document");
