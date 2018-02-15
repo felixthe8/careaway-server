@@ -45,7 +45,11 @@ api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
                     // med pro was found, check password
                     const userPass = result[0].password;
                     const userSalt = result[0].salt;
+                    console.log('salt', userSalt)
+                    console.log(userPass);
+                    console.log(password);
                     const passHashed = CryptoJS.PBKDF2(password,userSalt, { keySize: 128/32, iterations: 1000 }).toString();
+                    console.log(passHashed);
                     if (passHashed === userPass) {
                         res.json({success: true, accountType: 'medical professional'});
                     } else {
