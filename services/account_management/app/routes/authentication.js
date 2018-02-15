@@ -1,8 +1,11 @@
 const config = require('@accountConfig');
 const models = require('@account/app/setup');
+
 module.exports = (app) => {
     const api = app.account_management.app.api.authentication;
 
+    // Listens for a register post request.
+    app.route(config.routes.register).post(api.register());
     app.route(config.routes.login).post(api.login(models.User, models.db));
     app.route(config.routes.resetCreds).put(api.resetCreds(models.User, models.db));
 
@@ -11,4 +14,5 @@ module.exports = (app) => {
     });
 
     app.route('/patients_test').get(api.getPatients(models.User, models.db));
+
 }

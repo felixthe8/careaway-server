@@ -1,10 +1,13 @@
-const api = {};
-
+const Patient = require('@models/patient');
 const patientRepo = require('@dataAccess/patient_repository');
 const medproRepo = require('@dataAccess/medical_professional_repository');
 const adminRepo = require('@dataAccess/system_admin_repository');
 
-const Patient = require('@models/patient');
+const api = {};
+
+api.register = () => (req, res) => {
+    console.log('in register');
+}
 
 api.login = (User, db) => (req, res) => {
     // POST

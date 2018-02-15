@@ -5,25 +5,33 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
+const proxy = require('express-http-proxy');
+const routes = require('./proxyRoutes');
 
-// Allows only one cross origin site
 const corsOptions = {
-  origin: 'http://localhost:8080',
+  origin: 'http://localhost:8081',
   optionsSuccessStatus: 200
 };
 
+// Allows only one cross origin site.
 app.use(cors(corsOptions));
-app.use(helmet());
+app.use(helmet()); 
+
+app.use('/register', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.register;
+  } 
+}));
+
+app.use('/login', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.login;
+  }
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'));
 
-// Makes sure setup, api, and routes are loaded before anything else.
-consign({ cwd: 'services' })
-  .include('appointment_scheduling/app/setup')
-  .then('appointment_scheduling/app/api')
-  .then('appointment_scheduling/app/routes')
-  .into(app);
 module.exports = app;
