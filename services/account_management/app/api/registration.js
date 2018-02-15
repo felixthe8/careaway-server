@@ -1,3 +1,5 @@
+var CryptoJS = require('crypto-js');
+
 const api = {};
 
 // TODO validation for unique username
@@ -15,9 +17,16 @@ api.registerPatient = (Patient, db) => (req, res) => {
     const securityA2 = req.body.securityA2;
     const securityQ3 = req.body.securityQ3;
     const securityA3 = req.body.securityA3;
+
+    const salt = CryptoJS.lib.WordArray.random(128/8);
+
+    const passHashed = CryptoJS.PBKDF2(password,salt, { keySize: 128/32, iterations: 1000 }).toString();
+    const a1Sha = CryptoJS.SHA256(securityA1).toString(CryptoJS.enc.Hex);
+    const a2Sha = CryptoJS.SHA256(securityA2).toString(CryptoJS.enc.Hex);
+    const a3Sha = CryptoJS.SHA256(securityA3).toString(CryptoJS.enc.Hex);
     
     // create patient obj
-    var newPatient = new Patient.create(firstName, lastName, diagnosis, username, password, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3);
+    var newPatient = new Patient.create(firstName, lastName, diagnosis, username, passHashed, salt, securityQ1, a1Sha, securityQ2, a2Sha, securityQ3, a3Sha);
     
     db.then(database => {
         // insert patient into db
@@ -40,8 +49,15 @@ api.registerMedpro = (MedicalProfessional, db) => (req, res) => {
     const securityQ3 = req.body.securityQ3;
     const securityA3 = req.body.securityA3;
     
+    const salt = CryptoJS.lib.WordArray.random(128/8);
+
+    const passHashed = CryptoJS.PBKDF2(password,salt, { keySize: 128/32, iterations: 1000 }).toString();
+    const a1Sha = CryptoJS.SHA256(securityA1).toString(CryptoJS.enc.Hex);
+    const a2Sha = CryptoJS.SHA256(securityA2).toString(CryptoJS.enc.Hex);
+    const a3Sha = CryptoJS.SHA256(securityA3).toString(CryptoJS.enc.Hex);
+    
     // create new med pro obj
-    var newMedpro = new MedicalProfessional.create(firstName, lastName, medicalCode, username, password, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3);
+    var newMedpro = new MedicalProfessional.create(firstName, lastName, medicalCode, username, passHashed, securityQ1, a1Sha, securityQ2, a2Sha, securityQ3, a3Sha);
 
     db.then(database => {
         // insert med pro into db
