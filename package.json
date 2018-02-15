@@ -25,22 +25,33 @@
     "@treatment": "./services/treatment_management",
     "@treatmentModels": "./services/treatment_management/app/models",
     "@treatmentConfig": "./services/treatment_management/config/index.js",
-    "@treatmentAPI": "./services/treatment_management/config/app.js"
+    "@treatmentAPI": "./services/treatment_management/config/app.js",
+    "@models": "./services/model",
+    "@dataAccess": "./services/data_access"
   },
   "bugs": {
     "url": "https://github.com/CrystalChun/careaway-server/issues"
   },
   "homepage": "https://github.com/CrystalChun/careaway-server#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "consign": "^0.1.6",
     "cors": "^2.8.4",
+    "csurf": "^1.9.0",
+    "express-session": "^1.15.6",
+    "passport": "^0.4.0"
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.2",
+<<<<<<< HEAD
     "express-http-proxy": "^1.1.0",
     "express-router": "0.0.1",
     "helmet": "^3.10.0",
     "http-proxy": "^1.16.2",
     "http-proxy-rules": "^1.1.3",
+=======
+    "helmet": "^3.11.0",
+>>>>>>> origin
     "module-alias": "^2.0.3",
     "mongodb": "^3.0.2",
     "morgan": "^1.9.0",
