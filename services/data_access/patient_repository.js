@@ -36,16 +36,28 @@ UserAccess.prototype.Create = function(patient)
  * within the database
  * @param {*} username the patient object in the database that needs to
  * be edited 
- * @param {*} user the edits to the patient object
+ * @param {*} patient the edits to the patient object
  * 
  * @TODO test what happens if you put in a invalid username 
  */
-UserAccess.prototype.Edit = function(username, user)
+UserAccess.prototype.Edit = function(username, patient)
 {
   if(patient instanceof patientobj)
   {
     const collection = this.db.collection('Patients');
-    collection.updateOne({'username' : username}, { $set: user} , 
+    collection.updateOne({'username' : username}, 
+    { $set: {"firstname": patient.firstname,
+              "lastname": patient.lastname,
+              "diagnosis": patient.diagnosis,
+              "username": patient.username,
+              "password": patient.password,
+              "securityQ1": patient.securityQ1,
+              "securityA1": patient.securityA1,
+              "securityQ2": patient.securityQ2,
+              "securityA2": patient.securityA2,
+              "securityQ3": patient.securityQ3,
+              "securityA3": patient.securityA3,
+              "medicalcode": patient.medicalcode}}, 
     function(err, result)
     {
      console.log("Updated Document");
@@ -91,7 +103,7 @@ UserAccess.prototype.GetOne = function(username)
   const collection = this.db.collection('Patients');
   return new promise(function(fullfill,reject)
   { 
-    collection.find({username : username}).toArray(function(err, docs) 
+    collection.find({'username' : username}).toArray(function(err, docs) 
     {
       if(err)
       {

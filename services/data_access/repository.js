@@ -1,13 +1,13 @@
 const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
-const medicalProfessional = require('../model/medicalprofessional');
 /**
  * Constructor of the Repository
  */
-function UserAccess(dbConnection)
+function UserAccess(dbConnection,collectionName)
 {
   //fetches the database client connection
   this.db = dbConnection;
+  this.collectionName = collectionName;
 }
 /**
  * This function inserts a new medicalPro into the 
@@ -16,20 +16,13 @@ function UserAccess(dbConnection)
  * @param {*} medicalPro is the medicalPro object that 
  * is going to be inserted into the database 
  */
-UserAccess.prototype.Create = function(medicalPro)
+UserAccess.prototype.Create = function(user)
 {     
-  if(medicalPro instanceof medicalProfessional)
+  const collection = this.db.collection(this.collectionName);
+  collection.insertOne(medicalPro, function(err, result)
   {
-   const collection = this.db.collection('Medical Professionals');
-   collection.insertOne(medicalPro, function(err, result)
-   {
-        console.log("Inserted medicalPro");
-   });
-  }
-  else
-  {
-    console.log("Object is not a Medical Professional type");
-  }
+    console.log("Inserted" + this.collectionName);
+  });
 };
 /**
  * This function edits an existing medicalPro document 
@@ -40,39 +33,21 @@ UserAccess.prototype.Create = function(medicalPro)
  * 
  * @TODO test what happens if you put in a invalid username 
  */
-UserAccess.prototype.Edit = function(username, medicalPro)
+UserAccess.prototype.Edit = function(username, user)
 {
-  if(medicalPro instanceof medicalProfessional)
+  const collection = this.db.collection(this.collectionName);
+  collection.updateOne({'username' : username}, { $set: user}, 
+  function(err, result)
   {
-    const collection = this.db.collection('Medical Professionals');
-    collection.updateOne({"username" : username}, 
-    { $set: {"firstname": medicalPro.firstname,
-              "lastname": medicalPro.lastname,
-              "medicalcode": medicalPro.medicalcode,
-              "username": medicalPro.username,
-              "password": medicalPro.password,
-              "securityQ1": medicalPro.securityQ1,
-              "securityA1": medicalPro.securityA1,
-              "securityQ2": medicalPro.securityQ2,
-              "securityA2": medicalPro.securityA2,
-              "securityQ3": medicalPro.securityQ3,
-              "securityA3": medicalPro.securityA3}} , 
-    function(err, result)
-    {
-     console.log("Updated Document");
-    });
-  }
-  else
-  {
-    console.log("Object is not a Medical Professional type");
-  }
+    console.log("Updated " + this.collectionName + " Document");
+  }); 
 };
 /** 
 * This is the function to get all medicalPro documents
 * within the mongo database
 */
 UserAccess.prototype.GetAll = function(){
-  const collection = this.db.collection('Medical Professionals');
+  const collection = this.db.collection(this.collectionName);
   return new promise(function(fullfill,reject)
   {
     collection.find({}).toArray(function(err, docs)
@@ -99,7 +74,7 @@ UserAccess.prototype.GetAll = function(){
  */
 UserAccess.prototype.GetOne = function(username)
 {
-  const collection = this.db.collection('Medical Professionals');
+  const collection = this.db.collection(this.collectionName);
   return new promise(function(fullfill,reject)
   { 
     collection.find({username : username}).toArray(function(err, docs) 
