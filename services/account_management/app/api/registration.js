@@ -57,7 +57,7 @@ api.registerMedpro = (MedicalProfessional, db) => (req, res) => {
     const a3Sha = CryptoJS.SHA256(securityA3).toString(CryptoJS.enc.Hex);
     
     // create new med pro obj
-    var newMedpro = new MedicalProfessional.create(firstName, lastName, medicalCode, username, passHashed, securityQ1, a1Sha, securityQ2, a2Sha, securityQ3, a3Sha);
+    var newMedpro = new MedicalProfessional.create(firstName, lastName, medicalCode, username, passHashed,salt, securityQ1, a1Sha, securityQ2, a2Sha, securityQ3, a3Sha);
 
     db.then(database => {
         // insert med pro into db
