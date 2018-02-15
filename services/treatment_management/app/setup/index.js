@@ -1,5 +1,5 @@
 const treatmentModel = require('@treatmentModels/treatment_plan');
 const model = {
-    treatmentPlan : treatmentModel
+  treatmentPlan : treatmentModel
 }
 module.exports = model;

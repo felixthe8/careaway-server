@@ -7,8 +7,8 @@ const morgan = require('morgan');
 const consign = require('consign');
 // Allows only one cross origin site
 const corsOptions = {
-    origin: 'http://localhost:8080',
-    optionsSuccessStatus: 200
+  origin: 'http://localhost:8080',
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
@@ -21,8 +21,8 @@ app.use(morgan('dev'));
 
 // Make sure setup is loaded before anything else 
 consign({ cwd: 'services' })
-    .include('appointment_scheduling/app/setup')
-    .then('appointment_scheduling/app/api')
-    .then('appointment_scheduling/app/routes')
-    .into(app);
+  .include('appointment_scheduling/app/setup')
+  .then('appointment_scheduling/app/api')
+  .then('appointment_scheduling/app/routes')
+  .into(app);
 module.exports = app;
