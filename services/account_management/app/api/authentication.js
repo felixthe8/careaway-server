@@ -5,10 +5,6 @@ const adminRepo = require('@dataAccess/system_admin_repository');
 
 const api = {};
 
-api.register = () => (req, res) => {
-    console.log('in register');
-}
-
 api.login = (User, db) => (req, res) => {
     // POST
     // auth user credentials
