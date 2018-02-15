@@ -261,7 +261,7 @@ api.resetCreds = (Patient, MedicalProfessional, db) => (req, res) => {
                 console.log(user.password);
                 console.log(passHashed);
 
-                const updatedPatient = new Patient.create('aaaaaa', user.lastname, user.diagnosis, username, 
+                const updatedPatient = new Patient.create(user.firstname, user.lastname, user.diagnosis, username, 
                     passHashed, salt, user.securityQ1, user.securityA1, 
                     user.securityQ2, user.securityA2, user.securityQ3, user.securityA3);
 
