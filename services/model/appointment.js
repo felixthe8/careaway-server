@@ -1,12 +1,6 @@
-var patient = require('./patient');
-var mp = require('./medicalprofessional');
-
-function Appointment(patient, medicalprofessional, date, initiator, status) {
-    patient.username = patient;
-    medicalprofessional.username = medicalprofessional
-
-    this.patient = patient.username;
-    this.medicalprofessional = medicalprofessional.username;
+function Appointment(appointee, date, initiator, status) {
+    this.appointee = appointee;
+    // the date refers to the date that the appointment is requested. 
     this.date = date;
     // the initiator will be the individual who requested the appointment
     this.initiator = initiator;
