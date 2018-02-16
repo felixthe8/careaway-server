@@ -1,7 +1,7 @@
 var user = require('./users');
 var security = require('./security');
 
-function Patient (firstname, lastname, diagnosis, username, password, salt, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3) {
+function Patient (firstname, lastname, diagnosis, username, password, salt, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3, medicalcode) {
     user.username = username;
     user.password = password;
     user.salt = salt;
@@ -24,6 +24,7 @@ function Patient (firstname, lastname, diagnosis, username, password, salt, secu
     this.securityA2 = security.securityA2 || '';
     this.securityQ3 = security.securityQ3 || '';
     this.securityA3 = security.securityA3 || '';
+    this.medicalcode = medicalcode || '';
 }
 Patient.prototype = Object.create(user.prototype);
 
