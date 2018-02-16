@@ -3,9 +3,7 @@ const promise = require('promise');
 /**
  * The object that holds the function
  */
-function Database(){
-  this.client;
-}
+function Database(){}
 /**
  * @TODO make the connection to the deployment 
  * database
@@ -23,7 +21,6 @@ Database.prototype.Connect = function()
     MongoClient.connect('mongodb://localhost:27017', 
       function(err, client)
       {
-        this.client = client;
         console.log("Connected to DB");
         var db=client.db('CareAway');
         //return the error if some error happened
@@ -40,17 +37,6 @@ Database.prototype.Connect = function()
   });
 }
 
-Database.prototype.Close = function()
-{
-  return new promise( function(fulfill,reject)
-  {
-    console.log('client');
-    this.client.close();
-    console.log('client');
-    fulfull('blah');
 
-  })
-
-}
 
 module.exports = Database;

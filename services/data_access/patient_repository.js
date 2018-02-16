@@ -51,6 +51,7 @@ UserAccess.prototype.Edit = function(username, patient)
               "diagnosis": patient.diagnosis,
               "username": patient.username,
               "password": patient.password,
+              "salt":patient.salt,
               "securityQ1": patient.securityQ1,
               "securityA1": patient.securityA1,
               "securityQ2": patient.securityQ2,

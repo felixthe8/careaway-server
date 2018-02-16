@@ -38,16 +38,18 @@ app.get('/', function (req, res) {
         'MPCODE',
         'req.body.username',
         'CryptoJS.PBKDF2(req.body.password,salt, { keySize: 128/32, iterations: 1000 }).toString()',
+        'salt',
         'req.body.securityQ1',
         'req.body.securityQ2',
         'req.body.securityQ3',
         'CryptoJS.SHA256(req.body.answer1).toString(CryptoJS.enc.Hex)',
         'CryptoJS.SHA256(req.body.answer2).toString(CryptoJS.enc.Hex)',
         'CryptoJS.SHA256(req.body.answer3).toString(CryptoJS.enc.Hex)'
+
        );
     //Saves the Value into the Database
 
-    userAccessTool.Edit("afdasfasfafaf",newMP);
+    userAccessTool.Edit("CryptoJS.PBKDF2(req.body.password,salt, { keySize: 128/32, iterations: 1000 }).toString()",newMP);
     res.end("SUCCESS")
 });
 

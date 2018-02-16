@@ -51,12 +51,14 @@ UserAccess.prototype.Edit = function(username, medicalPro)
               "medicalcode": medicalPro.medicalcode,
               "username": medicalPro.username,
               "password": medicalPro.password,
+              "salt": medicalPro.salt,
               "securityQ1": medicalPro.securityQ1,
               "securityA1": medicalPro.securityA1,
               "securityQ2": medicalPro.securityQ2,
               "securityA2": medicalPro.securityA2,
               "securityQ3": medicalPro.securityQ3,
-              "securityA3": medicalPro.securityA3}} , 
+              "securityA3": medicalPro.securityA3,
+              }} , 
     function(err, result)
     {
      console.log("Updated Document");
