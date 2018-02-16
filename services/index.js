@@ -48,3 +48,15 @@ const server = http.Server(proxyServer);
 server.listen(8080, () => {
   console.log('proxy server started');
 });
+
+// Listens for a breach request to shut down all servers.
+server.on('request', (req, res) => {
+  if(req.url === '/breach') {
+    accountServer.close();
+    treatmentServer.close();
+    appointmentServer.close();
+    console.log('Exiting');
+    server.close();
+    process.exit(1);
+  }
+});
