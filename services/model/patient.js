@@ -1,53 +1,44 @@
-var user = require('./users');
-var security = require('./security');
-
-function Patient (firstname, lastname, diagnosis, username, password, salt, securityQ1, securityA1, securityQ2, securityA2, securityQ3, securityA3, medicalcode) {
-    user.username = username;
-    user.password = password;
-    user.salt = salt;
-    security.securityQ1 = securityQ1;
-    security.securityA1 = securityA1;
-    security.securityQ2 = securityQ2;
-    security.securityA2 = securityA2;
-    security.securityQ3 = securityQ3;
-    security.securityA3 = securityA3;
-    
-    this.firstname = firstname || '';
-    this.lastname = lastname || '';
-    this.diagnosis = diagnosis || '';
-    this.username = user.username || '';
-    this.password = user.password || '';
-    this.salt = user.salt || '';
-    this.securityQ1 = security.securityQ1 || '';
-    this.securityA1 = security.securityA1 || '';
-    this.securityQ2 = security.securityQ2 || '';
-    this.securityA2 = security.securityA2 || '';
-    this.securityQ3 = security.securityQ3 || '';
-    this.securityA3 = security.securityA3 || '';
-    this.medicalcode = medicalcode || '';
+var appointment = require('./appointment');
+var meter = require('./meter');
+var checklist = require('./checklist');    
+/*
+    Model for patients on the CareAway system. The Patient object will be 
+    stored inside the User accountType attribute of the User. 
+*/
+function Patient (firstname, lastname, medicalcode, diagnosis, treatment,appointment) {
+  this.firstname = firstname || '';
+  this.lastname = lastname || '';
+  // This refers to the medical professional's code the patient will provide during registration
+  this.medicalcode = medicalcode || '';
+  this.diagnosis = diagnosis || '';
+  // This refers to an array to represent the appointments that the patient will have.
+  // As appointments are added, they will be pushed into the array
+  this.appointment = appointment || [];
+  // This refers to an array to represent the treatment widgets the patient will be 
+  // assigned. As treatment widgets are added, they will be pushed into the array
+  this.treatment = treatment || [];
+  this.role = 'patient';
 }
-Patient.prototype = Object.create(user.prototype);
-
+// Function to return patient name
 Patient.prototype.DisplayName = function () {
-    return this.firstname+' '+this.lastname;
+  return this.firstname+' '+this.lastname;
 }
-
+// Function to return the patient diagnosis
 Patient.prototype.DisplayDiagnosis = function () {
-    return this.diagnosis;
+  return this.diagnosis;
 }
-
-Patient.prototype.SetDiagnosis = function (i) {
-    this.diagnosis = CONDITIONS[i];
+// Function to add a widget. Takes in 'widget' object as a parameter 
+Patient.prototype.AddWidget = function (widget) {
+  // Push 'widget' onto the array
+  this.treatment.push(widget);
 }
-
-
+// Object to represent the patient conditions
 var CONDITIONS = Object.freeze({
-    1: "Diabetic",
-    2: "Asthma",
-    3: "High Blood Pressure",
-    4: "Generalized Anxiety Disorder",
-    5: "Panic Disorder",
-    6: "Social Anxiety Disorder"
+  1: "Diabetic",
+  2: "Asthma",
+  3: "High Blood Pressure",
+  4: "Generalized Anxiety Disorder",
+  5: "Panic Disorder",
+  6: "Social Anxiety Disorder"
 });
-
 module.exports = Patient;
