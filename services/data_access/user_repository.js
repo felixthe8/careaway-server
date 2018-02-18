@@ -1,11 +1,7 @@
 const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
-const userModel = require('../model/users.js')
-const patientObject= require('../model/patient.js');
-const professionalObject = require('../model/medicalprofessional.js')
-const sysAdminObject = require('../model/systemadmin.js')
 /**
- * Constructor of the Repository
+ * Constructor of the User Repository
  */
 function UserAccess(dbConnection)
 {
@@ -13,31 +9,47 @@ function UserAccess(dbConnection)
   this.db = dbConnection;
 }
 /**
- * This function inserts a new patient into the 
+ * This function inserts a new User into the 
  * mongodb database with received information
  * 
- * @param {*} user is the patient object that 
- * is going to be inserted into the database 
+ * @param {*} user contains the user info that is going
+ * to be inserted into the database
  */
 UserAccess.prototype.Create = function(user)
-{     
+{ 
   const collection = this.db.collection('Users');
   collection.insertOne(user, function(err, result)
   {
-    console.log("Inserted Patient");
+    if(err == null){
+      console.log("Inserted Patient");
+    }
+    else{
+      console.log(err);
+    }
   });
 };
-
+/**
+ * This function edits a user's password into the 
+ * mongodb database with received information
+ * 
+ * @param {*} username the user that wants to reset their password
+ * @param {*} password the new password the user wants to save
+ */
 UserAccess.prototype.ResetCredential = function(username,password){
     const collection = this.db.collection('Users');
-    collection.updateOne({'username' : username}, 
-    { $set: {"password":password}}, 
-    function(err, result)
-    {
-     console.log("Updated Document");
-    });
-}
-
+    collection.updateOne({'username' : username},//looks for username in the database
+                         { $set: {"password":password}},//inserts new password 
+                         function(err, result){
+                            console.log("Updated Document");
+                        });
+};
+/**
+ * This function finds an existing user in the database
+ * it will return the user info as an object if found or 
+ * return an empty object if the user does not exist 
+ * 
+ * @param {*} username the user that is being queried for
+ */
 UserAccess.prototype.FindUser= function(username)
 {
   const collection = this.db.collection('Users');
@@ -57,14 +69,18 @@ UserAccess.prototype.FindUser= function(username)
       }
     });
   });
-}
-
+};
+/**
+ * This finds all the patient under a medical professional
+ * 
+ * @param {*} MPCode the medical professional querying for their patient
+ */
 UserAccess.prototype.FindPatient = function(MPCode){
   const collection = this.db.collection('Users');
   return new promise(function(fullfill,reject)
   { 
-    console.log(MPCode)
-    collection.find({'accountType': {"medicalcode": MPCode}}).toArray(function(err, docs) 
+    //This is the filter to locate any user with the role of patient and contains the MPCode of the medical professional
+    collection.find({'accountType.medicalcode': MPCode, 'accountType.role': "patient"}).toArray(function(err, docs) 
     {
       if(err)
       {
@@ -74,9 +90,11 @@ UserAccess.prototype.FindPatient = function(MPCode){
       else
       {
         console.log("Successfully got query");
-        fullfill(docs);
+        //return the array of patients in a object 
+        var patients = {"patients" : docs};
+        fullfill(patients);
       } 
     });
   });
-}
+};
 module.exports = UserAccess;
