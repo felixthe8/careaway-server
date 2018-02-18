@@ -1,4 +1,4 @@
-var Question = require('./question');
+var Question = require('./questions');
 
 function Checklist (questions, due) {
   // for db table
