@@ -41,15 +41,15 @@ app.get('/', function (req, res) {
     var role = new MedicalProfessional('Lazer','Man','MPCODE777')
     var newUser = new User('Lazer',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
     //This saves a new Medical Professional into the database
-    userAccessTool.Create(newUser);
+    //userAccessTool.Create(newUser);
     //The code below resets a passwrod with that username
     //userAccessTool.ResetCredential('Lazer','Lazer7777');
 
     //This code finds any patient with that MPCODE777 (use data seed to check for functionality)
-    /*userAccessTool.FindPatient('MPCODE777').then(function(value){
+    userAccessTool.FindPatient('MPCODE777').then(function(value){
         console.log(value);
-        res.end("SUCCESS")
-    })*/
+        res.end(JSON.stringify(value));
+    })
 
     //This code checks the functionality to find one user
     /*userAccessTool.FindUser('Lazer').then(function(value){

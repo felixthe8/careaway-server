@@ -21,7 +21,7 @@ UserAccess.prototype.Create = function(user)
   collection.insertOne(user, function(err, result)
   {
     if(err == null){
-      console.log("Inserted Patient");
+      console.log("Inserted User");
     }
     else{
       console.log(err);
@@ -40,7 +40,7 @@ UserAccess.prototype.ResetCredential = function(username,password){
     collection.updateOne({'username' : username},//looks for username in the database
                          { $set: {"password":password}},//inserts new password 
                          function(err, result){
-                            console.log("Updated Document");
+                            console.log("Updated Password");
                         });
 };
 /**
