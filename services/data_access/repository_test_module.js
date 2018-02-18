@@ -5,9 +5,12 @@ var app = express();
 var bodyParser = require('body-parser');
 var CryptoJS = require('crypto-js');
 
-var Repo = require('./medical_professional_repository');
-//TODO: Change this directory to the actual Model Folder
-var mP = require('../model/medicalprofessional');
+var Repo = require('./user_repository');
+var User = require('../model/users');
+var MedicalProfessional = require('../model/medicalprofessional');
+var security = require('../model/security');
+var salt = require('../model/identifier');
+
 var mongodb = require('./db_connection.js');
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -25,32 +28,32 @@ app.use(function(req, res, next) {
 
 //The variable that holds the db connection
 var db;
-//The test method to check all patientrepository function
+
+//The test method to check repository functionality
 app.get('/', function (req, res) {
-    var salt = CryptoJS.lib.WordArray.random(128/8);
-
-    //Creates the Repository for the Medical Professional
+    //Creates the Repository for the users
     var userAccessTool = new Repo(db);
-    //Make a new Medical Professional Object
-    var newMP = new mP(
-        'req.body.firstName',
-        'req.body.lastName',
-        'MPCODE',
-        'req.body.username',
-        'CryptoJS.PBKDF2(req.body.password,salt, { keySize: 128/32, iterations: 1000 }).toString()',
-        'salt',
-        'req.body.securityQ1',
-        'req.body.securityQ2',
-        'req.body.securityQ3',
-        'CryptoJS.SHA256(req.body.answer1).toString(CryptoJS.enc.Hex)',
-        'CryptoJS.SHA256(req.body.answer2).toString(CryptoJS.enc.Hex)',
-        'CryptoJS.SHA256(req.body.answer3).toString(CryptoJS.enc.Hex)'
-
-       );
-    //Saves the Value into the Database
-
-    userAccessTool.Edit("CryptoJS.PBKDF2(req.body.password,salt, { keySize: 128/32, iterations: 1000 }).toString()",newMP);
-    res.end("SUCCESS")
+    var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8))
+    var sQ = [ new security("Where did you go?","Answer"),
+               new security("Where did you go?","Answer"),
+               new security("Where did you go?","Answer"),
+    ]
+    var role = new MedicalProfessional('Lazer','Man','MPCODE777')
+    var newUser = new User('Lazer','Lazer',role,sQ,userSalt);
+    //Saves the Value into0 the Database
+    userAccessTool.ResetCredential('Lazer','Lazer7777');
+    userAccessTool.FindPatient('MPCODE777').then(function(value){
+        console.log(value);
+        res.end("SUCCESS")
+    })
+    // userAccessTool.FindUser('Lazer').then(function(value){
+    //     console.log(value)
+    //     console.log("Role:"+value.accountType.role)
+    //     if(value.accountType.role == "medical-professional"){
+    //         console.log("HELLA YEA")
+    //     }
+    //     res.end("SUCCESS")
+    // });
 });
 
 app.post('/FindUser', function(req,res) {
@@ -75,30 +78,5 @@ var server = app.listen(8081, function () {
     var connection = new mongodb();
     connection.Connect().then(function(value){
         db=value;
-        console.log('db');
-        console.log(db);
-        var userAccessTool = new patientRepo(db);
-    var newPatient = new patient(
-        'req.body.fName',
-        'req.body.lName',
-        '',
-        'req.body.username',
-        'CryptoJS.PBKDF2(req.body.password,salt, { keySize: 128/32, iterations: 1000 }).toString()',
-        'req.body.SQ1',
-        'req.body.SQ2',
-        'req.body.SQ3',
-        'CryptoJS.SHA256(req.body.A1).toString(CryptoJS.enc.Hex)',
-        'CryptoJS.SHA256(req.body.A2).toString(CryptoJS.enc.Hex)',
-        'CryptoJS.SHA256(req.body.A3).toString(CryptoJS.enc.Hex)',
-        'req.body.medicalProCode'
-       );
-    userAccessTool.Create(newPatient);
-       //Checking the query for information of data
-    userAccessTool.GetOne("req.body.username").then(function(value){
-        var list=value;
-        console.log(list);
-        res.end("Values " + list[0].username); 
-    });
-    }); 
-    
+    });    
  });
