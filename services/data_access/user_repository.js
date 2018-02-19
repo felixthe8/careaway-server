@@ -65,7 +65,8 @@ UserAccess.prototype.FindUser= function(username)
       else
       {
         console.log('Successfully got query');
-        fullfill(docs[0]);
+        var results = {"User" : docs}
+        fullfill(results);
       }
     });
   });
