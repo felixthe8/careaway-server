@@ -10,5 +10,5 @@ module.exports = (app) => {
 
     // POST /account/api/registration/medical-professional
     // register new med pro
-    app.route(config.routes.registerMedpro).post(api.registerMedpro(models.User, models.UserRepo, models.DB));
+    app.route(config.routes.registerMedpro).post(api.registerMedpro(models.User, models.Security, models.Salt, models.MedicalProfessional, models.UserRepo, models.DB));
 }
