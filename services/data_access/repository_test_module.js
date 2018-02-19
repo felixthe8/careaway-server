@@ -29,27 +29,53 @@ app.use(function(req, res, next) {
 //The variable that holds the db connection
 var db;
 
+app.post('/account/api/registration/medical-professional', function(req, res){
+    //Creates the Repository for the users
+    var userAccessTool = new Repo(db);
+    var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8).toString())
+    var sQ = [ new security(req.body.securityQ1,req.body.securityA1),
+               new security(req.body.securityQ2,req.body.securityA2),
+               new security(req.body.securityQ3,req.body.securityA3),
+    ]
+    var role = new MedicalProfessional(req.body.firstname,req.body.lastname,"MPCODE7777")
+    var newUser = new User(req.body.username,CryptoJS.HmacSHA256(req.body.password,userSalt.salt).toString(),role,sQ,userSalt);
+    userAccessTool.Create(newUser);
+    res.send("SUCCESS");
+});
+
+
 //The test method to check repository functionality
 app.get('/', function (req, res) {
     //Creates the Repository for the users
     var userAccessTool = new Repo(db);
-    var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8).toString())
-    var sQ = [ new security(1,"Answer"),
-               new security(4,"Answer"),
-               new security(9,"Answer"),
-    ]
-    var role = new MedicalProfessional('Lazer','Man','MPCODE777')
-    var newUser = new User('Lazer',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
-    //This saves a new Medical Professional into the database
-    //userAccessTool.Create(newUser);
+    // var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8).toString())
+    // var sQ = [ new security(1,"Answer"),
+    //            new security(4,"Answer"),
+    //            new security(9,"Answer"),
+    // ]
+    // var role = new MedicalProfessional('Lazer','Man','MPCODE777')
+    // var newUser = new User('Lazer',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
+    // This saves a new Medical Professional into the database
+    // userAccessTool.Create(newUser);
     //The code below resets a passwrod with that username
     //userAccessTool.ResetCredential('Lazer','Lazer7777');
 
-    //This code finds any patient with that MPCODE777 (use data seed to check for functionality)
-    userAccessTool.FindPatient('MPCODE777').then(function(value){
-        console.log(value);
-        res.end(JSON.stringify(value));
-    })
+    // This code finds any patient with that MPCODE777 (use data seed to check for functionality)
+    // userAccessTool.FindPatient('MPCODE777').then(function(value){
+    //     console.log(value);
+    //     res.end(JSON.stringify(value));
+    // })
+
+    //This code finds all MPCODE within the database
+    // userAccessTool.GetMedicalCodes().then(
+    //     function(value){
+    //         for(var i=0; i<value.codeList.length; i++)
+    //         {
+    //             console.log(value.codeList[i]);
+    //         }
+    //         res.end("SUCCESS");
+    //     });
+
 
     //This code checks the functionality to find one user
     /*userAccessTool.FindUser('Lazer').then(function(value){

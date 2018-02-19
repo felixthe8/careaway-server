@@ -21,7 +21,7 @@ UserAccess.prototype.Create = function(user)
   collection.insertOne(user, function(err, result)
   {
     if(err == null){
-      console.log("Inserted User");
+      console.log('Inserted User');
     }
     else{
       console.log(err);
@@ -36,11 +36,11 @@ UserAccess.prototype.Create = function(user)
  * @param {*} password the new password the user wants to save
  */
 UserAccess.prototype.ResetCredential = function(username,password){
-    const collection = this.db.collection('Users');
-    collection.updateOne({'username' : username},//looks for username in the database
-                         { $set: {"password":password}},//inserts new password 
-                         function(err, result){
-                            console.log("Updated Password");
+  const collection = this.db.collection('Users');
+  collection.updateOne({'username' : username},//looks for username in the database
+                          { $set: {'password':password}},//inserts new password 
+                           function(err, result){
+                            console.log('Updated Password');
                         });
 };
 /**
@@ -59,12 +59,12 @@ UserAccess.prototype.FindUser= function(username)
     {
       if(err)
       {
-        console.log("Failed to get query");
+        console.log('Failed to get query');
           reject(err);
       }
       else
       {
-        console.log("Successfully got query");
+        console.log('Successfully got query');
         fullfill(docs[0]);
       }
     });
@@ -80,21 +80,54 @@ UserAccess.prototype.FindPatient = function(MPCode){
   return new promise(function(fullfill,reject)
   { 
     //This is the filter to locate any user with the role of patient and contains the MPCode of the medical professional
-    collection.find({'accountType.medicalcode': MPCode, 'accountType.role': "patient"}).toArray(function(err, docs) 
+    collection.find({'accountType.medicalcode': MPCode, 'accountType.role': 'patient'}).toArray(function(err, docs) 
     {
       if(err)
       {
-        console.log("Failed to get query");
+        console.log('Failed to get query');
         reject(err);
       }
       else
       {
-        console.log("Successfully got query");
+        console.log('Successfully got query');
         //return the array of patients in a object 
-        var patients = {"patients" : docs};
+        var patients = {'patients' : docs};
         fullfill(patients);
       } 
     });
   });
 };
+/** 
+ * This function is used gather a list of medical professional codes 
+ * used to verify if a medical professional exist within our system
+*/
+UserAccess.prototype.GetMedicalCodes = function(){
+  const collection = this.db.collection('Users');
+  return new promise(function(fullfill,reject)
+  { 
+    //This is the filter to locate any user with the role  medical professional
+    collection.find({'accountType.role': 'medical-professional'}).toArray(function(err, docs) 
+    {
+      console.log("CHECKED");
+      if(err)
+      {
+        console.log('Failed to get query');
+        reject(err);
+      }
+      else
+      {
+        console.log('Successfully got query');
+        //grabs just the Medical Professional Code and save it to an array
+        var mpCode = []
+        for(var i=0; i<docs.length; i++){
+          mpCode.push(docs[i].accountType.medicalcode);
+        }
+        //return the array of codes 
+        var code = {'codeList' : mpCode};
+        fullfill(code);
+      } 
+    });
+  });
+
+}
 module.exports = UserAccess;
