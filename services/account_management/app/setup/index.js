@@ -1,19 +1,27 @@
 const dbConnection = require('@dataAccess/db_connection');
 
-// all repositories
-const patientRepo = require('@dataAccess/patient_repository');
-const medproRepo = require('@dataAccess/medical_professional_repository');
-const adminRepo = require('@dataAccess/system_admin_repository');
+// user repository
+const UserRepo = require('@dataAccess/user_repository');
 
-// all models
-const Patient = require('@models/patient');
+// all user models
+const User = require('@models/users')
+const Security = require('@models/security');
+const Salt = require('@models/identifier');
+const Patient = require('@models/patient')
 const MedicalProfessional = require('@models/medicalprofessional');
-const SystemAdmin = require('@models/systemadmin');
+const SystemAdmin = require('@models/systemadmin')
 
-// each repo+model pair is bundled into one object for easy importing
 const models = {
-	db: new dbConnection().Connect(),
-    Patient: {
+	DB: new dbConnection().Connect(),
+    UserRepo: UserRepo,
+    User: User,
+    Security: Security,
+    Salt: Salt,
+    Patient: Patient,
+    MedicalProfessional: MedicalProfessional,
+    SystemAdmin: SystemAdmin
+
+    /*Patient: {
     	repo: patientRepo,
     	create: Patient
     },
@@ -24,7 +32,7 @@ const models = {
     SystemAdmin: {
     	repo: adminRepo,
     	create: SystemAdmin
-    }
+    }*/
 }
 
 module.exports = models;
