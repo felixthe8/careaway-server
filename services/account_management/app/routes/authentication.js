@@ -6,7 +6,7 @@ module.exports = (app) => {
 
     // POST /account/api/authentication
     // authenticates user and determines account type
-    app.route(config.routes.login).post(api.login(models.Patient, models.MedicalProfessional, models.SystemAdmin, models.db));
+    app.route(config.routes.login).post(api.login(models.UserRepo, models.DB));
     
     // POST /account/api/validate-username
     // make sure username exists
