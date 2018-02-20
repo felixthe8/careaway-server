@@ -120,7 +120,6 @@ api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) =
                     // med pro code was not found in db
                     const firstName = req.body.firstName;
                     const lastName = req.body.lastName;
-
                     // create user object with med pro role
                     var newUser = createGenericUser(User, Security, Salt, req.body);
                     var role = new MedicalProfessional(firstName, lastName, medicalCode);
