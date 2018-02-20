@@ -102,7 +102,7 @@ app.get('/', function (req, res) {
     //This saves a new Medical Professional into the database
     //userAccessTool.Create(newUser);
     //The code below resets a passwrod with that username
-    //userAccessTool.ResetCredential('Lazer','Lazer7777');
+    userAccessTool.ResetCredential('Lazer777','Lazer7777',"FK");
 
     // This code finds any patient with that MPCODE777 (use data seed to check for functionality)
     // userAccessTool.FindPatient('MPCODE777').then(function(value){
