@@ -9,12 +9,17 @@ api.login = (UserRepo, DB) => (req, res) => {
     DB.then(database => {
         var userRepo = new UserRepo(database);
         userRepo.FindUser(username).then(function(value){
-            var queriedUser = value;
-            const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
-            if (passHashed === queriedUser.password) {
-                res.json({success: true, accountType: queriedUser.accountType.role});
+            var queriedUser = value.User;
+            if (queriedUser.length === 0) {
+                res.json({error: 'User does not exist.'});
             } else {
-                res.json({error: 'Wrong password.'})
+                queriedUser = queriedUser[0];
+                const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
+                if (passHashed === queriedUser.password) {
+                    res.json({success: true, accountType: queriedUser.accountType.role});
+                } else {
+                    res.json({error: 'Wrong password.'})
+                }
             }
         });
     })
@@ -26,13 +31,18 @@ api.validateUsername = (UserRepo, DB) => (req, res) => {
     DB.then(database => {
         var userRepo = new UserRepo(database);
         userRepo.FindUser(username).then(function(value){
-            var queriedUser = value;
+            var queriedUser = value.User;
+            if (queriedUser.length === 0) {
+                res.json({error: 'User does not exist.'});
+            } else {
+                res.json({success: true});
+            }
             
         });
     })
 }
 
-api.securityQs = (Patient, MedicalProfessional, db) => (req, res) => {
+api.securityQs = (UserRepo, db) => (req, res) => {
     const username = req.query.username;
 
     db.then(database => {

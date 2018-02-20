@@ -10,7 +10,7 @@ module.exports = (app) => {
     
     // POST /account/api/validate-username
     // make sure username exists
-    app.route(config.routes.validateUsername).post(api.validateUsername(models.Patient, models.MedicalProfessional, models.db));
+    app.route(config.routes.validateUsername).post(api.validateUsername(models.UserRepo, models.DB));
     
     // GET /account/api/security-questions
     // reset credentials for user
