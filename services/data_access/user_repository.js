@@ -29,6 +29,19 @@ UserAccess.prototype.Create = function(user)
   });
 };
 /**
+ * This function edits the patient diagnosis
+ * @param {*} username 
+ * @param {*} diagnosis
+ */
+UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
+  const collection = this.db.collection('Users');
+  collection.updateOne({'username' : username},//looks for username in the database
+                          { $set: {'accountType.diagnosis ': diagnosis}},//inserts new password 
+                           function(err, result){
+                            console.log('Updated Diagnosis');
+                        });
+}
+/**
  * This function edits a user's password into the 
  * mongodb database with received information
  * 
