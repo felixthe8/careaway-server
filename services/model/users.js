@@ -17,6 +17,6 @@ function User (username, password, role, security, identifier) {
   // answer will be stored as an element inside an array
   this.security = security || [];
   // identifier is an array that will hold the user salt value
-  this.identifier = identifier || [];
+  this.identifier = identifier || {};
 }
 module.exports = User;
