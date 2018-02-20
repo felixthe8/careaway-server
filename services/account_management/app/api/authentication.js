@@ -42,53 +42,30 @@ api.validateUsername = (UserRepo, DB) => (req, res) => {
     })
 }
 
-api.securityQs = (UserRepo, db) => (req, res) => {
+api.securityQs = (UserRepo, DB) => (req, res) => {
     const username = req.query.username;
 
-    db.then(database => {
-        // query for patient with username
-        new Patient.repo(database).GetOne(username).then(result => {
-            if (result.length === 0) {
-                // no patient with given username, so go to next query
-                return USER_NOT_FOUND;
+    DB.then(database => {
+        var userRepo = new UserRepo(database);
+        userRepo.FindUser(username).then(function(value){
+            var queriedUser = value.User;
+            if (queriedUser.length === 0) {
+                res.json({error: 'User does not exist.'});
             } else {
-                // patient was found
-                const user = result[0];
-                const q1 = user.securityQ1;
-                const q2 = user.securityQ2;
-                const q3 = user.securityQ3;
-                res.json({q1: q1, q2: q2, q3: q3});
-                // return user found
-                return USER_FOUND;
-            }
-        }).then(result => {
-            // if user was already found, skip this promise
-            if (result === USER_FOUND) return USER_FOUND;
-
-            // query for med pro with username
-            return new MedicalProfessional.repo(database).GetOne(username).then(result => {
-                if (result.length == 0) {
-                    // no med pro with given username, so go to next query
-                    return USER_NOT_FOUND;
-                } else {
-                    // med pro was found, check password
-                    const user = result[0];
-                    const q1 = user.securityQ1;
-                    const q2 = user.securityQ2;
-                    const q3 = user.securityQ3;
-                    res.json({q1: q1, q2: q2, q3: q3});
-                    // return user found
-                    return USER_FOUND;
+                queriedUser = queriedUser[0];
+                var userSecurity = queriedUser.security;
+                var securityQs = [];
+                for (var i=0;i<userSecurity.length;i++) {
+                    securityQs.push(userSecurity[i].securityQ);
                 }
-            })
-        }).then(result => {
-            if (result == USER_NOT_FOUND)
-                res.json({error: 'User not found.'});
+                res.json({result: securityQs});
+            }
+            
         });
-    });
+    })
 }
 
-api.validateAs = (Patient, MedicalProfessional, db) => (req, res) => {
+api.validateAs = (UserRepo, DB) => (req, res) => {
     const username = req.body.username;
     const reqA1 = req.body.securityA1;
     const reqA2 = req.body.securityA2;
@@ -152,7 +129,7 @@ api.validateAs = (Patient, MedicalProfessional, db) => (req, res) => {
     });
 }
 
-api.resetCreds = (Patient, MedicalProfessional, db) => (req, res) => {
+api.resetCreds = (UserRepo, DB) => (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 

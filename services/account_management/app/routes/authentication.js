@@ -14,15 +14,15 @@ module.exports = (app) => {
     
     // GET /account/api/security-questions
     // reset credentials for user
-    app.route(config.routes.securityQuestions).get(api.securityQs(models.Patient, models.MedicalProfessional, models.db));
+    app.route(config.routes.securityQuestions).get(api.securityQs(models.UserRepo, models.DB));
     
     // POST /account/api/validate-answers
     // reset credentials for user
-    app.route(config.routes.validateAnswers).post(api.validateAs(models.Patient, models.MedicalProfessional, models.db));
+    app.route(config.routes.validateAnswers).post(api.validateAs(models.UserRepo, models.DB));
     
     // PUT /account/api/reset-creds
     // reset credentials for user
-    app.route(config.routes.resetCreds).put(api.resetCreds(models.Patient, models.MedicalProfessional, models.db));
+    app.route(config.routes.resetCreds).put(api.resetCreds(models.UserRepo, models.DB));
 
     // GET /
     // test server
