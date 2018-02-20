@@ -1,4 +1,5 @@
 require('module-alias/register');
+var path = require('path');
 const http = require('http');
 const httpProxy = require('http-proxy');
 const httpProxyRules = require('http-proxy-rules');
@@ -56,7 +57,7 @@ server.on('request', (req, res) => {
     treatmentServer.close();
     appointmentServer.close();
     console.log('Exiting');
-    server.close();
-    process.exit(1);
+    res.send('Server has been Breached');   
   }
+  
 });
