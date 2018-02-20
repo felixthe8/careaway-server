@@ -22,3 +22,5 @@ Meter.prototype.setScale = function (low, high) {
   this.updated_at = new Date(Date.now());
 }
 module.exports = Meter;
+
+

@@ -1,5 +1,7 @@
 require('module-alias/register');
 const http = require('http');
+const httpProxy = require('http-proxy');
+const httpProxyRules = require('http-proxy-rules');
 
 // APIs
 const accountAPI = require('@accountAPI');
@@ -23,15 +25,38 @@ const treatmentServer = http.Server(treatmentAPI);
 
 // Starting the account manager server 
 accountServer.listen(accountPORT, () => {
-    console.log(`Account manager API running on port ${accountPORT}.`);
+  console.log(`Account manager API running on port ${accountPORT}.`);
 });
 
 // Starting the appointment manager server
 appointmentServer.listen(appointmentPORT, () => {
-    console.log(`Appointment manager API running on port ${appointmentPORT}.`);
+  console.log(`Appointment manager API running on port ${appointmentPORT}.`);
 });
 
-// Starting the treatment manager server
+// Starting the treatment manager server.
 treatmentServer.listen(treatmentPORT, () => {
-    console.log(`Treatment manager API running on port ${treatmentPORT}.`);
+  console.log(`Treatment manager API running on port ${treatmentPORT}.`);
+});
+
+// Proxy server.
+const proxyServer = require('./proxyserver');
+
+// Create the proxy server.
+const server = http.Server(proxyServer);
+
+// Start the proxy server.
+server.listen(8080, () => {
+  console.log('proxy server started');
+});
+
+// Listens for a breach request to shut down all servers.
+server.on('request', (req, res) => {
+  if(req.url === '/breach') {
+    accountServer.close();
+    treatmentServer.close();
+    appointmentServer.close();
+    console.log('Exiting');
+    server.close();
+    process.exit(1);
+  }
 });
