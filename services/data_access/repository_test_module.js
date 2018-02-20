@@ -4,14 +4,14 @@ var app = express();
 //get bodyparser middleware
 var bodyParser = require('body-parser');
 var CryptoJS = require('crypto-js');
-
+//This is all the models and dataaccess object
 var Repo = require('./user_repository');
 var User = require('../model/users');
 var MedicalProfessional = require('../model/medicalprofessional');
 var security = require('../model/security');
 var salt = require('../model/identifier');
-
 var mongodb = require('./db_connection.js');
+
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -29,46 +29,64 @@ app.use(function(req, res, next) {
 //The variable that holds the db connection
 var db;
 
+app.post('/account/api/registration/medical-professional', function(req, res){
+    //Creates the Repository for the users
+    var userAccessTool = new Repo(db);
+    var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8).toString())
+    var sQ = [ new security(req.body.securityQ1,req.body.securityA1),
+               new security(req.body.securityQ2,req.body.securityA2),
+               new security(req.body.securityQ3,req.body.securityA3),
+    ]
+    var role = new MedicalProfessional(req.body.firstname,req.body.lastname,"MPCODE7777")
+    var newUser = new User(req.body.username,CryptoJS.HmacSHA256(req.body.password,userSalt.salt).toString(),role,sQ,userSalt);
+    userAccessTool.Create(newUser);
+    res.send("SUCCESS");
+});
+
+
 //The test method to check repository functionality
 app.get('/', function (req, res) {
     //Creates the Repository for the users
     var userAccessTool = new Repo(db);
-    var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8))
-    var sQ = [ new security("Where did you go?","Answer"),
-               new security("Where did you go?","Answer"),
-               new security("Where did you go?","Answer"),
-    ]
-    var role = new MedicalProfessional('Lazer','Man','MPCODE777')
-    var newUser = new User('Lazer','Lazer',role,sQ,userSalt);
-    //Saves the Value into0 the Database
-    userAccessTool.ResetCredential('Lazer','Lazer7777');
-    userAccessTool.FindPatient('MPCODE777').then(function(value){
-        console.log(value);
+    // var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8).toString())
+    // var sQ = [ new security(1,"Answer"),
+    //            new security(4,"Answer"),
+    //            new security(9,"Answer"),
+    // ]
+    // var role = new MedicalProfessional('Lazer','Man','MPCODE777')
+    // var newUser = new User('Lazer',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
+    // This saves a new Medical Professional into the database
+    // userAccessTool.Create(newUser);
+    //The code below resets a passwrod with that username
+    //userAccessTool.ResetCredential('Lazer','Lazer7777');
+
+    // This code finds any patient with that MPCODE777 (use data seed to check for functionality)
+    // userAccessTool.FindPatient('MPCODE777').then(function(value){
+    //     console.log(value);
+    //     res.end(JSON.stringify(value));
+    // })
+
+    //This code finds all MPCODE within the database
+    // userAccessTool.GetMedicalCodes().then(
+    //     function(value){
+    //         for(var i=0; i<value.codeList.length; i++)
+    //         {
+    //             console.log(value.codeList[i]);
+    //         }
+    //         res.end("SUCCESS");
+    //     });
+
+
+    //This code checks the functionality to find one user
+    /*userAccessTool.FindUser('Lazer').then(function(value){
+        console.log(value)
+        console.log("Role:"+value.accountType.role)
+        if(value.accountType.role == "medical-professional"){
+            console.log("HELLA YEA")
+        }
         res.end("SUCCESS")
-    })
-    // userAccessTool.FindUser('Lazer').then(function(value){
-    //     console.log(value)
-    //     console.log("Role:"+value.accountType.role)
-    //     if(value.accountType.role == "medical-professional"){
-    //         console.log("HELLA YEA")
-    //     }
-    //     res.end("SUCCESS")
-    // });
+    });*/
 });
-
-app.post('/FindUser', function(req,res) {
-    var userAccessTool = new patientRepo(db);
-    console.log("I'm inside the POST method");
-    console.log("Username: "+req.body.username);
-    console.log("Password: "+req.body.password);
-
-    userAccessTool.GetOne(req.body.username).then (function(value) {
-        
-        res.send(value);
-
-    })
-});
-
 
 var server = app.listen(8081, function () {
     var host = server.address().address
