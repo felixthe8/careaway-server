@@ -1,6 +1,6 @@
-const appointmentModel = requires('@appointmentModels/appointmet');
+const appointmentModel = require('@appointmentModels/appointment');
 const model = {
-    Appointment: appointmentModel
+  Appointment: appointmentModel
 }
 
 module.exports = model;
