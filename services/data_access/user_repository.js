@@ -112,7 +112,7 @@ UserAccess.prototype.FindPatient = function(MPCode){
   });
 };
 /** 
- * This function is used gather a list of medical professional codes 
+ * This function is used to gather a list of medical professional codes 
  * used to verify if a medical professional exist within our system
 */
 UserAccess.prototype.GetMedicalCodes = function(){
@@ -122,7 +122,6 @@ UserAccess.prototype.GetMedicalCodes = function(){
     //This is the filter to locate any user with the role  medical professional
     collection.find({'accountType.role': 'medical-professional'}).toArray(function(err, docs) 
     {
-      console.log("CHECKED");
       if(err)
       {
         console.log('Failed to get query');

@@ -10,7 +10,6 @@ function TreatmentPlanAccess(dbConnection)
 }
 
 TreatmentPlanAccess.prototype.CreateTreatment = function(){
-
 }
 
 TreatmentPlanAccess.prototype.EditTreatment= function(){
