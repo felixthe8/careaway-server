@@ -22,7 +22,7 @@ api.login = (UserRepo, DB) => (req, res) => {
                 }
             }
         });
-    })
+    });
 }
 
 api.validateUsername = (UserRepo, DB) => (req, res) => {
@@ -39,7 +39,7 @@ api.validateUsername = (UserRepo, DB) => (req, res) => {
             }
             
         });
-    })
+    });
 }
 
 api.securityQs = (UserRepo, DB) => (req, res) => {
@@ -62,7 +62,7 @@ api.securityQs = (UserRepo, DB) => (req, res) => {
             }
             
         });
-    })
+    });
 }
 
 api.validateAs = (UserRepo, DB) => (req, res) => {
@@ -71,60 +71,26 @@ api.validateAs = (UserRepo, DB) => (req, res) => {
     const reqA2 = req.body.securityA2;
     const reqA3 = req.body.securityA3;
 
-    db.then(database => {
-        // query for patient with username
-        new Patient.repo(database).GetOne(username).then(result => {
-            if (result.length === 0) {
-                // no patient with given username, so go to next query
-                return USER_NOT_FOUND;
+    DB.then(database => {
+        var userRepo = new UserRepo(database);
+        userRepo.FindUser(username).then(function(value){
+            var queriedUser = value.User;
+            if (queriedUser.length === 0) {
+                res.json({error: 'User does not exist.'});
             } else {
-                // patient was found
-                const user = result[0];
-                const a1 = user.securityA1;
-                const a2 = user.securityA2;
-                const a3 = user.securityA3;
-                const a1Sha = CryptoJS.SHA256(reqA1).toString(CryptoJS.enc.Hex);
-                const a2Sha = CryptoJS.SHA256(reqA2).toString(CryptoJS.enc.Hex);
-                const a3Sha = CryptoJS.SHA256(reqA3).toString(CryptoJS.enc.Hex);
-                console.log(a1, a1Sha);
-                if (a1 === a1Sha && a2 === a2Sha && a3 === a3Sha) {
+                queriedUser = queriedUser[0];
+                var userSecurity = queriedUser.security;
+                // TODO hashed answers?
+                const a1 = userSecurity[0].securityA;
+                const a2 = userSecurity[1].securityA;
+                const a3 = userSecurity[2].securityA;
+
+                if (a1 === reqA1 && a2 === reqA2 && a3 === reqA3) {
                     res.json({success: true});
                 } else {
-                    res.json({error: 'Bad answers'});
+                    res.json({error: 'Wrong answers.'})
                 }
-                // return user found
-                return USER_FOUND;
             }
-        }).then(result => {
-            // if user was already found, skip this promise
-            if (result === USER_FOUND) return USER_FOUND;
-
-            // query for med pro with username
-            return new MedicalProfessional.repo(database).GetOne(username).then(result => {
-                if (result.length == 0) {
-                    // no med pro with given username, so go to next query
-                    return USER_NOT_FOUND;
-                } else {
-                    // med pro was found, check password
-                    const user = result[0];
-                    const a1 = user.securityA1;
-                    const a2 = user.securityA2;
-                    const a3 = user.securityA3;
-                    const a1Sha = CryptoJS.SHA256(reqA1).toString(CryptoJS.enc.Hex);
-                    const a2Sha = CryptoJS.SHA256(reqA2).toString(CryptoJS.enc.Hex);
-                    const a3Sha = CryptoJS.SHA256(reqA3).toString(CryptoJS.enc.Hex);
-                    if (a1 === a1Sha && a2 === a2Sha && a3 === a3Sha) {
-                        res.json({success: true});
-                    } else {
-                        res.json({error: 'Bad answers'});
-                    }
-                    // return user found
-                    return USER_FOUND;
-                }
-            })
-        }).then(result => {
-            if (result == USER_NOT_FOUND)
-                res.json({error: 'User not found.'});
         });
     });
 }
