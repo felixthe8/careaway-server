@@ -20,19 +20,6 @@ const models = {
     Patient: Patient,
     MedicalProfessional: MedicalProfessional,
     SystemAdmin: SystemAdmin
-
-    /*Patient: {
-    	repo: patientRepo,
-    	create: Patient
-    },
-    MedicalProfessional: {
-    	repo: medproRepo,
-    	create: MedicalProfessional
-    },
-    SystemAdmin: {
-    	repo: adminRepo,
-    	create: SystemAdmin
-    }*/
 }
 
 module.exports = models;
