@@ -38,37 +38,61 @@ function createGenericUser(User, Security, Salt, req) {
 
 
 api.registerPatient = (User, Security, Salt, Patient, UserRepo, DB) => (req, res) => {
-    // grab patient info from body
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const medicalCode = req.body.medicalCode;
+    const username = req.body.username;
+    // check for unique user
 
-    var newUser = createGenericUser(User, Security, Salt, req.body);
-    var role = new Patient(firstName, lastName, medicalCode);
-    newUser.accountType = role;
-    
     DB.then(database => {
         var userRepo = new UserRepo(database);
-        userRepo.Create(newUser);
-        res.json({success: true});
+        userRepo.FindUser(username).then(function(value){
+            var queriedUser = value.User;
+            if (queriedUser.length > 0) {
+                res.json({error: 'Username already exists.'})
+            } else {
+                // grab patient info from body
+                const firstName = req.body.firstName;
+                const lastName = req.body.lastName;
+                const medicalCode = req.body.medicalCode;
+
+                var newUser = createGenericUser(User, Security, Salt, req.body);
+                var role = new Patient(firstName, lastName, medicalCode);
+                newUser.accountType = role;
+                
+                userRepo.Create(newUser);
+                res.json({success: true});
+            }
+        });
     });
+
+    
 }
 
 api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) => (req, res) => {
     // grab med pro info from body
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const medicalCode = req.body.medicalCode;
+    const username = req.body.username;
 
-    var newUser = createGenericUser(User, Security, Salt, req.body);
-    var role = new MedicalProfessional(firstName, lastName, medicalCode);
-    newUser.accountType = role;
-    
     DB.then(database => {
         var userRepo = new UserRepo(database);
-        userRepo.Create(newUser);
-        res.json({success: true});
-    })
+        userRepo.FindUser(username).then(function(value){
+            var queriedUser = value.User;
+            if (queriedUser.length > 0) {
+                res.json({error: 'Username already exists.'})
+            } else {
+                // grab patient info from body
+                const firstName = req.body.firstName;
+                const lastName = req.body.lastName;
+                const medicalCode = req.body.medicalCode;
+
+                var newUser = createGenericUser(User, Security, Salt, req.body);
+                var role = new MedicalProfessional(firstName, lastName, medicalCode);
+                newUser.accountType = role;
+
+                userRepo.Create(newUser);
+                res.json({success: true});
+            }
+        });
+    });
+
+    
 }
 
 
