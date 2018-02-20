@@ -2,6 +2,9 @@ var CryptoJS = require('crypto-js');
 
 const api = {};
 
+// const string to return and compare to
+const USER_EXISTS = 'Username already exists.';
+
 // creates a user object that both patient and medical professional need for registration
 function createGenericUser(User, Security, Salt, req) {
     // grab all registration info from body
@@ -44,8 +47,6 @@ function createGenericUser(User, Security, Salt, req) {
 api.registerPatient = (User, Security, Salt, Patient, UserRepo, DB) => (req, res) => {
     // grab just username from body
     const username = req.body.username;
-    // const string to return and compare to
-    const USER_EXISTS = 'Username already exists.';
 
     DB.then(database => {
         var userRepo = new UserRepo(database);
@@ -99,20 +100,35 @@ api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) =
             var queriedUser = value.User;
             if (queriedUser.length > 0) {
                 // username already exists
-                res.json({error: 'Username already exists.'})
+                return USER_EXISTS;
             } else {
-                // username does not exist yet
-                const firstName = req.body.firstName;
-                const lastName = req.body.lastName;
+                // username doesn't exist yet, query medical codes
+                return userRepo.GetMedicalCodes();
+            }
+        }).then(function(value) {
+            if (value === USER_EXISTS) {
+                // user exists, respond with json and do nothing else
+                res.json({error: USER_EXISTS});
+            } else {
+                // get list of med pro codes
+                var codes = value.codeList;
                 const medicalCode = req.body.medicalCode;
+                if (codes.indexOf(medicalCode) > -1) {
+                    // med pro code from request already exists in db
+                    res.json({error: 'Medical professional code already exists.'});
+                } else {
+                    // med pro code was not found in db
+                    const firstName = req.body.firstName;
+                    const lastName = req.body.lastName;
 
-                // create user object with med pro role
-                var newUser = createGenericUser(User, Security, Salt, req.body);
-                var role = new MedicalProfessional(firstName, lastName, medicalCode);
-                newUser.accountType = role;
-                // put user in db
-                userRepo.Create(newUser);
-                res.json({success: true});
+                    // create user object with med pro role
+                    var newUser = createGenericUser(User, Security, Salt, req.body);
+                    var role = new MedicalProfessional(firstName, lastName, medicalCode);
+                    newUser.accountType = role;
+                    // put user in db
+                    userRepo.Create(newUser);
+                    res.json({success: true});
+                }
             }
         });
     });
