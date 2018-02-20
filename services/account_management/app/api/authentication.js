@@ -1,9 +1,16 @@
+
 var CryptoJS = require('crypto-js');
 
 const api = {};
 
 const USER_FOUND = 1;
 const USER_NOT_FOUND = 0;
+const Patient = require('@models/patient');
+const patientRepo = require('@dataAccess/patient_repository');
+const medproRepo = require('@dataAccess/medical_professional_repository');
+const adminRepo = require('@dataAccess/system_admin_repository');
+
+const api = {};
 
 api.login = (Patient, MedicalProfessional, SystemAdmin, db) => (req, res) => {
     // grab username and password from body
