@@ -50,11 +50,11 @@ UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
  * @param {*} username the user that wants to reset their password
  * @param {*} password the new password the user wants to save
  */
-UserAccess.prototype.ResetCredential = function(username,password){
+UserAccess.prototype.ResetCredential = function(username,password,salt){
   const collection = this.db.collection('Users');
   collection.updateOne(
     {'username' : username},//looks for username in the database
-    { $set: {'password':password}},//inserts new password 
+    { $set: {'password':password,'identifier.salt': salt}},//inserts new password 
     function(err, result){
       console.log('Updated Password');
     }

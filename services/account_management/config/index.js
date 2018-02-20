@@ -12,18 +12,10 @@ module.exports = {
         securityQuestions: '/account/api/security-questions',
         validateAnswers: '/account/api/validate-answers',
         resetCreds: '/account/api/reset-creds',
-        updateDiagnosis: '/account/api/update-diagnosis'
+        updateDiagnosis: '/account/api/update-diagnosis',
+        breach: '/account/api/breach'
     },
     server: {
         port: 4100
     }
 }
-
-// POST registerPatient (with username validation)
-// POST registerMedpro (with username validation)
-// POST authentication (patient and mp)
-// POST validate username
-// GET security questions for user
-// POST validate answers
-// PUT reset credentials
-// PUT edit patient diagnosis data
