@@ -47,7 +47,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'));
-
+app.use('/', (req, res, next) => {
+  console.log("Here");
+})
 /* app.use('/', (req, res) => {
   const token = req.csrfToken();
   res.locals.csrfToken = token;
