@@ -42,13 +42,12 @@ AppointmentAccess.prototype.CreateAppointment = function(medicalprofessional, pa
  * 
  * @param {*} medicalprofessional the medical professional username
  * @param {*} patient the patient username
- * @param {*} appointmentDate the appointmentDate of the appointment that needs to be changed
  * @param {*} appointment the new update to the appointment
  */
-AppointmentAccess.prototype.EditAppointment= function(medicalprofessional, patient, appointmentDate, appointment){
+AppointmentAccess.prototype.EditAppointment= function(medicalprofessional, patient, appointment){
   const collection = this.db.collection('Users');
   collection.updateOne(
-    {'username' : medicalprofessional, 'accountType.appointment.date' : appointmentDate},//looks for username in the database
+    {'username' : medicalprofessional, 'accountType.appointment.date' : appointment.date},//looks for username in the database
     { $set: {'accountType.appointment.$': appointment}},//updates appointment with new edits on the array 
     function(err, result){
       console.log('Edited appointment');
@@ -73,11 +72,13 @@ AppointmentAccess.prototype.EditAppointment= function(medicalprofessional, patie
  */
 AppointmentAccess.prototype.DeleteAppointment= function(medicalprofessional, patient, appointment){
   const collection = this.db.collection('Users');
-  collection.updateOne({'username' : medicalprofessional },//looks for username in the database
-                          { $pull: {'accountType.appointment': appointment}},//deletes the appointment
-                           function(err, result){
-                            console.log('Removed appointment');
-                        });
+  collection.updateOne(
+    {'username' : medicalprofessional },//looks for username in the database
+    { $pull: {'accountType.appointment': appointment}},//deletes the appointment
+      function(err, result){
+        console.log('Removed appointment');
+    }
+  );
   collection.updateOne({'username' : patient},//looks for username in the database
     { $pull: {'accountType.appointment.$': appointment}},//deletes the appointment
       function(err, result){
@@ -103,10 +104,15 @@ AppointmentAccess.prototype.GetAppointment= function(username){
       else
       {
         console.log('Successfully got query');
-        var appointments = result.accountType.appointment;
-        //return an object containing all the appointments of the user
-        var appointmentList = {'appointments' : appointments};
-        fullfill(appointmentList);
+        if(result != null){        
+          var appointments = result.accountType.appointment;
+          //return an object containing all the appointments of the user
+          var appointmentList = {'appointments' : appointments};
+          fullfill(appointmentList);
+        }
+        else{
+          fullfill(null);
+        }
       } 
     });
   });

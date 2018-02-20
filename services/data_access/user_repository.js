@@ -35,11 +35,13 @@ UserAccess.prototype.Create = function(user)
  */
 UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
   const collection = this.db.collection('Users');
-  collection.updateOne({'username' : username},//looks for username in the database
-                          { $set: {'accountType.diagnosis ': diagnosis}},//inserts new password 
-                           function(err, result){
-                            console.log('Updated Diagnosis');
-                        });
+  collection.updateOne(
+    {'username' : username},//looks for username in the database
+    { $set: {'accountType.diagnosis ': diagnosis}},//inserts new password 
+    function(err, result){
+      console.log('Updated Diagnosis');
+    }
+  );
 }
 /**
  * This function edits a user's password into the 
@@ -50,11 +52,13 @@ UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
  */
 UserAccess.prototype.ResetCredential = function(username,password){
   const collection = this.db.collection('Users');
-  collection.updateOne({'username' : username},//looks for username in the database
-                          { $set: {'password':password}},//inserts new password 
-                           function(err, result){
-                            console.log('Updated Password');
-                        });
+  collection.updateOne(
+    {'username' : username},//looks for username in the database
+    { $set: {'password':password}},//inserts new password 
+    function(err, result){
+      console.log('Updated Password');
+    }
+  );
 };
 /**
  * This function finds an existing user in the database

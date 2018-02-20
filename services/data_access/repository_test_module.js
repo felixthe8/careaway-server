@@ -52,6 +52,29 @@ app.post('/account/api/registration/medical-professional', function(req, res){
 
 
 //The test method to check repository functionality
+app.get('/Treatment', function (req, res) {
+    //Creates the Repository for the users
+    var TreatmentAccess = new TreatmentRepo(db);
+    var Treatment = new Treatments("HOW DO YOU DO?",10,"1/1/2010");
+    //TreatmentAccess.CreateTreatment("Lazer777",Treatment);
+    //TreatmentAccess.EditTreatment("Lazer777",Treatment);
+    //TreatmentAccess.DeleteTreatment("Lazer777",Treatment);
+    // TreatmentAccess.GetPatientTreatment("Lazer777").then(function(value)
+    // {
+    //     console.log(value);
+    //     res.end("SUCCESS");
+    // });
+    // TreatmentAccess.GetTreatmentsDiagnosis("MPCODE777","H").then(
+    //     function(value){
+    //         console.log(value);
+    //         res.end("Success");
+    //     }
+    // )
+
+
+});
+
+//The test method to check repository functionality
 app.get('/Appointment', function (req, res) {
     //Creates the Repository for the users
     var appointmentAccess = new AppointmentRepo(db);
@@ -59,11 +82,10 @@ app.get('/Appointment', function (req, res) {
     //appointmentAccess.CreateAppointment('Lazer','Lazer777',appointment);
     //appointmentAccess.EditAppointment('Lazer','Lazer777',"1/1/2010",appointment);
     //appointmentAccess.DeleteAppointment('Lazer','Lazer777',appointment);
-    appointmentAccess.GetAppointment('Lazer').then(function(value){
-        console.log(value);
-        res.end(value.toString());
-    });
-
+    // appointmentAccess.GetAppointment('Lazer').then(function(value){
+    //     console.log(value);
+    //     res.end("Success");
+    // });
 });
  
 //The test method to check repository functionality
@@ -78,7 +100,7 @@ app.get('/', function (req, res) {
     var role = new Patient('Lazer','Man','MPCODE777')
     var newUser = new User('Lazer777',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
     //This saves a new Medical Professional into the database
-    userAccessTool.Create(newUser);
+    //userAccessTool.Create(newUser);
     //The code below resets a passwrod with that username
     //userAccessTool.ResetCredential('Lazer','Lazer7777');
 
