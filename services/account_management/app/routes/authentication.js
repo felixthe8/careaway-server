@@ -25,14 +25,9 @@ module.exports = (app) => {
     // reset credentials for user
     app.route(config.routes.resetCreds).put(api.resetCreds(models.UserRepo, models.DB));
 
-
-
     // GET /
     // test server
     app.route('/').get((req, res) => {
         res.send('Test for account management.');
     });
-
-    app.route('/patients_test').get(api.getPatients(models.User, models.db));
-
 }

@@ -80,13 +80,18 @@ api.validateAs = (UserRepo, DB) => (req, res) => {
                 res.json({error: 'User does not exist.'});
             } else {
                 queriedUser = queriedUser[0];
+                var userSalts = queriedUser.identifier;
                 var userSecurity = queriedUser.security;
-                // TODO hashed answers?
-                const a1 = userSecurity[0].securityA;
-                const a2 = userSecurity[1].securityA;
-                const a3 = userSecurity[2].securityA;
+                
+                const hashedA1 = CryptoJS.HmacSHA256(reqA1,userSalts.saltA1).toString();
+                const hashedA2 = CryptoJS.HmacSHA256(reqA2,userSalts.saltA2).toString();
+                const hashedA3 = CryptoJS.HmacSHA256(reqA3,userSalts.saltA3).toString();
 
-                if (a1 === reqA1 && a2 === reqA2 && a3 === reqA3) {
+                const queriedA1 = userSecurity[0].securityA;
+                const queriedA2 = userSecurity[1].securityA;
+                const queriedA3 = userSecurity[2].securityA;
+
+                if (hashedA1 === queriedA1 && hashedA2 === queriedA2 && hashedA3 === queriedA3) {
                     res.json({success: true});
                 } else {
                     res.json({error: 'Wrong answers.'})
