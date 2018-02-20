@@ -1,4 +1,3 @@
-
 var CryptoJS = require('crypto-js');
 
 const api = {};
@@ -114,9 +113,10 @@ api.resetCreds = (UserRepo, DB) => (req, res) => {
             } else {
                 // reset creds
                 queriedUser = queriedUser[0];
-                var userSalts = queriedUser.identifier;
-                // TODO change password salt too
-                const passHashed = CryptoJS.HmacSHA256(password,salt.salt).toString();
+                const newSalt = CryptoJS.lib.WordArray.random(128/8).toString();
+                const passHashed = CryptoJS.HmacSHA256(password,newSalt).toString();
+                userRepo.ResetCredential(username,passHashed,newSalt);
+                res.json({success: true});
             }
         });
     });
