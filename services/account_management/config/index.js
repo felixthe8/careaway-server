@@ -13,11 +13,10 @@ module.exports = {
         validateAnswers: '/account/api/validate-answers',
         resetCreds: '/account/api/reset-creds',
         updateDiagnosis: '/account/api/update-diagnosis',
-        ssoLogin: '/login/ReceiveSSOInfo',
-        ssoRegistration: '/registration/SendSSOInfo',
-        ssoSendPassword:'/registration/ReceiveSSOInfo',
-        ssoSendPassword:'/resetpassword/SendSSOInfo',
-        ssoReceivePassword:'/resetpassword/ReceiveSSOInfo'
+        ssoLogin: '/SSO/login',
+        ssoRegistration: '/SSO/registration',
+        ssoResetPassword:'/SSO/ResetPassword',
+
     },
     server: {
         port: 4100
