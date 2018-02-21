@@ -6,6 +6,6 @@ module.exports = (app) => {
 
     // POST /account/api/breach
     // shuts down server; there's been a breach!!!
-    app.route(config.routes.breach).post(api.shutdownDB(models.UserRepo, models.DB));
+    //app.route(config.routes.breach).post(api.shutdownDB(models.UserRepo, models.DB));
 
 }
