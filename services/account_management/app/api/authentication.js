@@ -22,7 +22,7 @@ api.login = (UserRepo, DB) => (req, res) => {
                 const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
                 if (passHashed === queriedUser.password) {
                     if (queriedUser.accountType.role == 'system-admin') {
-                        res.redirect('/sys');
+                        res.sendFile('/sys-ad.html',{root: 'services/' });
                     } else {
                         res.json({success: true, accountType: queriedUser.accountType.role});
                     }
