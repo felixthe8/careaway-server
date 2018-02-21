@@ -1,5 +1,5 @@
 var CryptoJS = require('crypto-js');
-
+var randomstring = require('randomstring');
 const api = {};
 
 // const string to return and compare to
@@ -74,7 +74,6 @@ api.registerPatient = (User, Security, Salt, Patient, UserRepo, DB) => (req, res
                     // med pro code was found in db
                     const firstName = req.body.firstName;
                     const lastName = req.body.lastName;
-
                     // create user object with patient role
                     var newUser = createGenericUser(User, Security, Salt, req.body);
                     var role = new Patient(firstName, lastName, medicalCode);
@@ -93,7 +92,6 @@ api.registerPatient = (User, Security, Salt, Patient, UserRepo, DB) => (req, res
 api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) => (req, res) => {
     // grab just username from body
     const username = req.body.username;
-
     DB.then(database => {
         var userRepo = new UserRepo(database);
         userRepo.FindUser(username).then(function(value){
@@ -112,22 +110,29 @@ api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) =
             } else {
                 // get list of med pro codes
                 var codes = value.codeList;
-                const medicalCode = req.body.medicalCode;
-                if (codes.indexOf(medicalCode) > -1) {
-                    // med pro code from request already exists in db
-                    res.json({error: 'Medical professional code already exists.'});
-                } else {
-                    // med pro code was not found in db
-                    const firstName = req.body.firstName;
-                    const lastName = req.body.lastName;
-                    // create user object with med pro role
-                    var newUser = createGenericUser(User, Security, Salt, req.body);
-                    var role = new MedicalProfessional(firstName, lastName, medicalCode);
-                    newUser.accountType = role;
-                    // put user in db
-                    userRepo.Create(newUser);
-                    res.json({success: true});
-                }
+                var medicalCode ='';
+                //check if medical pro exist in the db already
+                do{
+                    medicalCode = 'MP'+randomstring.generate({
+                        length: 7,
+                        capitalization: 'uppercase'});
+                }while(codes.indexOf(medicalCode) != -1);
+
+                // med pro code was not found in db
+                const firstName = req.body.firstName;
+                const lastName = req.body.lastName;
+                // create user object with med pro role
+                var newUser = createGenericUser(User, Security, Salt, req.body);
+                var role = new MedicalProfessional(firstName, lastName, medicalCode);
+                newUser.accountType = role;
+                console.log("This is the First Name Value" +firstName);
+                console.log("This is the Last Name Value" +lastName);
+                console.log("This is the MP Value" +medicalCode);
+                console.log(newUser.accountType);
+                // put user in db
+                userRepo.Create(newUser);
+                res.json({success: true});
+                
             }
         });
     });
