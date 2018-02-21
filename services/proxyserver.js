@@ -49,6 +49,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use('/', (req, res, next) => {
   console.log("Here");
+  next();
 })
 /* app.use('/', (req, res) => {
   const token = req.csrfToken();
@@ -58,11 +59,15 @@ app.use('/', (req, res, next) => {
   return res.json({ csrfToken : token });
 }); */
 
-app.use('/register', proxy('localhost:4100', {
+app.use('/registerPatient', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
-    console.log('here ');
-    console.log(req);
-    return routes.register;
+    return routes.registerPatient;
+  } 
+}));
+
+app.use('/registerMed', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.registerMed;
   } 
 }));
 
