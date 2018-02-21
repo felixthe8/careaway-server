@@ -47,7 +47,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'));
-
+app.use('/', (req, res, next) => {
+  console.log("Here");
+  next();
+})
 /* app.use('/', (req, res) => {
   const token = req.csrfToken();
   res.locals.csrfToken = token;
@@ -56,26 +59,32 @@ app.use(morgan('dev'));
   return res.json({ csrfToken : token });
 }); */
 
-    app.use(function(req,res,next){
-      if (breached){
-        res.sendFile('/breached.html',{root: __dirname });
-      }else{
-        next();
-      }
+app.use(function(req,res,next){
+  if (breached) {
+      res.sendFile('/breached.html',{root: __dirname });
+  } else {
+      next();
+  }
   
-    });
- 
-  app.get('/sys', function (req,res){   
-  res.sendFile('/sys-ad.html',{root: __dirname });
-  });
-app.post('/breach', function (req,res){   
-  breached =true;
 });
-app.use('/register', proxy('localhost:4100', {
+ 
+app.get('/sys', function (req,res){   
+  res.sendFile('/sys-ad.html',{root: __dirname });
+});
+
+app.post('/breach', function (req,res){   
+  breached = true;
+});
+
+app.use('/registerPatient', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
-    console.log('here ');
-    console.log(req);
-    return routes.register;
+    return routes.registerPatient;
+  } 
+}));
+
+app.use('/registerMed', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.registerMed;
   } 
 }));
 
