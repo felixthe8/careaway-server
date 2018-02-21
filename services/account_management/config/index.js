@@ -19,12 +19,3 @@ module.exports = {
         port: 4100
     }
 }
-
-// POST registerPatient (with username validation)
-// POST registerMedpro (with username validation)
-// POST authentication (patient and mp)
-// POST validate username
-// GET security questions for user
-// POST validate answers
-// PUT reset credentials
-// PUT edit patient diagnosis data
