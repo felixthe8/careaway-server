@@ -5,9 +5,9 @@ var checklist = require('./checklist');
     Model for patients on the CareAway system. The Patient object will be 
     stored inside the User accountType attribute of the User. 
 */
-function Patient (firstname, lastname, medicalcode, diagnosis, treatment,appointment) {
-  this.firstname = firstname || '';
-  this.lastname = lastname || '';
+function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appointment) {
+  this.firstName = firstName || '';
+  this.lastName = lastName || '';
   // This refers to the medical professional's code the patient will provide during registration
   this.medicalcode = medicalcode || '';
   this.diagnosis = diagnosis || '';
