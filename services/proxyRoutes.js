@@ -4,7 +4,8 @@ const appointmentConfig = require('@appointmentConfig');
 
 const routes = {
   login : `${accountConfig.routes.login}`,
-  register : `${accountConfig.routes.registerPatient}`,
+  registerPatient : `${accountConfig.routes.registerPatient}`,
+  registerMed: `${accountConfig.routes.registerMedpro}`,
   createAppt : `${appointmentConfig.routes.create}`,
   updateAppt : `${appointmentConfig.routes.update}`,
   creatTreatment : `${treatmentConfig.routes.create}`,

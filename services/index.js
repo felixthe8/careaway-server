@@ -53,10 +53,10 @@ server.listen(8080, () => {
 server.on('request', (req, res) => {
   if(req.url === '/breach') {
     accountServer.close();
+    console.log('Account module closed.');
     treatmentServer.close();
+    console.log('Treatment module closed.');
     appointmentServer.close();
-    console.log('Exiting');
-    server.close();
-    process.exit(1);
+    console.log('Appointment module closed.');
   }
 });

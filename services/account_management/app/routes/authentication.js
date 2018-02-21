@@ -14,11 +14,11 @@ module.exports = (app) => {
     app.route(config.routes.validateUsername).post(api.validateUsername(models.UserRepo, models.DB));
     
     // GET /account/api/security-questions
-    // reset credentials for user
+    // query security questions for user
     app.route(config.routes.securityQuestions).get(api.securityQs(models.UserRepo, models.DB));
     
     // POST /account/api/validate-answers
-    // reset credentials for user
+    // validate security answers for user
     app.route(config.routes.validateAnswers).post(api.validateAs(models.UserRepo, models.DB));
     
     // PUT /account/api/reset-creds
