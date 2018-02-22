@@ -101,6 +101,42 @@ app.use('/login', proxy('localhost:4100', {
   }
 }));
 
+app.use('/validName', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.validateUsername;
+  }
+}));
+
+app.use('/securityQs', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.securityQues}?username=${req.query.username}`;
+  }
+}));
+
+app.use('/validAns', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.validAns;
+  }
+}));
+
+app.use('/reset', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.resetCred;
+  }
+}));
+
+app.use('/updateDiagnosis', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.updateDiagnosis;
+  }
+}));
+
+app.use('/breach', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.breach;
+  }
+}));
+
 app.use('/ssoRegisterPatient', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
     return routes.ssoRegisterPatient;
@@ -116,29 +152,6 @@ app.use('/ssoRegisterMed', proxy('localhost:4100', {
 app.use('/validate-username', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
     return routes.validateUsername;
-  }
-}));
-
-// app.get('/security-questions', function(req,res){
-//   var options = {
-//     host: 'localhost',
-//     port: 4100,
-//     path: routes.securityQuestions +'?username='+req.query.username
-//   }
-//   var proxiedResponse;
-
-//   http.get(options,function(res){
-//     res.on('data',function(chunk){
-//         proxiedResponse = chunk;
-//     })
-//   });
-//   res.send(proxiedResponse);
-// });
-
-app.use('/security-questions', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    console.log(req.query);
-    return routes.securityQuestions(req.query);
   }
 }));
 

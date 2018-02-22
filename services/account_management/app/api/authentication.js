@@ -71,8 +71,6 @@ api.validateUsername = (UserRepo, DB) => (req, res) => {
 api.securityQs = (UserRepo, DB) => (req, res) => {
   // grab username from query obj
   const username = req.query.username;
-  console.log(req.query);
-  console.log("Username"+username);
   DB.then(database => {
     var userRepo = new UserRepo(database);
     userRepo.FindUser(username).then(function(value){
