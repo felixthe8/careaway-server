@@ -6,7 +6,6 @@ api.login = (UserRepo, DB) => (req, res) => {
   // grab username and password from body
   const username = req.body.username;
   const password = req.body.password;
-
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // find user in db
@@ -25,10 +24,6 @@ api.login = (UserRepo, DB) => (req, res) => {
             //send a request telling client to register the user
             res.json({success: true, accountType: 'SSO'});
           } else{
-            // user was found
-            queriedUser = queriedUser[0];
-            // hash password from request and compare with hashed password in db
-            const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
             if (passHashed === queriedUser.password) {
               res.json({success: true, accountType: queriedUser.accountType.role});       
             } else {

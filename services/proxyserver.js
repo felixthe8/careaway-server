@@ -124,7 +124,7 @@ app.use('/security-questions', proxy('localhost:4100', {
   }
 }));
 
-app.put('/reset-creds', proxy('localhost:4100', {
+app.use('/reset-creds', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
     return routes.resetCreds;
   }
