@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 
-//const passport = require('passport');
+const passport = require('passport');
 
 
 const consign = require('consign');
@@ -17,9 +17,10 @@ const corsOptions = {
 // Allows only one cross origin site.
 app.use(cors(corsOptions));
 app.use(helmet());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session())
 app.use(morgan('dev'));
 
 // Makes sure setup, api, and routes are loaded before the app.

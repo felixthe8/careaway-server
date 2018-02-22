@@ -1,31 +1,37 @@
 var CryptoJS = require('crypto-js');
-
 const api = {};
 
-api.login = (UserRepo, DB) => (req, res) => {
-    // grab username and password from body
-    const username = req.body.username;
-    const password = req.body.password;
-
-    DB.then(database => {
-        var userRepo = new UserRepo(database);
-        // find user in db
-        userRepo.FindUser(username).then(function(value){
-            var queriedUser = value.User;
-            if (queriedUser.length === 0) {
-                // user was not found
-                res.json({error: 'User does not exist.'});
-            } else {
-                // user was found
-                queriedUser = queriedUser[0];
-                // hash password from request and compare with hashed password in db
-                const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
-                if (passHashed === queriedUser.password) {
-                    res.json({success: true, accountType: queriedUser.accountType.role});
+api.login = (UserRepo, DB, username, password)  => {
+    return new Promise ((resolve, reject) => {
+        // grab username and password from body
+        DB.then(database => {
+            var userRepo = new UserRepo(database);
+            // find user in db
+            userRepo.FindUser(username).then(function(value){
+                var queriedUser = value.User;
+                if (queriedUser.length === 0) {
+                    // user was not found
+                    console.log(username);
+                    console.log("user dne");
+                    resolve(null);
+                    
                 } else {
-                    res.json({error: 'Wrong password.'})
+                    // user was found
+                    queriedUser = queriedUser[0];
+                    // hash password from request and compare with hashed password in db
+                    const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
+                    if (passHashed === queriedUser.password) {
+                        //res.json({success: true, accountType: queriedUser.accountType.role});
+                       console.log("found " + queriedUser)
+                        resolve(queriedUser);
+                    } else {
+                        //res.json({error: 'Wrong password.'})
+                        console.log("Wrong pass");
+                        resolve(null);
+                        
+                    }
                 }
-            }
+            });
         });
     });
 }
