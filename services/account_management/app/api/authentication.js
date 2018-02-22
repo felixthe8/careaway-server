@@ -20,7 +20,6 @@ api.login = (UserRepo, DB) => (req, res) => {
         queriedUser = queriedUser[0];
         // hash password from request and compare with hashed password in db
         const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
-        console.log(passHashed);
         if (passHashed === queriedUser.password) {
             if (queriedUser.accountType.role == 'system-admin') {
             res.sendFile('/sys-ad.html',{root: 'services/' });
