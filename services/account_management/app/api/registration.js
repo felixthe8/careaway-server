@@ -132,6 +132,47 @@ api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) =
     });
   });  
 };
+//This method inputs the patient type for a newly registered SSO user
+api.ssoRegisterPatient = (User, Patient, UserRepo, DB) => (req, res) => {
+  // grab username and account info
+  const username = req.body.username;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const medicalCode = req.body.medicalCode;
+  DB.then(database => {
+    var userRepo = new UserRepo(database);
+    var patientType = new Patient(firstName,lastName,medicalCode);
+    // update db with new account type
+    userRepo.addAccountType(username,patientType);
+    res.json({success: true});
+  });
+}
+//This method inputs the medical professional type for a newly registered SSO user
+api.ssoRegisterMed = (User, MedicalProfessional, UserRepo, DB) => (req, res) => {
+  // grab username and account info
+  const username = req.body.username;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  DB.then(database => {
+    var userRepo = new UserRepo(database);
+    userRepo.GetMedicalCodes().then(function(value){
+      //check if medical pro exist in the db already
+      var medicalCode ='';
+      var codes = value.codeList;
+      //generates a new mp code
+      do{
+        medicalCode = 'MP'+randomstring.generate({
+        length: 7,
+        capitalization: 'uppercase'});
+      }while(codes.indexOf(medicalCode) != -1);
+      var MedType = new MedicalProfessional(firstName,lastName,medicalCode);
+      // update db with new hashed account type
+      userRepo.addAccountType(username,MedType);
+      res.json({success: true});
+    });
+  });
+
+}
 
 
 module.exports = api;

@@ -29,6 +29,21 @@ UserAccess.prototype.Create = function(user)
   });
 };
 /**
+ * This function adds the accountType from a new user from SSO
+ * @param {*} username the unique identifier of the new user
+ * @param {*} accountType either medical professional or patient type
+ */
+UserAccess.prototype.addAccountType= function(username,accountType){
+  const collection = this.db.collection('Users');
+  collection.updateOne(
+    {'username' : username},//looks for username in the database
+    { $set: {'accountType': accountType}},//inserts new password 
+    function(err, result){
+      console.log('Updated Account Type');
+    }
+  );
+}
+/**
  * This function edits the patient diagnosis
  * @param {*} username 
  * @param {*} diagnosis

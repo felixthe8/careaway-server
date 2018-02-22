@@ -21,15 +21,20 @@ api.login = (UserRepo, DB) => (req, res) => {
         // hash password from request and compare with hashed password in db
         const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
         if (passHashed === queriedUser.password) {
+          if((Object.keys(queriedUser.accountType).length ===0)){
+            //send a request telling client to register the user
+            res.json({success: true, accountType: 'SSO'});
+          } else{
             if (queriedUser.accountType.role == 'system-admin') {
-            res.sendFile('/sys-ad.html',{root: 'services/' });
+              res.sendFile('/sys-ad.html',{root: 'services/' });
             } else {
-            res.json({success: true, accountType: queriedUser.accountType.role});
+              res.json({success: true, accountType: queriedUser.accountType.role});
             }
+          }
         } else {
-          //res.json({error: 'Wrong password.'})
+          res.json({error: 'Wrong password.'})
           console.log("Wrong pass");
-          resolve(null);  
+
          }
        }
     });

@@ -100,5 +100,17 @@ app.use('/login', proxy('localhost:4100', {
   }
 }));
 
+app.use('/ssoRegisterPatient', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.ssoRegisterPatient;
+  }
+}));
+
+app.use('/ssoRegisterMed', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.ssoRegisterMed;
+  }
+}));
+
 
 module.exports = app;

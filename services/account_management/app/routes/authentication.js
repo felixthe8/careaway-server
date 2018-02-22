@@ -7,19 +7,9 @@ const LocalStrategy = require('passport-local').Strategy;
 module.exports = (app) => {
   const api = app.account_management.app.api.authentication;
 
-  passport.use(new LocalStrategy((username, password, done) => {
-    console.log("running the strat");
-    (api.login(models.UserRepo, models.DB, username, password)).then((result) => {
-      if(result) return done(null, result);
-      else return done(null, false);
-      });
-    }));
   // POST /account/api/authentication
   // authenticates user and determines account type
-  app.route(config.routes.login).post(passport.authenticate('local'), (req, res) => {
-    console.log("Sending");
-    res.send({success: true});
-  });
+  app.route(config.routes.login).post(api.login(models.UserRepo, models.DB));
     
   // POST /account/api/validate-username
   // make sure username exists
