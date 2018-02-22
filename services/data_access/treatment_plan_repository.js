@@ -7,7 +7,7 @@ function TreatmentPlanAccess(dbConnection)
 {
   //fetches the database client connection
   this.db = dbConnection;
-}
+};
 /**
  * This appends a new treatment plan to the patient 
  * treatment array
@@ -22,10 +22,8 @@ TreatmentPlanAccess.prototype.CreateTreatment = function(patient,treatment){
     { $push: {'accountType.treatment': treatment}},//inserts new treatment on the array 
     function(err, result){
       console.log('Added treatment');
-   }
-  );
-}
-
+    });
+};
 /**
  * This Edits an existing Treatment Plan
  * 
@@ -43,7 +41,7 @@ TreatmentPlanAccess.prototype.EditTreatment= function(patient,treatment){
       console.log('Edited treatment');
     }
   );
-}
+};
 /**
  * This Deletes a Treatment Plan within the user's
  * treatment array
@@ -58,7 +56,7 @@ TreatmentPlanAccess.prototype.DeleteTreatment= function(patient,treatment){
     function(err, result){
     console.log('Remove treatment');
   });
-}
+};
 /**
  * Gets all treatment plans of a particular patient
  * 
@@ -92,7 +90,7 @@ TreatmentPlanAccess.prototype.GetPatientTreatment = function(patient){
       } 
     });
   });
-}
+};
 /**
  * Gets Treatments plans of a particular diagnosis
  * under a particular medical professional
@@ -127,7 +125,6 @@ TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis
       }
     });
   });
-
-}
+};
 
 module.exports = TreatmentPlanAccess

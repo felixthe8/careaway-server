@@ -1,6 +1,9 @@
-/* Meter Widget Model
- *
- * description: string question with array scale
+/**
+ * Meter Widget Model
+ * 
+ * question inquirying the patient of the status of their diagnosis 
+ * scale the measurement of patient's status
+ * due the deadline of the treatment
  */
 function Meter (question,scale, due) {
   // for db table

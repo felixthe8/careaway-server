@@ -15,7 +15,9 @@ const routes = {
   createAppt : `${appointmentConfig.routes.create}`,
   updateAppt : `${appointmentConfig.routes.update}`,
   creatTreatment : `${treatmentConfig.routes.create}`,
-  updateTreatment : `${treatmentConfig.routes.update}`
+  updateTreatment : `${treatmentConfig.routes.update}`,
+  ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
+  ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`
 };
 
 module.exports = routes;

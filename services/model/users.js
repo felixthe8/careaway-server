@@ -4,8 +4,8 @@ var mp = require('./medicalprofessional');
 var admin = require('./systemadmin');
 var identifier = require('./identifier');
 /*
-    Model for user on the CareAway system. The User will be the top
-    level of the object hierarchy. 
+  Model for user on the CareAway system. The User will be the top
+  level of the object hierarchy. 
 */
 function User (username, password, role, security, identifier) {
   this.username = username || '';
