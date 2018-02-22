@@ -11,7 +11,10 @@ const routes = {
   creatTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
-  ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`
+  ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
+  validateUsername : `${accountConfig.routes.validateUsername}`,
+  securityQuestions : `${accountConfig.routes.securityQuestions}`,
+  resetCred : `${accountConfig.routes.resetCreds}`
 };
 
 module.exports = routes;

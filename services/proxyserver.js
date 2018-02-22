@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
+var http = require('http');
 const routes = require('./proxyRoutes');
 const session = require('express-session');
 const csrf = require('csurf');
@@ -112,5 +113,39 @@ app.use('/ssoRegisterMed', proxy('localhost:4100', {
   }
 }));
 
+app.use('/validate-username', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.validateUsername;
+  }
+}));
+
+// app.get('/security-questions', function(req,res){
+//   var options = {
+//     host: 'localhost',
+//     port: 4100,
+//     path: routes.securityQuestions +'?username='+req.query.username
+//   }
+//   var proxiedResponse;
+
+//   http.get(options,function(res){
+//     res.on('data',function(chunk){
+//         proxiedResponse = chunk;
+//     })
+//   });
+//   res.send(proxiedResponse);
+// });
+
+app.use('/security-questions', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    console.log(req.query);
+    return routes.securityQuestions(req.query);
+  }
+}));
+
+app.use('/reset-creds', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.resetCreds;
+  }
+}));
 
 module.exports = app;
