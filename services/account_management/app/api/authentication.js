@@ -1,6 +1,7 @@
 var CryptoJS = require('crypto-js');
 const api = {};
 
+//This authenticates the user with the received username and password from the client
 api.login = (UserRepo, DB, username, password)  => {
     return new Promise ((resolve, reject) => {
         // grab username and password from body
@@ -36,6 +37,7 @@ api.login = (UserRepo, DB, username, password)  => {
     });
 }
 
+//This finds if the username inputted exist within the system
 api.validateUsername = (UserRepo, DB) => (req, res) => {
     // grab username form body
     const username = req.body.username;
@@ -57,6 +59,9 @@ api.validateUsername = (UserRepo, DB) => (req, res) => {
     });
 }
 
+//uses the username user inputted for resetting credentials		
+//and returns their list of security questions they		
+//selected during registration
 api.securityQs = (UserRepo, DB) => (req, res) => {
     // grab username from query obj
     const username = req.query.username;
@@ -84,6 +89,8 @@ api.securityQs = (UserRepo, DB) => (req, res) => {
     });
 }
 
+//Validates if the answers the user inputted are the same		
+//as the ones saved on the system
 api.validateAs = (UserRepo, DB) => (req, res) => {
     // grab user and answers from body
     const username = req.body.username;
@@ -122,6 +129,8 @@ api.validateAs = (UserRepo, DB) => (req, res) => {
     });
 }
 
+//This updates the user's password with the new password		
+//the user entered
 api.resetCreds = (UserRepo, DB) => (req, res) => {
     // grab user and new password from body
     const username = req.body.username;
