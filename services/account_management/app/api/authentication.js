@@ -1,5 +1,4 @@
 var CryptoJS = require('crypto-js');
-
 const api = {};
 
 api.login = (UserRepo, DB) => (req, res) => {
@@ -27,9 +26,22 @@ api.login = (UserRepo, DB) => (req, res) => {
                         res.json({success: true, accountType: queriedUser.accountType.role});
                     }
                 } else {
-                    res.json({error: 'Wrong password.'})
+                    // user was found
+                    queriedUser = queriedUser[0];
+                    // hash password from request and compare with hashed password in db
+                    const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
+                    if (passHashed === queriedUser.password) {
+                        //res.json({success: true, accountType: queriedUser.accountType.role});
+                       console.log("found " + queriedUser)
+                        resolve(queriedUser);
+                    } else {
+                        //res.json({error: 'Wrong password.'})
+                        console.log("Wrong pass");
+                        resolve(null);
+                        
+                    }
                 }
-            }
+            });
         });
     });
 }
