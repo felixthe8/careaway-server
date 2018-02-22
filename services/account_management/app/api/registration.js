@@ -145,7 +145,7 @@ api.ssoRegisterPatient = (User, Patient, UserRepo, DB) => (req, res) => {
       //check if medical pro exist in the db already
       var codes = value.codeList;
       if(codes.indexOf(medicalCode) === -1){
-        res.json({success:false , err : "Non-Existant MP CODE"});
+        res.json({success:false , error : "Non-Existant MP CODE"});
       }
       else{
         var patientType = new Patient(firstName,lastName,medicalCode);
