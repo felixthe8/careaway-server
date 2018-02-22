@@ -1,4 +1,3 @@
-
 var Question = require('./questions');
 
 function Checklist (questions, due) {
