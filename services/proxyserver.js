@@ -77,4 +77,39 @@ app.use('/login', proxy('localhost:4100', {
   }
 }));
 
+app.use('/validName', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.validateUsername;
+  }
+}));
+
+app.use('/securityQs', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.securityQues;
+  }
+}));
+
+app.use('/validAns', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.validAns;
+  }
+}));
+
+app.use('/reset', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.resetCred;
+  }
+}));
+
+app.use('/updateDiagnosis', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.updateDiagnosis;
+  }
+}));
+
+app.use('/breach', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.breach;
+  }
+}));
 module.exports = app;
