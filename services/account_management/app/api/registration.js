@@ -141,10 +141,19 @@ api.ssoRegisterPatient = (User, Patient, UserRepo, DB) => (req, res) => {
   const medicalCode = req.body.medicalCode;
   DB.then(database => {
     var userRepo = new UserRepo(database);
-    var patientType = new Patient(firstName,lastName,medicalCode);
-    // update db with new account type
-    userRepo.addAccountType(username,patientType);
-    res.json({success: true});
+    userRepo.GetMedicalCodes().then(function(value){
+      //check if medical pro exist in the db already
+      var codes = value.codeList;
+      if(codes.indexOf(medicalCode) === -1){
+        res.json({success:false , err : "Non-Existant MP CODE"});
+      }
+      else{
+        var patientType = new Patient(firstName,lastName,medicalCode);
+        // update db with new account type
+        userRepo.addAccountType(username,patientType);
+        res.json({success: true});
+      }
+    })
   });
 }
 //This method inputs the medical professional type for a newly registered SSO user
