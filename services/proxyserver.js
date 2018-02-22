@@ -71,7 +71,6 @@ app.post('/breach', function (req,res){
 
 app.use(morgan('dev'));
 app.use('/', (req, res, next) => {
-  console.log("Here");
   next();
 })
 /* app.use('/', (req, res) => {
@@ -101,42 +100,6 @@ app.use('/login', proxy('localhost:4100', {
   }
 }));
 
-app.use('/validName', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.validateUsername;
-  }
-}));
-
-app.use('/securityQs', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return `${routes.securityQues}?username=${req.query.username}`;
-  }
-}));
-
-app.use('/validAns', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.validAns;
-  }
-}));
-
-app.use('/reset', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.resetCred;
-  }
-}));
-
-app.use('/updateDiagnosis', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.updateDiagnosis;
-  }
-}));
-
-app.use('/breach', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.breach;
-  }
-}));
-
 app.use('/ssoRegisterPatient', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
     return routes.ssoRegisterPatient;
@@ -155,7 +118,13 @@ app.use('/validate-username', proxy('localhost:4100', {
   }
 }));
 
-app.use('/reset-creds', proxy('localhost:4100', {
+app.use('/security-questions', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.securityQues}?username=${req.query.username}`; 
+  }
+}));
+
+app.put('/reset-creds', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
     return routes.resetCreds;
   }
