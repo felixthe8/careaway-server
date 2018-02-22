@@ -5,9 +5,6 @@ const promise = require('promise');
  */
 function Database(){}
 /**
- * @TODO make the connection to the deployment 
- * database
- * 
  * This function is used to connected to a local Mongo
  * Databaseit returns a fucntion in order to ensure the
  * connection to the database before proceeding to the next

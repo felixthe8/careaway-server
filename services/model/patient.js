@@ -2,8 +2,8 @@ var appointment = require('./appointment');
 var meter = require('./meter');
 var checklist = require('./checklist');    
 /*
-    Model for patients on the CareAway system. The Patient object will be 
-    stored inside the User accountType attribute of the User. 
+  Model for patients on the CareAway system. The Patient object will be 
+  stored inside the User accountType attribute of the User. 
 */
 function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appointment) {
   this.firstName = firstName || '';

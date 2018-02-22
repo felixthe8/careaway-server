@@ -1,6 +1,6 @@
 /*
-    Model for appointments. Appointments will be stored inside
-    appointment array of patient and medical professional. 
+  Model for appointments. Appointments will be stored inside
+  appointment array of patient and medical professional. 
 */
 function Appointment(appointee, date, initiator, status) {
   // The individual that the appointment will be scheduled with
