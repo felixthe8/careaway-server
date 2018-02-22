@@ -51,6 +51,22 @@ const csrfProtection = csrf();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.get('*',function(req,res,next){
+  if (breached) {
+      res.send({down:true});
+  } else {
+      next();
+  }
+  
+});
+app.get('/isBreached',function(req,res){
+  res.send({down:false});
+});
+
+app.post('/breach', function (req,res){   
+  breached = true;
+  res.send('Server has been breached');
+});
 
 app.use(morgan('dev'));
 app.use('/', (req, res, next) => {
@@ -65,22 +81,6 @@ app.use('/', (req, res, next) => {
   return res.json({ csrfToken : token });
 }); */
 
-app.use(function(req,res,next){
-  if (breached) {
-      res.sendFile('/breached.html',{root: __dirname });
-  } else {
-      next();
-  }
-  
-});
- 
-app.get('/sys', function (req,res){   
-  res.sendFile('/sys-ad.html',{root: __dirname });
-});
-
-app.post('/breach', function (req,res){   
-  breached = true;
-});
 
 app.use('/registerPatient', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {

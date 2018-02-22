@@ -60,7 +60,7 @@ server.on('request', (req, res) => {
     appointmentServer.close();
     console.log('Appointment module closed.');
     console.log('Exiting');
-    res.send('Server has been Breached');   
+
     
   }
   

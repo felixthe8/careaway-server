@@ -28,7 +28,17 @@ api.login = (UserRepo, DB) => (req, res) => {
             if (queriedUser.accountType.role == 'system-admin') {
               res.sendFile('/sys-ad.html',{root: 'services/' });
             } else {
-              res.json({success: true, accountType: queriedUser.accountType.role});
+                // user was found
+                queriedUser = queriedUser[0];
+                // hash password from request and compare with hashed password in db
+                const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
+                if (passHashed === queriedUser.password) {
+                    
+                        res.json({success: true, accountType: queriedUser.accountType.role});
+                    
+                } else {
+                    res.json({error: 'Wrong password.'})
+                }
             }
           }
         } else {
