@@ -11,7 +11,7 @@ const helmet = require('helmet');
 const consign = require('consign');
 
 const corsOptions = {
-    origin: 'http://localhost:8080'
+    origin: 'http://localhost:8081'
 };
 
 // Allows only one cross origin site.
