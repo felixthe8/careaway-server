@@ -5,7 +5,7 @@ module.exports = (app) => {
     const api = app.account_management.app.api.sso;
 
 
-    app.route(config.routes.ssoRegistration).post(api.ssoRegistration(models.UserRepo, models.DB));
+    app.route(config.routes.ssoRegistration).post(api.ssoRegistration(models.User,models.Security, models.Salt,models.UserRepo, models.DB));
 
 
     app.route(config.routes.ssoLogin).post(api.ssoLogin(models.UserRepo, models.DB));

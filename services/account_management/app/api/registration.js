@@ -36,7 +36,7 @@ function createGenericUser(User, Security, Salt, req) {
     var sQ = [ 
         new Security(securityQ1,a1Hashed),
         new Security(securityQ2,a2Hashed),
-        new Security(securityQ3,a3Hashed),
+        new Security(securityQ3,a3Hashed)
     ]
 
     // create user object and return it

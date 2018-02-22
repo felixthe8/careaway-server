@@ -41,7 +41,7 @@ api.login = (UserRepo, DB) => (req, res) => {
                         
                     }
                 }
-            });
+            }
         });
     });
 }
