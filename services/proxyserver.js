@@ -108,7 +108,7 @@ app.use('/validName', proxy('localhost:4100', {
 
 app.use('/securityQs', proxy('localhost:4100', {
   proxyReqPathResolver: function(req) {
-    return routes.securityQues;
+    return `${routes.securityQues}?username=${req.query.username}`;
   }
 }));
 
