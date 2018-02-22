@@ -95,7 +95,7 @@ app.get('/', function (req, res) {
     var userSalt = new salt(CryptoJS.lib.WordArray.random(128/8).toString())
     var sQ = [ new security(1,"Answer"),
                new security(4,"Answer"),
-               new security(9,"Answer"),
+               new security(9,"Answer")
     ]
     var role = new Patient('Lazer','Man','MPCODE777')
     var newUser = new User('Lazer777',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
