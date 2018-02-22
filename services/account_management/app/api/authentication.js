@@ -25,21 +25,15 @@ api.login = (UserRepo, DB) => (req, res) => {
             //send a request telling client to register the user
             res.json({success: true, accountType: 'SSO'});
           } else{
-            if (queriedUser.accountType.role == 'system-admin') {
-              res.sendFile('/sys-ad.html',{root: 'services/' });
+            // user was found
+            queriedUser = queriedUser[0];
+            // hash password from request and compare with hashed password in db
+            const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
+            if (passHashed === queriedUser.password) {
+              res.json({success: true, accountType: queriedUser.accountType.role});       
             } else {
-                // user was found
-                queriedUser = queriedUser[0];
-                // hash password from request and compare with hashed password in db
-                const passHashed = CryptoJS.HmacSHA256(password,queriedUser.identifier.salt).toString();
-                if (passHashed === queriedUser.password) {
-                    
-                        res.json({success: true, accountType: queriedUser.accountType.role});
-                    
-                } else {
-                    res.json({error: 'Wrong password.'})
-                }
-            }
+               res.json({error: 'Wrong password.'})
+            } 
           }
         } else {
           res.json({error: 'Wrong password.'})
