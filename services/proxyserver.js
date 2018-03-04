@@ -130,4 +130,18 @@ app.use('/reset-creds', proxy('localhost:4100', {
   }
 }));
 
+app.use('/returnCode', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.returnCode}?username=${req.query.username}`; 
+  }
+}));
+
+app.use('/patientBreakdown', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.getPatients}?medicalcode=${req.query.medicalcode}`; 
+  }
+}));
+
+
+
 module.exports = app;

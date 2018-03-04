@@ -11,9 +11,9 @@ api.returnCode = (UserRepo,DB) => (req,res) => {
 
     userRepo.FindUser(username)
     .then(function(value){
-      var querieduser = value.User;
-
-      res.json({medicalcode: querieduser[0].accountType.medicalcode});
+      // var querieduser = value.User;
+      // res.send({medicalcode: value.User[0].accountType.medicalcode});
+      res.json({medicalcode: value.User[0].accountType.medicalcode});
     })
   })
 }
@@ -36,7 +36,7 @@ api.getPatients = (UserRepo, DB) => (req,res) => {
        // store array of patient data inside patientContainer object
        patientContainer = {patients};
        
-        console.log(patientContainer);
+        // console.log(patientContainer);
       
       res.json(patientContainer);
     });

@@ -16,6 +16,8 @@ const routes = {
   updateAppt : `${appointmentConfig.routes.update}`,
   creatTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
+  returnCode : `${treatmentConfig.routes.returnCode}`,
+  getPatients: `${treatmentConfig.routes.getPatients}`,
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
   ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
   validateUsername : `${accountConfig.routes.validateUsername}`,
