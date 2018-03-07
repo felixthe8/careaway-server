@@ -35,7 +35,7 @@ TreatmentPlanAccess.prototype.EditTreatment= function(patient,treatment){
   collection.updateOne(
     {'username' : patient, //looks for the patient in the database
      'accountType.treatment.label' : treatment.label, //looks for the type of treatment 
-     'accountType.treatment.create_at': treatment.create_at}, //looks for the date created of that treatment
+     'accountType.treatment.created_at': treatment.created_at}, //looks for the date created of that treatment
     { $set: {'accountType.treatment.$': treatment}},//updates treatment with new edits on the array 
       function(err, result){
       console.log('Edited treatment');
