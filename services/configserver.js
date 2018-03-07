@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
-const routes = require('./proxyRoutes');
+const config = require('./config');
 const session = require('express-session');
 const csrf = require('csurf');
 var breached = false;
@@ -15,7 +15,7 @@ app.set('trust proxy', 1) // trust first proxy - only if secure is true for expr
 const MongoStore = require('connect-mongo')(session);
 const corsOptions = {
   origin: 'http://localhost:8081',
-  credentials: true,
+ 
   optionsSuccessStatus: 200
 };
 
@@ -82,35 +82,54 @@ app.use('/', (req, res, next) => {
 }); */
 
 
-app.use('/registerPatient', proxy('localhost:4100', {
+app.use('/registerPatient', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
-    return routes.registerPatient;
+    return config.routes.registerPatient;
   } 
 }));
 
-app.use('/registerMed', proxy('localhost:4100', {
+app.use('/registerMed', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
-    return routes.registerMed;
+    return config.routes.registerMed;
   } 
 }));
 
-app.use('/login', proxy('localhost:4100', {
+app.use('/login', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
-    return routes.login;
+    return config.routes.login;
   }
 }));
 
-app.use('/ssoRegisterPatient', proxy('localhost:4100', {
+app.use('/ssoRegisterPatient', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
-    return routes.ssoRegisterPatient;
+    return config.routes.ssoRegisterPatient;
   }
 }));
 
-app.use('/ssoRegisterMed', proxy('localhost:4100', {
+app.use('/ssoRegisterMed', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
-    return routes.ssoRegisterMed;
+    return config.routes.ssoRegisterMed;
   }
 }));
+
+app.post('/createAppt', proxy(config.ports.appointment), {
+  proxyReqPathResolver: function(req) {
+    return config.routes.createAppt;
+  }
+});
+
+app.post('/updateAppt', proxy(config.ports.appointment), {
+  proxyReqPathResolver: function(req) {
+    return config.routes.updateAppt;
+  }
+});
+
+app.post('/getAppt', proxy(config.ports.appointment), {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getAppt}${req.query}`;
+  }
+});
+
 
 
 module.exports = app;
