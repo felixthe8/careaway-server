@@ -14,7 +14,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(helmet());
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 // Makes sure setup, api, and routes are loaded before anything else.

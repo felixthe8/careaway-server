@@ -41,7 +41,7 @@ api.get = (AppointmentRepo, DB) => (req, res) => {
 }
 
 api.updateStatus = (AppointmentRepo, DB) => (req, res) => {
-  //console.log(req.body.appointment);
+  console.log(req.body.date);
   console.log("HELLA");
   res.json({SUCCESS:"SUCCESS"});
 }
