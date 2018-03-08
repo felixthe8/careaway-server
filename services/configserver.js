@@ -82,73 +82,73 @@ app.use('/', (req, res, next) => {
 }); */
 
 
-app.use('/registerPatient', proxy(config.ports.account, {
+app.use('/registerPatient', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerPatient;
   } 
 }));
 
-app.use('/registerMed', proxy(config.ports.account, {
+app.use('/registerMed', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerMed;
   } 
 }));
 
-app.use('/login', proxy(config.ports.account, {
+app.use('/login', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.login;
   }
 }));
 
-app.use('/ssoRegisterPatient', proxy(config.ports.account, {
+app.use('/ssoRegisterPatient', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterPatient;
   }
 }));
 
-app.use('/validate-username', proxy(config.ports.account, {
+app.use('/validate-username', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return routes.validateUsername;
+    return config.routes.validateUsername;
   }
 }));
 
-app.use('/security-questions', proxy(config.ports.account, {
+app.get('/security-questions', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return `${routes.securityQues}?username=${req.query.username}`; 
+    return `${config.routes.securityQues}?username=${req.query.username}`; 
   }
 }));
 
-app.use('/reset-creds', proxy(config.ports.account, {
+app.use('/reset-creds', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return routes.resetCreds;
+    return config.routes.resetCreds;
   }
 }));
 
-app.use('/ssoRegisterMed', proxy(config.ports.account, {
+app.use('/ssoRegisterMed', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterMed;
   }
 }));
 
-app.use('/createAppt', proxy(config.ports.appointment, {
+app.use('/createAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
   }
 }));
 
-app.use('/updateAppt', proxy(config.ports.appointment, {
+app.use('/updateAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }
 }));
 
-app.use('/getAppt', proxy(config.ports.appointment, {
+app.use('/getAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getAppt}${req.query}`;
   }
 }));
 
-app.use('/updateApptStatus', proxy(config.ports.appointment, {
+app.use('/updateApptStatus', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateApptStatus;
   }

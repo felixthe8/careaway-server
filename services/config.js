@@ -14,7 +14,6 @@ config.routes = {
   resetCreds : `${accountConfig.routes.resetCreds}`,
   updateDiagnosis : `${accountConfig.routes.updateDiagnosis}`,
   breach : `${accountConfig.routes.breach}`,
-  resetCred : `${accountConfig.routes.resetCreds}`,
 
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
   ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
@@ -28,10 +27,10 @@ config.routes = {
   updateApptStatus: `${appointmentConfig.routes.updateStatus}`
 };
 
-config.ports = {
-  account : `${accountConfig.server.port}`,
-  treatment : `${treatmentConfig.server.port}`,
-  appointment : `${appointmentConfig.server.port}`
+config.url = {
+  account : `localhost:${accountConfig.server.port}`,
+  treatment : `localhost:${treatmentConfig.server.port}`,
+  appointment : `localhost:${appointmentConfig.server.port}`
 };
 
 module.exports = config;
