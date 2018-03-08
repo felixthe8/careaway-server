@@ -6,12 +6,8 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
-
 var http = require('http');
-const routes = require('./proxyRoutes');
-
 const config = require('./config');
-
 const session = require('express-session');
 const csrf = require('csurf');
 var breached = false;
@@ -20,7 +16,7 @@ app.set('trust proxy', 1) // trust first proxy - only if secure is true for expr
 const MongoStore = require('connect-mongo')(session);
 const corsOptions = {
   origin: 'http://localhost:8081',
- 
+  credentials: true,
   optionsSuccessStatus: 200
 };
 
@@ -86,70 +82,77 @@ app.use('/', (req, res, next) => {
 }); */
 
 
-app.use('/registerPatient', proxy(config.ports.account, {
+app.use('/registerPatient', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerPatient;
   } 
 }));
 
-app.use('/registerMed', proxy(config.ports.account, {
+app.use('/registerMed', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerMed;
   } 
 }));
 
-app.use('/login', proxy(config.ports.account, {
+app.use('/login', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.login;
   }
 }));
 
-app.use('/ssoRegisterPatient', proxy(config.ports.account, {
+app.use('/ssoRegisterPatient', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterPatient;
   }
 }));
 
-app.use('/ssoRegisterMed', proxy(config.ports.account, {
+app.use('/validate-username', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.validateUsername;
+  }
+}));
+
+app.get('/security-questions', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.securityQues}?username=${req.query.username}`; 
+  }
+}));
+
+app.use('/reset-creds', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.resetCreds;
+  }
+}));
+
+app.use('/ssoRegisterMed', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterMed;
   }
 }));
 
-app.use('/validate-username', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.validateUsername;
-  }
-}));
-
-app.use('/security-questions', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return `${routes.securityQues}?username=${req.query.username}`; 
-  }
-}));
-
-app.use('/reset-creds', proxy('localhost:4100', {
-  proxyReqPathResolver: function(req) {
-    return routes.resetCreds;
-  }
-}));
-app.post('/createAppt', proxy(config.ports.appointment), {
+app.use('/createAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
   }
-});
+}));
 
-app.post('/updateAppt', proxy(config.ports.appointment), {
+app.use('/updateAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }
-});
+}));
 
-app.post('/getAppt', proxy(config.ports.appointment), {
+app.use('/getAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getAppt}${req.query}`;
   }
-});
+}));
+
+app.use('/updateApptStatus', proxy(config.url.appointment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.updateApptStatus;
+  }
+}));
 
 
 

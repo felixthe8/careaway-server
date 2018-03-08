@@ -16,7 +16,8 @@ const corsOptions = {
 // Allows only one cross origin site.
 app.use(cors(corsOptions));
 app.use(helmet());
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session())
 app.use(morgan('dev'));
