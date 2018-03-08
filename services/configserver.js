@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
+var http = require('http');
 const config = require('./config');
 const session = require('express-session');
 const csrf = require('csurf');
@@ -15,7 +16,7 @@ app.set('trust proxy', 1) // trust first proxy - only if secure is true for expr
 const MongoStore = require('connect-mongo')(session);
 const corsOptions = {
   origin: 'http://localhost:8081',
- 
+  credentials: true,
   optionsSuccessStatus: 200
 };
 
@@ -70,7 +71,6 @@ app.post('/breach', function (req,res){
 
 app.use(morgan('dev'));
 app.use('/', (req, res, next) => {
-  console.log("Here");
   next();
 })
 /* app.use('/', (req, res) => {
@@ -106,19 +106,19 @@ app.use('/ssoRegisterPatient', proxy(config.ports.account, {
   }
 }));
 
-app.use('/validate-username', proxy('localhost:4100', {
+app.use('/validate-username', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
     return routes.validateUsername;
   }
 }));
 
-app.use('/security-questions', proxy('localhost:4100', {
+app.use('/security-questions', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
     return `${routes.securityQues}?username=${req.query.username}`; 
   }
 }));
 
-app.use('/reset-creds', proxy('localhost:4100', {
+app.use('/reset-creds', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
     return routes.resetCreds;
   }
