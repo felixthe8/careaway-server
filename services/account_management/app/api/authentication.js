@@ -37,6 +37,7 @@ api.login = (UserRepo, DB) => (req, res) => {
          }
        }
     });
+  });
 }
 
 //This finds if the username inputted exist within the system

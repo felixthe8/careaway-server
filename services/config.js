@@ -8,7 +8,14 @@ config.routes = {
   login : `${accountConfig.routes.login}`,
   registerPatient : `${accountConfig.routes.registerPatient}`,
   registerMed: `${accountConfig.routes.registerMedpro}`,
-  
+  validateUsername : `${accountConfig.routes.validateUsername}`,
+  securityQues : `${accountConfig.routes.securityQuestions}`,
+  validAns : `${accountConfig.routes.validateAnswers}`,
+  resetCreds : `${accountConfig.routes.resetCreds}`,
+  updateDiagnosis : `${accountConfig.routes.updateDiagnosis}`,
+  breach : `${accountConfig.routes.breach}`,
+  resetCred : `${accountConfig.routes.resetCreds}`,
+
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
   ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
 

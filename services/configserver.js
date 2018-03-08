@@ -106,6 +106,24 @@ app.use('/ssoRegisterPatient', proxy(config.ports.account, {
   }
 }));
 
+app.use('/validate-username', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.validateUsername;
+  }
+}));
+
+app.use('/security-questions', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.securityQues}?username=${req.query.username}`; 
+  }
+}));
+
+app.use('/reset-creds', proxy('localhost:4100', {
+  proxyReqPathResolver: function(req) {
+    return routes.resetCreds;
+  }
+}));
+
 app.use('/ssoRegisterMed', proxy(config.ports.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterMed;
