@@ -112,23 +112,29 @@ app.use('/ssoRegisterMed', proxy(config.ports.account, {
   }
 }));
 
-app.post('/createAppt', proxy(config.ports.appointment), {
+app.use('/createAppt', proxy(config.ports.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
   }
-});
+}));
 
-app.post('/updateAppt', proxy(config.ports.appointment), {
+app.use('/updateAppt', proxy(config.ports.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }
-});
+}));
 
-app.post('/getAppt', proxy(config.ports.appointment), {
+app.use('/getAppt', proxy(config.ports.appointment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getAppt}${req.query}`;
   }
-});
+}));
+
+app.use('/updateApptStatus', proxy(config.ports.appointment,{
+  proxyReqPathResolver: function(req) {
+    return config.routes.updateApptStatus;
+  }
+}));
 
 
 

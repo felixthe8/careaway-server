@@ -8,4 +8,6 @@ module.exports = (app) => {
   app.route(config.routes.modify).post(api.modify());
 
   app.route(config.routes.get).get(api.get());
+
+  app.route(config.routes.updateStatus).post(api.updateStatus());
 }
