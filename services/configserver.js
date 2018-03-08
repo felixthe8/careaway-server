@@ -130,7 +130,7 @@ app.use('/getAppt', proxy(config.ports.appointment, {
   }
 }));
 
-app.use('/updateApptStatus', proxy(config.ports.appointment,{
+app.use('/updateApptStatus', proxy(config.ports.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateApptStatus;
   }
