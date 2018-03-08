@@ -118,6 +118,33 @@ AppointmentAccess.prototype.GetAppointment= function(username){
   });
 }
 
+AppointmentAccess.prototype.GetActive= function(username){
+  const collection = this.db.collection('Users');
+  return new promise(function(fullfill,reject)
+  { 
+    collection.find({'username' : username }).toArray(function(err, data)
+    {
+      if(err)
+      {
+        console.log('Failed to get query');
+        reject(err);
+      }
+      else
+      {
+        console.log('Successfully got query');
+        if(data != null){        
+          const appointments = result.accountType.appointment;
+          //return an object containing all the appointments of the user
+          const appointmentList = {'appointments' : appointments};
+          fullfill(appointmentList);
+        }
+        else{
+          fullfill(null);
+        }
+      } 
+    });
+  });
+}
 
 
 module.exports = AppointmentAccess

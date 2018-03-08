@@ -1,4 +1,4 @@
-const appointmentModel = require('@appointmentModels/appointment');
+const appointmentModel = require('@models/appointment');
 const model = {
   Appointment: appointmentModel
 }

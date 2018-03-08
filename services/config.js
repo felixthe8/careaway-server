@@ -2,7 +2,9 @@ const accountConfig = require('@accountConfig');
 const treatmentConfig = require('@treatmentConfig');
 const appointmentConfig = require('@appointmentConfig');
 
-const routes = {
+const config = {};
+
+config.routes = {
   login : `${accountConfig.routes.login}`,
   registerPatient : `${accountConfig.routes.registerPatient}`,
   registerMed : `${accountConfig.routes.registerMedpro}`,
@@ -13,7 +15,8 @@ const routes = {
   updateDiagnosis : `${accountConfig.routes.updateDiagnosis}`,
   breach : `${accountConfig.routes.breach}`,
   createAppt : `${appointmentConfig.routes.create}`,
-  updateAppt : `${appointmentConfig.routes.update}`,
+  updateAppt : `${appointmentConfig.routes.modify}`,
+  getAppt : `${appointmentConfig.routes.get}`,
   creatTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
@@ -23,4 +26,10 @@ const routes = {
   resetCred : `${accountConfig.routes.resetCreds}`
 };
 
-module.exports = routes;
+config.ports = {
+  account : `${accountConfig.server.port}`,
+  treatment : `${treatmentConfig.server.port}`,
+  appointment : `${appointmentConfig.server.port}`
+};
+
+module.exports = config;

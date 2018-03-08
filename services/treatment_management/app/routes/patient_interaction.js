@@ -6,6 +6,6 @@ module.exports = (app) => {
 
   // PUT /treatment_plan/api/patient_edit
   // authenticates user and determines account type
-  app.route(config.routes.patientUpdate).put(api.patientUpdate(models));
+  app.route(config.routes.patientUpdate).put(api.patientUpdateMeter(models));
 
 }
