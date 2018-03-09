@@ -142,17 +142,13 @@ app.use('/updateAppt', proxy(config.url.appointment, {
   }
 }));
 
-app.use('/getAppt', proxy(config.url.appointment, {
+app.get('/getAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getAppt}${req.query}`;
+    return `${config.routes.getAppt}?username=${req.query.username}`;
   }
 }));
 
-app.use('/updateApptStatus', proxy(config.url.appointment, {
-  proxyReqPathResolver: function(req) {
-    return config.routes.updateApptStatus;
-  }
-}));
+
 
 
 

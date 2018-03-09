@@ -18,11 +18,10 @@ api.create = (AppointmentRepo, DB) => (req, res)=> {
 api.modify = (AppointmentRepo, DB) => (req, res) => {
   DB.then(database => {
     const repo = new AppointmentRepo(database);
-    const medicalProfessional = req.body.med;
-    const patient = req.body.patient;
     const appointment = req.body.appointment;
-
-    repo.EditAppointment(medicalProfessional, patient, appointment);
+    console.log("GOT EVERYTHING")
+    res.json({"tyler" : "tyler"})
+    //repo.EditAppointment(medicalProfessional, patient, appointment);
   }).catch(err => {
     console.log("There was an error accessing the database.");
   });
@@ -31,18 +30,13 @@ api.modify = (AppointmentRepo, DB) => (req, res) => {
 api.get = (AppointmentRepo, DB) => (req, res) => {
   const username = req.query.username;
   DB.then(database => {
-    const repo = new AppointmentRepo(database);
+    var repo = new AppointmentRepo(database);
     // Gets all active appointments for this user.
-    repo.GetActive(username).then(result => {
+    repo.GetAppointment(username).then(result => {
       // Returns a json object appointments containing an array of appointments
       res.json(result);
     });
   });
 }
 
-api.updateStatus = (AppointmentRepo, DB) => (req, res) => {
-  console.log(req.body.date);
-  console.log("HELLA");
-  res.json({SUCCESS:"SUCCESS"});
-}
 module.exports = api;

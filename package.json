@@ -15,11 +15,11 @@
   "_moduleAliases": {
     "@root": ".",
     "@account": "./services/account_management",
-    "@accountModels": "./services/account_management/app/models",
+    "@accountModels": "./services/account_management/app/setup",
     "@accountConfig": "./services/account_management/config/index.js",
     "@accountAPI": "./services/account_management/config/app.js",
     "@appointment": "./services/appointment_schueduling",
-    "@appointmentModels": "./services/appointment_scheduling/app/models",
+    "@appointmentModels": "./services/appointment_scheduling/app/setup",
     "@appointmentConfig": "./services/appointment_scheduling/config/index.js",
     "@appointmentAPI": "./services/appointment_scheduling/config/app.js",
     "@treatment": "./services/treatment_management",

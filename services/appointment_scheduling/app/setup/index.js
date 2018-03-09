@@ -2,18 +2,12 @@ const dbConnection = require('@dataAccess/db_connection');
 
 const AppointmentRepo = require('@dataAccess/appointment_repository');
 
-const appointmentModel = require('@models/appointment');
-const Patient = require('@models/patient')
-const MedicalProfessional = require('@models/medicalprofessional');
-const User = require('@models/users')
+const Appointment = require('@models/appointment');
 
-
-const model = {
+const models = {
   DB: new dbConnection().Connect(),
   AppointmentRepo: AppointmentRepo,
-  Appointment: appointmentModel,
-  Patient: Patient,
-  MedicalProfessional: MedicalProfessional
+  Appointment: Appointment,
 }
 
-module.exports = model;
+module.exports = models;
