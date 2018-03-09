@@ -8,7 +8,7 @@ module.exports = {
     create: '/treatment_plan/api/create',
     update: '/treatment_plan/api/edit',
     returnCode: '/treatment_plan/api/returnCode',
-    getPatients: '/treatment_plan/api/patientBreakdown',
+    getDiagnoses: '/treatment_plan/api/getDiagnoses',
   },
   server: {
     port: 4400

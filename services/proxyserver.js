@@ -136,9 +136,9 @@ app.use('/returnCode', proxy('localhost:4400', {
   }
 }));
 
-app.use('/patientBreakdown', proxy('localhost:4400', {
+app.use('/getDiagnoses', proxy('localhost:4400', {
   proxyReqPathResolver: function(req) {
-    return `${routes.getPatients}?medicalcode=${req.query.medicalcode}`; 
+    return `${routes.getDiagnoses}?medicalcode=${req.query.medicalcode}`; 
   }
 }));
 

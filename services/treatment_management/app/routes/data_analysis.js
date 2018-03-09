@@ -1,8 +1,8 @@
 const config = require('@treatmentConfig');
 
-const models = require('@account/app/setup');
+const models = require('@treatment/app/setup');
 
 module.exports = (app) => {
     const api = app.treatment_management.app.api.data_analysis;
-    app.route(config.routes.getPatients).get(api.getPatients(models.UserRepo, models.DB));
+    app.route(config.routes.getDiagnoses).get(api.getDiagnoses(models.UserRepo, models.DB));
 }

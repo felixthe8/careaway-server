@@ -1,5 +1,5 @@
 const api = {};
-api.getPatients = (UserRepo, DB) => (req,res) => {
+api.getDiagnoses= (UserRepo, DB) => (req,res) => {
     const mpCode = req.query.medicalcode;
   
     DB.then(database => {
@@ -7,14 +7,13 @@ api.getPatients = (UserRepo, DB) => (req,res) => {
       userRepo.FindPatient(mpCode).then(function(value){ 
         // The 'value' holds all the data about the patient
         // patientContainer will be used as the object to hold information about the patient in the response
-         var patientContainer = {}, patients = [];
-  
-         // Loop through response value, and extract account information
-         for(var i = 0; i < value.patients.length; i++) {
-          patients.push(value.patients[i].accountType);
+         var patientContainer = {}, patientDiagnoses = [];
+         for (var single of value.patients) {
+            patientDiagnoses.push(single.accountType.diagnosis);
          }
-         // Store array of patient data inside patientContainer object
-         patientContainer = {patients};
+         // Store array of patient diagnoses inside patientContainer object
+         patientContainer = {patientDiagnoses};
+         console.log(patientContainer);
         res.json(patientContainer);
       });
     });
