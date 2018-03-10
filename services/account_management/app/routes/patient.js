@@ -1,5 +1,5 @@
 const config = require('@accountConfig');
-const models = require('@account/app/setup');
+const models = require('@accountModels');
 
 module.exports = (app) => {
   const api = app.account_management.app.api.patient;

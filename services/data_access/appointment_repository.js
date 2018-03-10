@@ -8,6 +8,7 @@ function AppointmentAccess(dbConnection)
   //fetches the database client connection
   this.db = dbConnection;
 }
+// TODO: rename the medical professional and patient to username 1 and username 2 and camel case
 /**
  * This appends a new appointment into the appointment 
  * attribute of the patient and medical professional
@@ -92,6 +93,7 @@ AppointmentAccess.prototype.DeleteAppointment= function(medicalprofessional, pat
  */
 AppointmentAccess.prototype.GetAppointment= function(username){
   const collection = this.db.collection('Users');
+  
   return new promise(function(fullfill,reject)
   { 
     collection.findOne({'username' : username },function(err, result)
@@ -118,33 +120,6 @@ AppointmentAccess.prototype.GetAppointment= function(username){
   });
 }
 
-AppointmentAccess.prototype.GetActive= function(username){
-  const collection = this.db.collection('Users');
-  return new promise(function(fullfill,reject)
-  { 
-    collection.find({'username' : username }).toArray(function(err, data)
-    {
-      if(err)
-      {
-        console.log('Failed to get query');
-        reject(err);
-      }
-      else
-      {
-        console.log('Successfully got query');
-        if(data != null){        
-          const appointments = result.accountType.appointment;
-          //return an object containing all the appointments of the user
-          const appointmentList = {'appointments' : appointments};
-          fullfill(appointmentList);
-        }
-        else{
-          fullfill(null);
-        }
-      } 
-    });
-  });
-}
 
 
 module.exports = AppointmentAccess

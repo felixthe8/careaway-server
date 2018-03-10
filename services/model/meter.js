@@ -11,6 +11,7 @@ function Meter (question,scale, due) {
   this.question = question || '';
   this.scale = scale || [];
   this.due_date = due || new Date(Date.now());
+  this.patient_input =  null;
   this.created_at = new Date(Date.now());
   this.updated_at = null;
 }  
@@ -24,6 +25,11 @@ Meter.prototype.setScale = function (low, high) {
   this.scale = [ low, high ];
   this.updated_at = new Date(Date.now());
 }
+Meter.prototype.setValue = function(value)
+{
+  this.patient_input = value;
+}
+
 module.exports = Meter;
 
 
