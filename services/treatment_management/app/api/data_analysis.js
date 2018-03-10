@@ -13,9 +13,32 @@ api.getDiagnoses= (UserRepo, DB) => (req,res) => {
          }
          // Store array of patient diagnoses inside patientContainer object
          patientContainer = {patientDiagnoses};
-         console.log(patientContainer);
         res.json(patientContainer);
       });
     });
+  }
+
+  api.getWellness = (UserRepo,DB) => (req,res) => {
+    const mpCode = req.query.medicalCode;
+    const searchDays = req.query.searchDays;
+    console.log(searchDays);
+
+    DB.then(database => {
+      var userRepo = new UserRepo(database);
+      userRepo.FindPatient(mpCode).then(function(value){ 
+        // console.log(value.patients);
+
+        /*
+          double for - loop
+          loop: day in searchDays
+            loop: wellness for patients on that day
+
+         output an array of the total wellness each day
+         then we will average those values
+
+        */
+        res.json(value.patients)
+      })
+    })
   }
   module.exports = api;
