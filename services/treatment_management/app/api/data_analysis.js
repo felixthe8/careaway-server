@@ -20,24 +20,18 @@ api.getDiagnoses= (UserRepo, DB) => (req,res) => {
 
   api.getWellness = (UserRepo,DB) => (req,res) => {
     const mpCode = req.query.medicalCode;
-    const searchDays = req.query.searchDays;
-    console.log(searchDays);
 
     DB.then(database => {
       var userRepo = new UserRepo(database);
       userRepo.FindPatient(mpCode).then(function(value){ 
         // console.log(value.patients);
+        var patientContainer = {}, patientData = [];
+        for (var singlePatient of value.patients) {
+          patientData.push(singlePatient.accountType.treatment);
+        }
+        console.log(patientData);
 
-        /*
-          double for - loop
-          loop: day in searchDays
-            loop: wellness for patients on that day
-
-         output an array of the total wellness each day
-         then we will average those values
-
-        */
-        res.json(value.patients)
+        res.json(patientData);
       })
     })
   }
