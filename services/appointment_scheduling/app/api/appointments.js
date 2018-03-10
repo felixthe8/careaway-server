@@ -19,11 +19,12 @@ api.modify = (AppointmentRepo, DB) => (req, res) => {
   DB.then(database => {
     const repo = new AppointmentRepo(database);
     const appointment = req.body.appointment;
-    console.log("GOT EVERYTHING")
-    res.json({"tyler" : "tyler"})
-    //repo.EditAppointment(medicalProfessional, patient, appointment);
+    const appointmentDate = req.body.appointmentDate;
+    repo.EditAppointment(appointment.initiator, appointment.appointee, appointmentDate, appointment);
+    res.json({"response" : "success"});
   }).catch(err => {
     console.log("There was an error accessing the database.");
+    res.json({"response" : err});
   });
 }
 
