@@ -103,6 +103,36 @@ UserAccess.prototype.FindUser= function(username)
     });
   });
 };
+
+/**
+ * This function finds an existing user in the database
+ * it will return the user info as an object if found or 
+ * return an empty object if the user does not exist 
+ * 
+ * @param {*} username the user that is being queried for
+ */
+UserAccess.prototype.FindUserId= function(id)
+{
+  const collection = this.db.collection('Users');
+  return new promise(function(fullfill,reject)
+  { 
+    collection.find({'_id' : id}).toArray(function(err, docs) 
+    {
+      if(err)
+      {
+        console.log('Failed to get query');
+          reject(err);
+      }
+      else
+      {
+        console.log('Successfully got query');
+        console.log(docs);
+        var results = {"User" : docs}
+        fullfill(results);
+      }
+    });
+  });
+};
 /**
  * This finds all the patient under a medical professional
  * 
