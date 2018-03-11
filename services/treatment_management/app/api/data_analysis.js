@@ -19,6 +19,8 @@ api.getDiagnoses= (UserRepo, DB) => (req,res) => {
   // Returns all meter widget data for all patients associated with a medical professional
 api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
   const mpCode = req.query.medicalcode;
+  const min = req.query.startDate;
+  const max = req.query.finalDate;
 
   DB.then(database => {
     var userRepo = new UserRepo(database);
@@ -29,10 +31,15 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
         // Add treatment objects of the patients to the array
         patientData.push(singlePatient.accountType.treatment);
       }
-      // Extract out meter widget data from patient treatment []
-      patientData = patientData.filter(function(el) {
-        return el.filter(widget => widget.label == 'meter')
-      });
+      // Response from data access layer is an array holding multiple arrays of treatment objects
+     patientData = patientData.filter(function(el) {
+       // Filter the data to extract only meter widget data and data that is within the time range
+       return el.filter(element => {
+         if(!(element.due_date >= min && element.due_date <=max) || !(element.label === "meter")){
+           el.splice(el.indexOf(element),1)
+         } 
+       })
+     })
       res.json(patientData);
     })
   })
@@ -49,12 +56,12 @@ api.getTreatmentchecklist = (UserRepo,DB) => (req,res) => {
         // Add treatment objects of the patients to the array
         patientData.push(singlePatient.accountType.treatment);
       }
-      // Extract out the checklist widget data from patient treatment []
+      // Extract out the checklist widget data from patient treatment []. Filters the return data between the specified dates
       patientData = patientData.filter(function(el) {
-        return el.filter(widget => widget.label == 'checklist')
+        return el.filter(widget => widget.label == 'checklist'); 
       });
       res.json(patientData);
-    })
-  })
+    });
+  });
 }
   module.exports = api;
