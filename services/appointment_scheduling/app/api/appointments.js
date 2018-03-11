@@ -40,4 +40,18 @@ api.get = (AppointmentRepo, DB) => (req, res) => {
   });
 }
 
+api.delete = (AppointmentRepo, DB) => (req, res) => {
+  DB.then(database => {
+    const repo = new AppointmentRepo(database);
+    const appointment = req.body.appointment;
+    console.log(appointment);
+    repo.DeleteAppointment(appointment.initiator, appointment.appointee, appointment);
+    res.json({"response" : "success"});
+  }).catch(err => {
+    console.log("There was an error accessing the database.");
+    res.json({"response" : err});
+  });
+
+}
+
 module.exports = api;

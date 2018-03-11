@@ -77,11 +77,11 @@ AppointmentAccess.prototype.DeleteAppointment= function(initiator, appointee, ap
     {'username' : initiator },//looks for username in the database
     { $pull: {'accountType.appointment': appointment}},//deletes the appointment
       function(err, result){
-        console.log('Removed appointment');
+        console.log('Remove appointment');
     }
   );
   collection.updateOne({'username' : appointee},//looks for username in the database
-    { $pull: {'accountType.appointment.$': appointment}},//deletes the appointment
+    { $pull: {'accountType.appointment': appointment}},//deletes the appointment
       function(err, result){
       console.log('Remove appointment');
   });
