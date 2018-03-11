@@ -32,11 +32,12 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
         patientData.push(singlePatient.accountType.treatment);
       }
       // Response from data access layer is an array holding multiple arrays of treatment objects
-     patientData = patientData.filter(function(el) {
+     patientData = patientData.filter(function(treatment) {
        // Filter the data to extract only meter widget data and data that is within the time range
-       return el.filter(element => {
-         if(!(element.due_date >= min && element.due_date <=max) || !(element.label === "meter")){
-           el.splice(el.indexOf(element),1)
+       return treatment.filter(widget => {
+         if(!(widget.due_date >= min && widget.due_date <=max) || !(widget.label === "meter")){
+          // Remove the widget if it is not necessary to return
+          treatment.splice(treatment.indexOf(widget),1)
          } 
        })
      })
