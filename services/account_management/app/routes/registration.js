@@ -12,8 +12,8 @@ module.exports = (app) => {
   // register new med pro
   app.route(config.routes.registerMedpro).post(api.registerMedpro(models.User, models.Security, models.Salt, models.MedicalProfessional, models.UserRepo, models.DB));
 
-  app.route(config.routes.ssoRegisterPatient).post(api.ssoRegisterPatient(models.User, models.Patient, models.UserRepo, models.DB));
+  app.route(config.routes.ssoRegisterPatient).post(api.ssoRegisterPatient(models.User,models.Security, models.Salt, models.Patient, models.UserRepo, models.DB));
 
-  app.route(config.routes.ssoRegisterMed).post(api.ssoRegisterMed(models.User, models.MedicalProfessional, models.UserRepo, models.DB));
+  app.route(config.routes.ssoRegisterMed).post(api.ssoRegisterMed(models.User, models.Security, models.Salt,models.MedicalProfessional, models.UserRepo, models.DB));
 
 }
