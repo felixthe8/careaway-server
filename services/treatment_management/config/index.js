@@ -9,7 +9,8 @@ module.exports = {
     update: '/treatment_plan/api/edit',
     returnCode: '/treatment_plan/api/returnCode',
     getDiagnoses: '/treatment_plan/api/getDiagnoses',
-    getTreatmentmeter: '/treatment_plan/api/getTreatmentmeter'
+    getTreatmentmeter: '/treatment_plan/api/getTreatmentmeter',
+    getTreatmentchecklist: '/treatment_plan/api/getTreatmentchecklist'
   },
   server: {
     port: 4400

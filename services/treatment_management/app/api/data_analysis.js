@@ -22,7 +22,7 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var userRepo = new UserRepo(database);
-    userRepo.FindPatient(mpCode).then(function(value){ 
+    userRepo.FindPatient(mpCode).then(function(value) { 
       // Create an array to store all the treatment objects for each patient the medical professional has
       var patientData = [];
       for (var singlePatient of value.patients) {
@@ -32,6 +32,26 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
       // Extract out meter widget data from patient treatment []
       patientData = patientData.filter(function(el) {
         return el.filter(widget => widget.label == 'meter')
+      });
+      res.json(patientData);
+    })
+  })
+}
+
+api.getTreatmentchecklist = (UserRepo,DB) => (req,res) => {
+  const mpCode = req.query.medicalcode;
+  DB.then(database => {
+    var UserRepo = new UserRepo(database);
+    userRepo.FindPatient(mpCode).then(function(value) {
+      // Create an array to store all the treatment objects for each patient the medical professional has
+      var patientData = [];
+      for(var singlePatient of value.patients) {
+        // Add treatment objects of the patients to the array
+        patientData.push(singlePatient.accountType.treatment);
+      }
+      // Extract out the checklist widget data from patient treatment []
+      patientData = patientData.filter(function(el) {
+        return el.filter(widget => widget.label == 'checklist')
       });
       res.json(patientData);
     })
