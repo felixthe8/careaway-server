@@ -4,11 +4,11 @@ const api = {};
 api.create = (AppointmentRepo, DB) => (req, res)=> {
   DB.then(database => {
     const repo = new AppointmentRepo(database);
-    const medicalProfessional = req.body.med;
-    const patient = req.body.patient;
+    const requester = req.body.requester;
+    const requestee = req.body.requestee;
     const appointment = req.body.appointment;
 
-    repo.CreateAppointment(medicalProfessional, patient, appointment);
+    repo.CreateAppointment(requester, requestee, appointment);
   }).catch(err => {
     console.log("There was an error accessing the database.");
   });
