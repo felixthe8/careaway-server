@@ -142,6 +142,13 @@ app.use('/getDiagnoses', proxy('localhost:4400', {
   }
 }));
 
+app.use('/getTreatmentmeter', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.getTreatmentmeter}?medicalcode=${req.query.medicalcode}`; 
+  }
+}));
+
+
 
 
 module.exports = app;
