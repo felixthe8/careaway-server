@@ -6,7 +6,7 @@ module.exports = (app) => {
   // POST /SSO/registration
   // This saves the SSO user credential within the CareAway system
   // Takes in User,Security,Salt model to create a user object
-  app.route(config.routes.ssoRegistration).post(api.ssoRegistration(models.User,models.Security, models.Salt,models.UserRepo, models.DB));
+  app.route(config.routes.ssoRegistration).post(api.ssoRegistration(models.User, models.Salt, models.UserRepo, models.DB));
 
   // POST /SSO/login
   // Attempts to log user in with sent credentials from the database

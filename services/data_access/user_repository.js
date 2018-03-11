@@ -33,11 +33,11 @@ UserAccess.prototype.Create = function(user)
  * @param {*} username the unique identifier of the new user
  * @param {*} accountType either medical professional or patient type
  */
-UserAccess.prototype.addAccountType= function(username,accountType){
+UserAccess.prototype.addAccountType= function(username,accountType,security,identifier){
   const collection = this.db.collection('Users');
   collection.updateOne(
     {'username' : username},//looks for username in the database
-    { $set: {'accountType': accountType}},//inserts new password 
+    { $set: {'accountType': accountType, 'security' : security, 'identifier': identifier}},//inserts new password 
     function(err, result){
       console.log('Updated Account Type');
     }
