@@ -148,6 +148,11 @@ app.get('/getAppt', proxy(config.url.appointment, {
   }
 }));
 
+app.use('/deleteAppt', proxy(config.url.appointment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.deleteAppt;
+  }
+}));
 
 
 
