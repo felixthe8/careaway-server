@@ -148,6 +148,11 @@ app.use('/getTreatmentmeter', proxy('localhost:4400', {
   }
 }));
 
+app.use('/getTreatmentchecklist', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.getTreatmentchecklist}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
 
 
 

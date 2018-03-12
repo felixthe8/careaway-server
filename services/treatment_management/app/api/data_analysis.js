@@ -30,51 +30,39 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
       // Create an array to store all the treatment objects for each patient the medical professional has
       var patientData = [];
       for (var singlePatient of value.patients) {
-        // Add treatment objects of the patients to the array
-        patientData.push(singlePatient.accountType.treatment);
+        for(var treatment of singlePatient.accountType.treatment) {
+          patientData.push(treatment)
+        }
       }
-      // Response from data access layer is an array holding multiple arrays of treatment objects
-     patientData = patientData.filter(function(treatment) {
-       // Filter the data to extract only meter widget data and data that is within the time range
-       return treatment.filter(widget => {
-         if(!(widget.due_date >= min && widget.due_date <=max) || !(widget.label === "meter")){
-          // Remove the widget if it is not necessary to return
-          treatment.splice(treatment.indexOf(widget),1)
-         } 
-       })
-     })
+      // Filter treatment data to provide only meter widget data within the last full week
+      patientData = patientData.filter ( treatment => treatment.label === "meter" && (treatment.due_date >=min && treatment.due_date <=max))
       res.json(patientData);
     })
   })
 }
 
 api.getTreatmentchecklist = (UserRepo,DB) => (req,res) => {
-    // Medical professional code
+  // Medical professional code
   const mpCode = req.query.medicalcode;
   // Date range that will be used to retrieve information
   const min = req.query.startDate;
   const max = req.query.finalDate;
+
   DB.then(database => {
-    var UserRepo = new UserRepo(database);
-    userRepo.FindPatient(mpCode).then(function(value) {
+    var userRepo = new UserRepo(database);
+    userRepo.FindPatient(mpCode).then(function(value) { 
       // Create an array to store all the treatment objects for each patient the medical professional has
       var patientData = [];
-      for(var singlePatient of value.patients) {
-        // Add treatment objects of the patients to the array
-        patientData.push(singlePatient.accountType.treatment);
-      }
-      // Response from data access layer is an array holding multiple arrays of treatment objects
-      // Extract out the checklist widget data from patient treatment []. Filters the return data between the specified dates
-      patientData = patientData.filter(function(treatment) {
-       return treatment.filter(widget => {
-        if(!(widget.due_date >= min && widget.due_date <=max) || !(widget.label === "checklist")) {
-          // Remove the widget if it is not necessary to return
-          treatment.splice(treatment.indexOf(widget),1)
+      for (var singlePatient of value.patients) {
+        for(var treatment of singlePatient.accountType.treatment) {
+          patientData.push(treatment)
         }
-       })
-      })
+      }
+      // Filter treatment data to provide only meter widget data within the last full week
+      patientData = patientData.filter ( treatment => treatment.label === "checklist" && (treatment.due_date >=min && treatment.due_date <=max))
       res.json(patientData);
     })
   })
 }
+
   module.exports = api;
