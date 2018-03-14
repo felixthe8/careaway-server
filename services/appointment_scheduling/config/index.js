@@ -8,7 +8,8 @@ module.exports = {
     create: '/appointment/api/create',
     modify: '/appointment/api/edit',
     get: '/appointment/api/get',
-    delete: '/appointment/api/delete'
+    delete: '/appointment/api/delete',
+    breach: '/breach',
   },
   server: {
     port: 4200

@@ -122,6 +122,7 @@ api.validateAs = (UserRepo, DB) => (req, res) => {
                 const queriedA2 = userSecurity[1].securityA;
                 const queriedA3 = userSecurity[2].securityA;
                 // compare hashed answers
+                // TODO loop through answers
                 if (hashedA1 === queriedA1 && hashedA2 === queriedA2 && hashedA3 === queriedA3) {
                     res.json({success: true});
                 } else {

@@ -54,13 +54,7 @@ server.listen(config.server.port, () => {
 
 // Listens for a breach request to shut down all servers.
 server.on('request', (req, res) => {
-  if(req.url === '/breach') {
-    accountServer.close();
-    console.log('Account module closed.');
-    treatmentServer.close();
-    console.log('Treatment module closed.');
-    appointmentServer.close();
-    console.log('Appointment module closed.');
-    console.log('Exiting');
-  } 
+ 
+  
+  
 });
