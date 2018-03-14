@@ -3,12 +3,17 @@ const api = {};
 // Creates an appointment.
 api.create = (AppointmentRepo, DB) => (req, res)=> {
   DB.then(database => {
+    // No overlapping appointments? 
     const repo = new AppointmentRepo(database);
     const requester = req.body.requester;
     const requestee = req.body.requestee;
     const appointment = req.body.appointment;
-
+    // First check if this date/time is available for requester
+    // If avail, check if available for requestee
+    // If all avail, insert into repo
     repo.CreateAppointment(requester, requestee, appointment);
+    // If success return, {success: true}
+    // If error return, { success: false, reason: "A message on why creating it failed." }
   }).catch(err => {
     console.log("There was an error accessing the database.");
   });

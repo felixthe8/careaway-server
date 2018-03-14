@@ -7,6 +7,10 @@ function Appointment(appointee, date, initiator, status) {
   this.appointee = appointee;
   // The date refers to the date that the appointment is requested. 
   this.date = date;
+  // The start time of the appointment.
+  this.startTime = startTime;
+  // The end time of the appointment.
+  this.endTime = endTime;
   // The initiator will be the individual who requested the appointment
   this.initiator = initiator;
   // Status of the appointment (pending, accepting, declined)
