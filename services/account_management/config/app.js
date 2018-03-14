@@ -7,7 +7,8 @@ const helmet = require('helmet');
 const passport = require('passport');
 const consign = require('consign');
 const corsOptions = {
-    origin: 'http://localhost:8081'
+    origin: 'http://localhost:8081',
+    optionsSuccessStatus: 200
 };
 var breached = false;
 // Allows only one cross origin site.

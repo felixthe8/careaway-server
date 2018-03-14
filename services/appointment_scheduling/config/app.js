@@ -21,10 +21,8 @@ app.all('*',function(req,res,next){
 });
 app.use(cors(corsOptions));
 app.use(helmet());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use(morgan('dev'));
 
 app.use('/breach', function(req,res){

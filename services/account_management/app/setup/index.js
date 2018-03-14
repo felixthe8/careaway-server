@@ -12,7 +12,7 @@ const MedicalProfessional = require('@models/medicalprofessional');
 const SystemAdmin = require('@models/systemadmin')
 
 const models = {
-	DB: new dbConnection().Connect(),
+	DB: new dbConnection().Connect(), // not model, but service/object
     UserRepo: UserRepo,
     User: User,
     Security: Security,
