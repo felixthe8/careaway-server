@@ -6,7 +6,10 @@ module.exports = {
   },
   routes: {
     create: '/appointment/api/create',
-    update: '/appointment/api/edit'
+    modify: '/appointment/api/edit',
+    get: '/appointment/api/get',
+    delete: '/appointment/api/delete',
+    breach: '/breach',
   },
   server: {
     port: 4200

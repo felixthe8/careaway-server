@@ -25,6 +25,11 @@ Meter.prototype.setScale = function (high) {
   this.scale = [1, high];
   this.updated_at = new Date(Date.now());
 }
+Meter.prototype.setValue = function(value)
+{
+  this.patient_input = value;
+}
+
 module.exports = Meter;
 
 

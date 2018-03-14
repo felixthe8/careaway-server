@@ -39,29 +39,20 @@ treatmentServer.listen(treatmentPORT, () => {
   console.log(`Treatment manager API running on port ${treatmentPORT}.`);
 });
 
-// Proxy server.
-const proxyServer = require('./proxyserver');
+// Configuration server.
+const configServer = require('./configserver');
 
-// Create the proxy server.
-const server = http.Server(proxyServer);
+// Create the configuration server.
+const server = http.Server(configServer);
 
 // Start the proxy server.
 server.listen(8080, () => {
-  console.log('proxy server started');
+  console.log('config server started on 8080');
 });
 
 // Listens for a breach request to shut down all servers.
 server.on('request', (req, res) => {
-  if(req.url === '/breach') {
-    accountServer.close();
-    console.log('Account module closed.');
-    treatmentServer.close();
-    console.log('Treatment module closed.');
-    appointmentServer.close();
-    console.log('Appointment module closed.');
-    console.log('Exiting');
-
-    
-  }
+ 
+  
   
 });
