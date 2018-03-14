@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const consign = require('consign');
+const request = require('request');
 const proxy = require('express-http-proxy');
 var http = require('http');
 const routes = require('./proxyRoutes');
@@ -15,7 +16,7 @@ var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 app.set('trust proxy', 1) // trust first proxy - only if secure is true for express-session
 const MongoStore = require('connect-mongo')(session);
 const corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: ['http://localhost:8081','http://localhost:8080'],
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -52,7 +53,7 @@ const csrfProtection = csrf();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.get('*',function(req,res,next){
+app.all('*',function(req,res,next){
   if (breached) {
       res.send({down:true});
   } else {
@@ -64,9 +65,51 @@ app.get('/isBreached',function(req,res){
   res.send({down:false});
 });
 
-app.post('/breach', function (req,res){   
-  breached = true;
+app.use('/breach', function (req,res){   
+ 
+  
+  var systemAdmin= {
+    username:req.body.username,
+    password: req.body.password
+  }
+
+  request.post({
+    url:     'http://localhost:4100/account/api/authentication',
+    form:   systemAdmin
+  }, function(err,httpResponse,body){ 
+
+      if(JSON.parse(httpResponse.body).accountType=== 'system-admin'){
+        request('http://localhost:4100/breach', function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
+        
+        // request('http://localhost:4200/breach', function (error, response, body) {
+        //   console.log('error:', error); // Print the error if one occurred and handle it
+        //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        // });
+        // request('http://localhost:4400/breach', function (error, response, body) {
+        //   console.log('error:', error); // Print the error if one occurred and handle it
+        //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        // });
+
+        console.log('Account module closed.');
+        console.log('Treatment module closed.');
+        console.log('Appointment module closed.');
+
+        breached = true;
+      
+        }
+        else{
+
+        }
+  });
+
   res.send('Server has been breached');
+  
+  
+
+  
 });
 
 app.use(morgan('dev'));

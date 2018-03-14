@@ -6,7 +6,8 @@ module.exports = {
   },
   routes: {
     create: '/treatment_plan/api/create',
-    update: 'treatment_plan/api/edit'
+    update: 'treatment_plan/api/edit',
+    breach: '/breach',
   },
   server: {
     port: 4400
