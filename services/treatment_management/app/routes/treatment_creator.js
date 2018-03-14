@@ -1,6 +1,6 @@
 const config = require('@treatmentConfig');
 
-const models = require('@treatment/app/setup');
+const models = require('@treatmentModels');
 
 module.exports = (app) => {
   const api = app.treatment_management.app.api.treatment_creator;
