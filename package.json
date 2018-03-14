@@ -23,7 +23,7 @@
     "@appointmentConfig": "./services/appointment_scheduling/config/index.js",
     "@appointmentAPI": "./services/appointment_scheduling/config/app.js",
     "@treatment": "./services/treatment_management",
-    "@treatmentModels": "./services/treatment_management/app/models",
+    "@treatmentModels": "./services/treatment_management/app/setup",
     "@treatmentConfig": "./services/treatment_management/config/index.js",
     "@treatmentAPI": "./services/treatment_management/config/app.js",
     "@models": "./services/model",

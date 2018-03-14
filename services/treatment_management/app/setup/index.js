@@ -1,5 +1,11 @@
-const treatmentModel = require('@treatmentModels/treatment_plan');
+const dbConnection = require('@dataAccess/db_connection');
+
+// user repository
+const UserRepo = require('@dataAccess/user_repository');
+
+
 const model = {
-  treatmentPlan : treatmentModel
+  DB: new dbConnection().Connect(),
+    UserRepo: UserRepo,
 }
 module.exports = model;

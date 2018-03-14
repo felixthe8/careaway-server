@@ -173,4 +173,30 @@ app.use('/reset-creds', proxy('localhost:4100', {
   }
 }));
 
+app.use('/returnCode', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.returnCode}?username=${req.query.username}`; 
+  }
+}));
+
+app.use('/getDiagnoses', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.getDiagnoses}?medicalcode=${req.query.medicalcode}`; 
+  }
+}));
+
+app.use('/getTreatmentmeter', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.getTreatmentmeter}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
+
+app.use('/getTreatmentchecklist', proxy('localhost:4400', {
+  proxyReqPathResolver: function(req) {
+    return `${routes.getTreatmentchecklist}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
+
+
+
 module.exports = app;

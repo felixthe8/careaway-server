@@ -10,7 +10,7 @@ function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appoint
   this.lastName = lastName || '';
   // This refers to the medical professional's code the patient will provide during registration
   this.medicalcode = medicalcode || '';
-  this.diagnosis = diagnosis || '';
+  this.diagnosis = diagnosis || 'Undiagnosed';
   // This refers to an array to represent the appointments that the patient will have.
   // As appointments are added, they will be pushed into the array
   this.appointment = appointment || [];
