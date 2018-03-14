@@ -1,5 +1,5 @@
 const config = require('@accountConfig');
-const models = require('@account/app/setup');
+const models = require('@accountModels');
 const passport = require('passport');
 //const pass = require('@account/app/setup/passport')(passport);
 const LocalStrategy = require('passport-local').Strategy;

@@ -24,7 +24,7 @@ config.routes = {
   getAppt : `${appointmentConfig.routes.get}`,
   createAppt : `${appointmentConfig.routes.create}`,
   updateAppt : `${appointmentConfig.routes.modify}`,
-  updateApptStatus: `${appointmentConfig.routes.updateStatus}`
+  deleteAppt : `${appointmentConfig.routes.delete}`
 };
 
 config.url = {
