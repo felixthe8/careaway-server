@@ -18,7 +18,7 @@ module.exports = {
         ssoLogin: '/SSO/login',
         ssoRegistration: '/SSO/registration',
         ssoResetPassword:'/SSO/ResetPassword',
-
+        breach: '/breach',
     },
     server: {
         port: 4100
