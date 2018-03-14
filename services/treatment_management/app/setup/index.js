@@ -1,5 +1,6 @@
 const dbConnection = require('@dataAccess/db_connection');
 
+const UserRepo = require('@dataAccess/user_repository');
 const TreatmentRepo = require('@dataAccess/treatment_plan_repository');
 
 const Checklist = require('@models/checklist')
@@ -13,7 +14,8 @@ const model = {
   TreatmentRepo: TreatmentRepo,
   Checklist: Checklist,
   Meter: Meter,
-  Question: Question
+  Question: Question,
+  UserRepo: UserRepo
   //treatmentPlan : treatmentModel,
 }
 module.exports = model;

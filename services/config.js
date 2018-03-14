@@ -25,6 +25,11 @@ config.routes = {
   createAppt : `${appointmentConfig.routes.create}`,
   updateAppt : `${appointmentConfig.routes.modify}`,
   deleteAppt : `${appointmentConfig.routes.delete}`
+  
+  returnCode : `${treatmentConfig.routes.returnCode}`,
+  getDiagnoses: `${treatmentConfig.routes.getDiagnoses}`,
+  getTreatmentmeter: `${treatmentConfig.routes.getTreatmentmeter}`,
+  getTreatmentchecklist: `${treatmentConfig.routes.getTreatmentchecklist}`,
 };
 
 config.url = {
