@@ -45,17 +45,17 @@ AppointmentAccess.prototype.CreateAppointment = function(initiator, appointee, a
  * @param {*} appointmentDate the old appointment Date that needs to be changed
  * @param {*} appointment the new update to the appointment
  */
-AppointmentAccess.prototype.EditAppointment= function(initiator, appointee, appointmentDate, appointment){
+AppointmentAccess.prototype.EditAppointment= function(initiator, appointee, startTime, appointment){
   const collection = this.db.collection('Users');
   collection.updateOne(
-    {'username' : initiator, 'accountType.appointment.date' : appointmentDate},//looks for username in the database
+    {'username' : initiator, 'accountType.appointment.startTime' : startTime},//looks for username in the database
     { $set: {'accountType.appointment.$': appointment}},//updates appointment with new edits on the array 
     function(err, result){
       console.log('Edited appointment');
     }
   );
   collection.updateOne(
-    {'username' : appointee, 'accountType.appointment.date' : appointmentDate},//looks for username in the database
+    {'username' : appointee, 'accountType.appointment.startTime' : startTime},//looks for username in the database
     { $set: {'accountType.appointment.$': appointment}},//updates appointment with new edits on the array 
       function(err, result){
       console.log('Edited appointment');
