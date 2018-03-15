@@ -18,6 +18,7 @@ function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appoint
   // assigned. As treatment widgets are added, they will be pushed into the array
   this.treatment = treatment || [];
   this.role = 'patient';
+  this.roleType = 'public';
 }
 // Function to return patient name
 Patient.prototype.DisplayName = function () {
