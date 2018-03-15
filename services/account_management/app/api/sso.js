@@ -1,7 +1,6 @@
 var CryptoJS = require('crypto-js');
 var jwt = require('jsonwebtoken');
 const api = {};
-// TODO: add a check to crossreference Database source to application source
 //  Register a new user from sso into the careaway system
 api.ssoRegistration = (User,Salt,UserRepo,DB) => (req, res) => {
   try{
