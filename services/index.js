@@ -41,13 +41,15 @@ treatmentServer.listen(treatmentPORT, () => {
 
 // Configuration server.
 const configServer = require('./configserver');
+// Configuration for configuration server.
+const config = require('./config');
 
 // Create the configuration server.
 const server = http.Server(configServer);
 
 // Start the proxy server.
-server.listen(8080, () => {
-  console.log('config server started on 8080');
+server.listen(config.server.port, () => {
+  console.log(`Config server running on  port ${config.server.port}`);
 });
 
 // Listens for a breach request to shut down all servers.
