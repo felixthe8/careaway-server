@@ -1,15 +1,23 @@
+const validator = require('./appointment-validation');
 const api = {};
 
 // Creates an appointment.
-api.create = (AppointmentRepo, DB) => (req, res)=> {
-  DB.then(database => {
+api.create = (AppointmentRepo, DB) => (req, res) => {
+  DB.then(database => { 
     const repo = new AppointmentRepo(database);
-    const medicalProfessional = req.body.med;
-    const patient = req.body.patient;
     const appointment = req.body.appointment;
+    const initiator = appointment.initiator;
+    const appointee = appointment.appointee;
 
-    repo.CreateAppointment(medicalProfessional, patient, appointment);
+    validator.validate_creation(repo, appointment, initiator, appointee).then(result => {
+      if(result.success) {
+        // No conflicting times, insert into the database.
+        repo.CreateAppointment(initiator, appointee, appointment);
+      }
+      res.send({success: result.success, reason: result.reason});
+    });
   }).catch(err => {
+    console.log(err);
     console.log("There was an error accessing the database.");
   });
 }
@@ -18,10 +26,18 @@ api.create = (AppointmentRepo, DB) => (req, res)=> {
 api.modify = (AppointmentRepo, DB) => (req, res) => {
   DB.then(database => {
     const repo = new AppointmentRepo(database);
-    const appointment = req.body.appointment;
-    const appointmentDate = req.body.appointmentDate;
-    repo.EditAppointment(appointment.initiator, appointment.appointee, appointmentDate, appointment);
-    res.json({"response" : "success"});
+    const newAppointment = req.body.newAppointment;
+    const originalAppointment = req.body.originalAppointment;
+    const appointee = originalAppointment.appointee;
+    const initiator = originalAppointment.initiator;
+
+    validator.validate_modification(repo, initiator, appointee, originalAppointment, newAppointment).then(result => {
+      if(result.success) {
+        // No conflicting times, can successfully modify appointment.
+        repo.EditAppointment(initiator, appointee, originalAppointment.startTime, newAppointment);
+      }
+      res.send({success: result.success, reason: result.reason});
+    });
   }).catch(err => {
     console.log("There was an error accessing the database.");
     res.json({"response" : err});

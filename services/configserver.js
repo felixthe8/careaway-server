@@ -52,17 +52,17 @@ const csrfProtection = csrf();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.get('*',function(req,res,next){
+
+app.get('*',function(req, res, next) {
   if (breached) {
-      res.send({down:true});
+    res.send({ down : true });
   } else {
-      next();
+    next();
   }
-  
 });
 
-app.get('/isBreached',function(req,res){
-  res.send({down:false});
+app.get('/isBreached',function(req,res) {
+  res.send({ down : false }); // ? Shouldn't this send breached? res.send({down:breached})
 });
 
 app.use('/breach', function (req,res){   

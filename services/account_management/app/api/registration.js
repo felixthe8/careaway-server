@@ -133,7 +133,7 @@ api.registerMedpro = (User, Security, Salt, MedicalProfessional, UserRepo, DB) =
   });  
 };
 //This method inputs the patient type for a newly registered SSO user
-api.ssoRegisterPatient = (User, Patient, UserRepo, DB) => (req, res) => {
+api.ssoRegisterPatient = (User,Security, Salt, Patient, UserRepo, DB) => (req, res) => {
   // grab username and account info
   const username = req.body.username;
   const firstName = req.body.firstName;
@@ -146,18 +146,25 @@ api.ssoRegisterPatient = (User, Patient, UserRepo, DB) => (req, res) => {
       var codes = value.codeList;
       if(codes.indexOf(medicalCode) === -1){
         res.json({success:false , error : "Non-Existant MP CODE"});
-      }
-      else{
-        var patientType = new Patient(firstName,lastName,medicalCode);
-        // update db with new account type
-        userRepo.addAccountType(username,patientType);
-        res.json({success: true});
+      } else{
+        userRepo.FindUser(username).then(
+          function(value){
+            var newUser = createGenericUser(User, Security, Salt, req.body);
+            var accountType = new Patient(firstName,lastName,medicalCode);
+            var security = newUser.security;
+            var identifier = newUser.identifier;
+            identifier.salt = value.User[0].identifier.salt;
+            console.log(identifier);
+            // update db with new account type
+            userRepo.addAccountType(username,accountType,security,identifier);
+            res.json({success: true});
+          });
       }
     })
   });
 }
 //This method inputs the medical professional type for a newly registered SSO user
-api.ssoRegisterMed = (User, MedicalProfessional, UserRepo, DB) => (req, res) => {
+api.ssoRegisterMed = (User, Security, Salt,MedicalProfessional, UserRepo, DB) => (req, res) => {
   // grab username and account info
   const username = req.body.username;
   const firstName = req.body.firstName;
@@ -174,10 +181,19 @@ api.ssoRegisterMed = (User, MedicalProfessional, UserRepo, DB) => (req, res) => 
         length: 7,
         capitalization: 'uppercase'});
       }while(codes.indexOf(medicalCode) != -1);
-      var MedType = new MedicalProfessional(firstName,lastName,medicalCode);
-      // update db with new hashed account type
-      userRepo.addAccountType(username,MedType);
-      res.json({success: true});
+
+      userRepo.FindUser(username).then(
+        function(value){
+          var newUser = createGenericUser(User, Security, Salt, req.body);
+          var accountType = new MedicalProfessional(firstName,lastName,medicalCode);
+          var security = newUser.security;
+          var identifier = newUser.identifier;
+          identifier.salt = value.User[0].identifier.salt;
+          console.log(identifier);
+          // update db with new hashed account type
+          userRepo.addAccountType(username,accountType,security,identifier);
+          res.json({success: true});
+        });
     });
   });
 
