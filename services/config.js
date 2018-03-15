@@ -4,6 +4,12 @@ const appointmentConfig = require('@appointmentConfig');
 
 const config = {};
 
+// Configurations for the config server.
+config.server = {
+  port : 8080,
+}
+
+// All routes the config server uses to route to the correct location..
 config.routes = {
   login : `${accountConfig.routes.login}`,
   registerPatient : `${accountConfig.routes.registerPatient}`,
@@ -32,6 +38,7 @@ config.routes = {
   getTreatmentchecklist: `${treatmentConfig.routes.getTreatmentchecklist}`,
 };
 
+// All urls the config server uses to route to the correct module.
 config.url = {
   account : `localhost:${accountConfig.server.port}`,
   treatment : `localhost:${treatmentConfig.server.port}`,
