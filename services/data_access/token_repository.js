@@ -13,15 +13,15 @@ function TokenAccess(dbConnection)
  * @param {*} token the token string that passed into the system
  */
 TokenAccess.prototype.addToken = function(token){
-    const collection = this.db.collection('JsonWebTokens');
-    collection.insertOne({"token":token}, function(err, result)
-    {
-        if(err){
-            console.log(err); 
-        } else{
-            console.log('Inserted Json Web Token');
-        }
-    });
+  const collection = this.db.collection('JsonWebTokens');
+  collection.insertOne({"token":token}, function(err, result)
+  {
+    if(err){
+      console.log(err); 
+    } else{
+      console.log('Inserted Json Web Token');
+    }
+  });
 };
 /**
  * This function finds all existing JWT in the database,
@@ -29,45 +29,43 @@ TokenAccess.prototype.addToken = function(token){
  * @returns {*} the array of Json Web Tokens
  */
 TokenAccess.prototype.getAllTokens = function(){
-    const collection = this.db.collection('JsonWebTokens');
-    return new promise(function(fullfill, reject){
-        collection.find({}).toArray(function(err, docs)
-        {
-            if(err){
-                console.log('Failed to get query');
-                reject(err);
-            } else {
-                console.log('Successfully got query');
-                var results = {'token' : docs};
-                fullfill(results);
-            }
-        });
+  const collection = this.db.collection('JsonWebTokens');
+  return new promise(function(fullfill, reject){
+    collection.find({}).toArray(function(err, docs) {
+      if(err) {
+        console.log('Failed to get query');
+        reject(err);
+      } else {
+        console.log('Successfully got query');
+        var results = {'token' : docs};
+        fullfill(results);
+      }
     });
+  });
 };
 /**
- * This function finds all existing JWT in the database,
- * and returns it as an object if found
- * @param {*} token the token the system is searching for
- * @returns {*} the array of Json Web Tokens
+ * This function finds if a JWT exist in the database,
+ * @param {*} token is the object the system is searching for
+ * @returns {*} true if the token was found or false if not
  */
 TokenAccess.prototype.findExistingToken = function(token){
-    const collection = this.db.collection('JsonWebTokens');
-    return new promise(function(fullfill, reject){
-        collection.find({'token' : token}).toArray(function(err, docs)
-        {
-            if(err){
-                console.log('Failed to get query');
-                reject(err);
-            } else {
-                console.log('Successfully got query');
-                if(docs.length > 0){
-                    fullfill(true);
-                } else {
-                    fullfill(false);
-                }
-            }
-        });
+  const collection = this.db.collection('JsonWebTokens');
+  return new promise(function(fullfill, reject){
+    collection.find({'token' : token}).toArray(function(err, docs)
+    {
+      if(err){
+        console.log('Failed to get query');
+          reject(err);
+      } else {
+        console.log('Successfully got query');
+        if(docs.length > 0){
+          fullfill(true);
+        } else {
+          fullfill(false);
+        }
+      }
     });
+  });
 };
 
 module.exports = TokenAccess;
