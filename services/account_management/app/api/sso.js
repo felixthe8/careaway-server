@@ -1,44 +1,48 @@
 var CryptoJS = require('crypto-js');
 var jwt = require('jsonwebtoken');
 const api = {};
-//  Register a new user from sso into the careaway system
-api.ssoRegistration = (User,Salt,UserRepo,DB) => (req, res) => {
-  try{
-    // Captures the JWT token received from a request from the SSO and decodes it using the secret key 
-    // Returns an error (goes to catch) if the token is not valid
-    var token = req.body.token;
-    console.log(token);
-    var decoded = jwt.verify(token,"db3OIsj+BXE9NZDy0t8W3TcNekrF+2d/1sFnWG4HnV8TZY30iTOdtVWJG8abWvB1GlOgJuQZdcF2Luqm/hccMw==");
-    // This decodes the JWT to the original json object if the token has been validated
-    var ssoUser = jwt.decode(token,{complete: true});
-    DB.then(database => {
-      var userRepo = new UserRepo(database);
-      userRepo.FindUser(ssoUser.payload.username).then(function(value){
-        if(value.User.length > 0){
-          console.log('User already exist in our system');
-          res.status(404);
-          res.json({'err' : 'User already exist'});
-        } else {
-          var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
-          var passHashed = CryptoJS.HmacSHA256(ssoUser.payload.password, saltStrPass).toString();
-          // Saves all salt to an object
-          var identifier = new Salt(saltStrPass);
-          // Generates a new user using the received username and password from sso
-          var newUser = new User(ssoUser.payload.username,passHashed, {role: 'SSO'}, {} ,identifier);
-          userRepo.Create(newUser);
-          // Return success message
-          res.json({success: true});
-        }
-      });
+// Register a new user from sso into the careaway system
+api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
+  // The message received from the third party service
+  var token = req.body.token;
+  DB.then(database => {
+    var userRepo = new UserRepo(database);
+    // Transfomer for the message received
+    var transformer = new Transformer(database);
+    // This morphs the message received to a generic user object for our system
+    transformer.decodeJWT(token).then(function(value){
+      // Checks if there were any errors during the message decoding
+      if(value.err){
+        console.log(value.err);
+        res.status(404); // Return a 404 bad request back to the sender
+        res.json({'err': value});
+      } else {
+        // If the message was decoded successfully check if the username already exist in our system
+        userRepo.FindUser(value.username).then(function(value){
+          // Checks if the user does exist within our system
+          if(value.User.length > 0){
+            console.log('User already exist in our system');
+            res.status(404);
+            res.json({'err' : 'User already exist'});
+          } else {
+            // If the user is new begin making a new salt and save the password and username into the database
+            var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
+            var passHashed = CryptoJS.HmacSHA256(value.password, saltStrPass).toString();
+            // Saves all salt to an object
+            var identifier = new Salt(saltStrPass);
+            // Generates a new user using the received username and password from sso
+            var newUser = new User(value.username,passHashed, {role: 'SSO', roleType:'public'}, {} ,identifier);
+            userRepo.Create(newUser);
+            // Return success message
+            res.json({success: true});
+          }
+        });
+      }
     });
-    // Goes here if token was invalid
-  }catch(err) {
-    console.log("Received a bad token");
-    res.json({success: false});
-  }
-};
+  });
+}
 // Authenticates the SSO user into our careaway system
-api.ssoLogin = (UserRepo, DB) => (req, res) => {
+api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
   try{
     // Captures the JWT token received from a request from the SSO and decodes it using the secret key 
     // Returns an error (goes to catch) if the token is not valid
@@ -92,7 +96,7 @@ api.ssoLogin = (UserRepo, DB) => (req, res) => {
 };
 
 //  This Edits an existing user's password into our system
-api.ssoResetPassword= (UserRepo, DB) => (req, res) => {
+api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
   try{
     // Captures the JWT token received from a request from the SSO and decodes it using the secret key 
     // Returns an error (goes to catch) if the token is not valid
