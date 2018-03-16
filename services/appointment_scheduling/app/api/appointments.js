@@ -1,6 +1,6 @@
 const validator = require('./appointment-validation');
 const api = {};
-
+//TODO: appointment model
 // Creates an appointment.
 api.create = (AppointmentRepo, DB) => (req, res) => {
   DB.then(database => { 
