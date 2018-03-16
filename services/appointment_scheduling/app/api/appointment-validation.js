@@ -18,7 +18,7 @@ const checkTimes = (existing, newAppointment) => {
   // The new appointment ends at the same time an existing one does.
   const fourthTest = (existing.endTime).isSame(newAppointment.endTime);
   return firstTest || secondTest || thirdTest || fourthTest;
-}
+};
 
 // Validates whether or not the appointment conflicts with existing appointments.
 const creation_validate = (appointment, appointmentList) => {
@@ -31,7 +31,7 @@ const creation_validate = (appointment, appointmentList) => {
     }
   }
   return valid;
-}
+};
 const isSame = (first, second) => {
   const firstStart = moment(first.startTime);
   const secondStart = moment(second.startTime);
@@ -40,7 +40,7 @@ const isSame = (first, second) => {
   const initiatorsMatch = first.initiator === second.initiator;
   const appointeesMatch = first.appointee === second.appointee;
   return timesMatch && initiatorsMatch && appointeesMatch;
-}
+};
 const validateModdedAppointment = (original, newAppointment, appointmentList) => {
   let valid = true;
   for(let i in appointmentList) {
@@ -54,9 +54,7 @@ const validateModdedAppointment = (original, newAppointment, appointmentList) =>
     } 
   }
   return valid;
-}
-
-
+};
 /**
  * Used to validate whether the appointment conflicts with both party's
  * existing appointments.
@@ -64,17 +62,18 @@ const validateModdedAppointment = (original, newAppointment, appointmentList) =>
  * @param {*} appointment The appointment object.
  * @param {*} initiator The username of the one who initiated this appointment.
  * @param {*} appointee The username of the person the intiator is requesting this appointment with.
+ * @returns {*} a promise that returns if an appointment was created successfully
  */
 const validate_creation = (repo, appointment, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
     // Gets all initiator's appointments. 
     repo.GetAppointment(initiator).then(initiatorResult => {
       // Validates no conflicting appointment times for initiator.
-      if(initiatorResult == null || creation_validate(appointment, initiatorResult.appointments)) {
+      if(initiatorResult === null || creation_validate(appointment, initiatorResult.appointments)) {
         // Gets all appointee's appointments.
         repo.GetAppointment(appointee).then(appointeeResult => {
           // Validates no conflicting appointment times for appointee.
-          if(appointeeResult == null || creation_validate(appointment, appointeeResult.appointments)) {
+          if(appointeeResult === null || creation_validate(appointment, appointeeResult.appointments)) {
             // No conflicting times.
             fulfill({success: true, reason: ""});
           } else {
@@ -90,7 +89,7 @@ const validate_creation = (repo, appointment, initiator, appointee) => {
       console.log(error);
     });
   });
-}
+};
 
 const validate_modification = (repo, initiator, appointee, originalAppointment, newAppointment) => {
   return new Promise((fulfill, reject) => {
@@ -118,5 +117,5 @@ const validate_modification = (repo, initiator, appointee, originalAppointment, 
     });
   });
   
-}
+};
 module.exports = {validate_creation, validate_modification};
