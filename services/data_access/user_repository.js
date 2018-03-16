@@ -2,6 +2,7 @@ const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
 /**
  * Constructor of the User Repository
+ * @param {*} dbConnection the database connection string
  */
 function UserAccess(dbConnection)
 {
@@ -20,7 +21,7 @@ UserAccess.prototype.Create = function(user)
   const collection = this.db.collection('Users');
   collection.insertOne(user, function(err, result)
   {
-    if(err == null){
+    if(err === null){
       console.log('Inserted User');
     }
     else{
@@ -42,11 +43,11 @@ UserAccess.prototype.addAccountType= function(username,accountType){
       console.log('Updated Account Type');
     }
   );
-}
+};
 /**
  * This function edits the patient diagnosis
- * @param {*} username 
- * @param {*} diagnosis
+ * @param {*} username the unique identifier of the patient
+ * @param {*} diagnosis the new diagnosis of the patient
  */
 UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
   const collection = this.db.collection('Users');
@@ -57,13 +58,14 @@ UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
       console.log('Updated Diagnosis');
     }
   );
-}
+};
 /**
  * This function edits a user's password into the 
  * mongodb database with received information
  * 
  * @param {*} username the user that wants to reset their password
  * @param {*} password the new password the user wants to save
+ * @param {*} salt the appended string to the password used in our hashing
  */
 UserAccess.prototype.ResetCredential = function(username,password,salt){
   const collection = this.db.collection('Users');
@@ -79,8 +81,8 @@ UserAccess.prototype.ResetCredential = function(username,password,salt){
  * This function finds an existing user in the database
  * it will return the user info as an object if found or 
  * return an empty object if the user does not exist 
- * 
  * @param {*} username the user that is being queried for
+ * @returns {*} a promise that returns a user
  */
 UserAccess.prototype.FindUser= function(username)
 {
@@ -97,42 +99,17 @@ UserAccess.prototype.FindUser= function(username)
       else
       {
         console.log('Successfully got query');
-        var results = {"User" : docs}
+        var results = {"User" : docs};
         fullfill(results);
       }
     });
   });
 };
-
 /**
- * This function finds an existing user in the database
- * it will return the user info as an object if found or 
- * return an empty object if the user does not exist 
- * 
- * @param {*} username the user that is being queried for
+ * This finds the medical professional based on the medical code
+ * @param {*} mpcode the medical professional code
+ * @returns {*} the medical professional object 
  */
-UserAccess.prototype.FindUserId= function(id)
-{
-  const collection = this.db.collection('Users');
-  return new promise(function(fullfill,reject)
-  { 
-    collection.find({'_id' : id}).toArray(function(err, docs) 
-    {
-      if(err)
-      {
-        console.log('Failed to get query');
-          reject(err);
-      }
-      else
-      {
-        console.log('Successfully got query');
-        console.log(docs);
-        var results = {"User" : docs}
-        fullfill(results);
-      }
-    });
-  });
-};
 UserAccess.prototype.FindMP = function(mpcode)
 {
   const collection = this.db.collection('Users');
@@ -157,6 +134,7 @@ UserAccess.prototype.FindMP = function(mpcode)
  * This finds all the patient under a medical professional
  * 
  * @param {*} MPCode the medical professional querying for their patient
+ * @returns {*} The list of patients of that medical professional
  */
 UserAccess.prototype.FindPatient = function(MPCode){
   const collection = this.db.collection('Users');
@@ -183,6 +161,7 @@ UserAccess.prototype.FindPatient = function(MPCode){
 /** 
  * This function is used to gather a list of medical professional codes 
  * used to verify if a medical professional exist within our system
+ * @returns {*} the promise that will return all the medical code in the system
 */
 UserAccess.prototype.GetMedicalCodes = function(){
   const collection = this.db.collection('Users');
@@ -200,7 +179,7 @@ UserAccess.prototype.GetMedicalCodes = function(){
       {
         console.log('Successfully got query');
         //grabs just the Medical Professional Code and save it to an array
-        var mpCode = []
+        var mpCode = [];
         for(var i=0; i<docs.length; i++){
           mpCode.push(docs[i].accountType.medicalcode);
         }
@@ -211,5 +190,5 @@ UserAccess.prototype.GetMedicalCodes = function(){
     });
   });
 
-}
+};
 module.exports = UserAccess;
