@@ -2,10 +2,10 @@
   Model for appointments. Appointments will be stored inside
   appointment array of patient and medical professional. 
 */
-function Appointment(appointee, date, initiator, status) {
+function Appointment(appointee, appointeeName, date, startTime, endTime, initiator, status) {
   // The individual that the appointment will be scheduled with
   this.appointee = appointee;
-  
+  // The name of the appointee.
   this.appointeeName = appointeeName;
   // The date refers to the date that the appointment is requested. 
   this.date = date;
@@ -17,5 +17,12 @@ function Appointment(appointee, date, initiator, status) {
   this.initiator = initiator;
   // Status of the appointment (pending, accepting, declined)
   this.status = status;
+}
+/*
+  Overloaded constructor for appointments.
+  @param {*} appointment the appointment object.
+*/
+function Appointment(appointment) {
+  
 }
 module.exports = Appointment;

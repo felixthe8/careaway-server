@@ -149,7 +149,7 @@ app.use('/validate-username', proxy(config.url.account, {
 
 app.get('/security-questions', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.securityQues}?username=${req.query.username}`; 
+    return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
@@ -165,6 +165,23 @@ app.use('/ssoRegisterMed', proxy(config.url.account, {
   }
 }));
 
+app.get('/get-user', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getUser}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.get('/get-patients', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getPatients}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.get('/patient-appointment-info', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`
+  }
+}));
 app.use('/createAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
@@ -179,7 +196,7 @@ app.use('/updateAppt', proxy(config.url.appointment, {
 
 app.get('/getAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getAppt}?username=${req.query.username}`;
+    return `${config.routes.getAppt}${req._parsedOriginalUrl.search}`;
   }
 }));
 
@@ -193,25 +210,25 @@ app.use('/deleteAppt', proxy(config.url.appointment, {
 
 app.use('/returnCode', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.returnCode}?username=${req.query.username}`; 
+    return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
 app.use('/getDiagnoses', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getDiagnoses}?medicalcode=${req.query.medicalcode}`; 
+    return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
 app.use('/getTreatmentmeter', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentmeter}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+    return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
 app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentchecklist}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+    return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`; 
   }
 }));
 

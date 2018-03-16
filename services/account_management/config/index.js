@@ -19,6 +19,9 @@ module.exports = {
         ssoRegistration: '/SSO/registration',
         ssoResetPassword:'/SSO/ResetPassword',
         breach: '/breach',
+        getUser: '/account/api/get-user',
+        getPatients: '/account/api/get-all-patients',
+        getAllInfoForPatientAppointment: '/account/api/get-patient-appointment-info'
     },
     server: {
         port: 4100

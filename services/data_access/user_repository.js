@@ -133,6 +133,26 @@ UserAccess.prototype.FindUserId= function(id)
     });
   });
 };
+UserAccess.prototype.FindMP = function(mpcode)
+{
+  const collection = this.db.collection('Users');
+  return new promise(function(fullfill,reject)
+  { 
+    collection.findOne({'accountType.medicalcode' : mpcode, 'accountType.role' : "medical-professional"}, (err, result) => 
+    {
+      if(err)
+      {
+        console.log('Failed to get query');
+          reject(err);
+      }
+      else
+      {
+        console.log('Successfully got query');
+        fullfill(result);
+      }
+    });
+  });
+};
 /**
  * This finds all the patient under a medical professional
  * 

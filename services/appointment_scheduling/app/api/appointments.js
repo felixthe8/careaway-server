@@ -8,7 +8,7 @@ api.create = (AppointmentRepo, DB) => (req, res) => {
     const appointment = req.body.appointment;
     const initiator = appointment.initiator;
     const appointee = appointment.appointee;
-
+    // Construct appointment object.
     validator.validate_creation(repo, appointment, initiator, appointee).then(result => {
       if(result.success) {
         // No conflicting times, insert into the database.
