@@ -21,7 +21,7 @@ api.getUser = (UserRepo, DB) => (req, res) => {
     const userRepo = new UserRepo(database);
     userRepo.FindUser(req.query.username).then(result => {
       // Construct the user object being returned.
-      const user = returnUser(result.User);
+      const user = returnUser(result.User[0]);
       const returning = {success: true, user: user};
       res.json(returning);
     }).catch(error => {
@@ -51,18 +51,18 @@ api.getAllPatients = (UserRepo, DB) => (req, res) => {
 api.getAppointmentPatientInfo = (UserRepo, DB) => (req, res) => {
   DB.then(database => {
     const userRepo = new UserRepo(database);
-    console.log(req.query.username);
-// ERROR HERE.
+    
     userRepo.FindUser(req.query.username).then(result => {
       // Construct the user object being returned.
-      const patient = returnUser(result.User);
-      userRepo.FindMP(result.User.accountType.medicalcode).then(result => {
+      const patient = returnUser(result.User[0]);
+      userRepo.FindMP(result.User[0].accountType.medicalcode).then(result => {
         // Need to add this into the user repo
-        const mp = returnUser(result);
+        const mp = [];
+        mp.push(returnUser(result));
+        
         const returning = {success: true, patient: patient, mp: mp};
         res.json(returning);
       });
-      
     }).catch(error => {
       console.log("An error occurred getting the specified user.");
       res.json({success: false});

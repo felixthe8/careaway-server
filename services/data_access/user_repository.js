@@ -92,11 +92,12 @@ UserAccess.prototype.FindUser= function(username)
       if(err)
       {
         console.log('Failed to get query');
-          reject(err);
+        reject(err);
       }
       else
       {
         console.log('Successfully got query');
+        //console.log(docs);
         var results = {"User" : docs}
         fullfill(results);
       }
