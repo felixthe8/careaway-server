@@ -2,7 +2,7 @@
   Model for appointments. Appointments will be stored inside
   appointment array of patient and medical professional. 
 */
-function Appointment(appointee, appointeeName, date, startTime, endTime, initiator, status) {
+function Appointment(appointee, appointeeName, date, startTime, endTime, initiator, initiatorName, status) {
   // The individual that the appointment will be scheduled with
   this.appointee = appointee;
   // The name of the appointee.
@@ -15,6 +15,8 @@ function Appointment(appointee, appointeeName, date, startTime, endTime, initiat
   this.endTime = endTime;
   // The initiator will be the individual who requested the appointment
   this.initiator = initiator;
+  // The name of the Initiator
+  this.initiatorName = initiatorName;
   // Status of the appointment (pending, accepting, declined)
   this.status = status;
 }
