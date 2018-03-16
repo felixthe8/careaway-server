@@ -33,10 +33,10 @@ const creation_validate = (appointment, appointmentList) => {
   return valid;
 }
 const isSame = (first, second) => {
-  first.startTime = moment(first.startTime);
-  second.startTime = moment(second.startTime);
+  const firstStart = moment(first.startTime);
+  const secondStart = moment(second.startTime);
 
-  const timesMatch = (first.startTime).isSame(second.startTime);
+  const timesMatch = (firstStart).isSame(secondStart);
   const initiatorsMatch = first.initiator === second.initiator;
   const appointeesMatch = first.appointee === second.appointee;
   return timesMatch && initiatorsMatch && appointeesMatch;
