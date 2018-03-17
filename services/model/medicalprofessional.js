@@ -11,6 +11,7 @@ function MedicalProfessional (firstName, lastName , medicalcode, appointment) {
   // will have as appointments are added, they will be pushed onto the array
   this.appointment = appointment || [];
   this.role = 'medical-professional';
+  this.roleType = 'public';
 }
 // Function to display the medical professional name
 MedicalProfessional.prototype.DisplayName = function ()  {

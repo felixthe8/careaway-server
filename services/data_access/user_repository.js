@@ -2,7 +2,7 @@ const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
 /**
  * Constructor of the User Repository
- * @param {*} dbConnection the database connection string
+ * @param {*} dbConnection is the database connection string
  */
 function UserAccess(dbConnection)
 {
@@ -33,21 +33,22 @@ UserAccess.prototype.Create = function(user)
  * This function adds the accountType from a new user from SSO
  * @param {*} username the unique identifier of the new user
  * @param {*} accountType either medical professional or patient type
+ * @param {*} security the security questions and answers of new user
+ * @param {*} identifier the salts fot the password and security answers
  */
-UserAccess.prototype.addAccountType= function(username,accountType){
+UserAccess.prototype.addAccountType= function(username,accountType,security,identifier){
   const collection = this.db.collection('Users');
   collection.updateOne(
     {'username' : username},//looks for username in the database
-    { $set: {'accountType': accountType}},//inserts new password 
+    { $set: {'accountType': accountType, 'security' : security, 'identifier': identifier}},//inserts new password 
     function(err, result){
       console.log('Updated Account Type');
     }
   );
 };
 /**
- * This function edits the patient diagnosis
- * @param {*} username the unique identifier of the patient
- * @param {*} diagnosis the new diagnosis of the patient
+ * @param {*} username the unique identifier of the object
+ * @param {*} diagnosis the illness of the patient
  */
 UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
   const collection = this.db.collection('Users');
@@ -62,10 +63,9 @@ UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
 /**
  * This function edits a user's password into the 
  * mongodb database with received information
- * 
  * @param {*} username the user that wants to reset their password
  * @param {*} password the new password the user wants to save
- * @param {*} salt the appended string to the password used in our hashing
+ * @param {*} salt the end text attach to the password for hashing
  */
 UserAccess.prototype.ResetCredential = function(username,password,salt){
   const collection = this.db.collection('Users');
@@ -106,9 +106,11 @@ UserAccess.prototype.FindUser= function(username)
   });
 };
 /**
- * This finds the medical professional based on the medical code
- * @param {*} mpcode the medical professional code
- * @returns {*} the medical professional object 
+ * This function finds an existing user in the database
+ * it will return the user info as an object if found or 
+ * return an empty object if the user does not exist 
+ * @param {*} id the user that is being queried for
+ * @returns {*} the promise to look for the user
  */
 UserAccess.prototype.FindMP = function(mpcode)
 {
@@ -132,9 +134,8 @@ UserAccess.prototype.FindMP = function(mpcode)
 };
 /**
  * This finds all the patient under a medical professional
- * 
  * @param {*} MPCode the medical professional querying for their patient
- * @returns {*} The list of patients of that medical professional
+ * @returns {*} the promise that gets all patients uder a medical professional
  */
 UserAccess.prototype.FindPatient = function(MPCode){
   const collection = this.db.collection('Users');
@@ -161,7 +162,7 @@ UserAccess.prototype.FindPatient = function(MPCode){
 /** 
  * This function is used to gather a list of medical professional codes 
  * used to verify if a medical professional exist within our system
- * @returns {*} the promise that will return all the medical code in the system
+ * @returns {*} the promise to return the medical codes
 */
 UserAccess.prototype.GetMedicalCodes = function(){
   const collection = this.db.collection('Users');
