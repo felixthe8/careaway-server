@@ -17,6 +17,9 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
         res.status(404); // Return a 404 bad request back to the sender
         res.json({'err': value});
       } else {
+        var username = value.username;
+        var password = value.password;
+        var roleType = value.roleType;
         // If the message was decoded successfully check if the username already exist in our system
         userRepo.FindUser(value.username).then(function(value){
           // Checks if the user does exist within our system
@@ -27,11 +30,11 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
           } else {
             // If the user is new begin making a new salt and save the password and username into the database
             var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
-            var passHashed = CryptoJS.HmacSHA256(value.password, saltStrPass).toString();
+            var passHashed = CryptoJS.HmacSHA256(password, saltStrPass).toString();
             // Saves all salt to an object
             var identifier = new Salt(saltStrPass);
             // Generates a new user using the received username and password from sso
-            var newUser = new User(value.username,passHashed, {role: 'SSO', roleType:'public'}, {} ,identifier);
+            var newUser = new User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
             userRepo.Create(newUser);
             // Return success message
             res.json({success: true});
@@ -74,7 +77,7 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
               res.json({success: true, needRegister: true});
             } else{
               // Checks if the user is a system admin
-              if (user.accountType.role == 'system-admin') {
+              if (user.accountType.role === 'system-admin') {
                 res.sendFile('/sys-ad.html',{root: 'services/' });
               } else {
                 // Checks if the user is a medical professional or patient
