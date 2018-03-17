@@ -100,37 +100,46 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
 
 //  This Edits an existing user's password into our system
 api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
-  try{
-    // Captures the JWT token received from a request from the SSO and decodes it using the secret key 
-    // Returns an error (goes to catch) if the token is not valid
-    var decoded = jwt.verify(req.body.token,"db3OIsj+BXE9NZDy0t8W3TcNekrF+2d/1sFnWG4HnV8TZY30iTOdtVWJG8abWvB1GlOgJuQZdcF2Luqm/hccMw==");
-    // This decodes the JWT to the original json object if the token has been validated
-    var ssoUser = jwt.decode(req.body.token,{complete: true});
-    DB.then(database => {
-      var userRepo = new UserRepo(database);
-      // Finds the existing user in the database
-      userRepo.FindUser(ssoUser.payload.username).then(function(value){
-        var queriedUser = value.User;
-        if (queriedUser.length === 0) {
-          // User does not exist return an error
-          res.status(404);
-        } else {
-          // Get's the salt value from the user
-          queriedUser = queriedUser[0];
-          const newSalt = ssoUser.payload.salt;
-          // Get the hashed password from the payload
-          const passHashed = ssoUser.payload.password;
-          // Update db with new hashed password and salt
-          userRepo.ResetCredential(ssoUser.payload.username,passHashed,newSalt);
+  // The message received from the third party service
+  var token = req.body.token;
+  console.log(token);
+  DB.then(database => {
+    var userRepo = new UserRepo(database);
+    // Transfomer for the message received
+    var transformer = new Transformer(database);
+    // This morphs the message received to a generic user object for our system
+    transformer.decodeJWT(token).then(function(value){
+      // Checks if there were any errors during the message decoding
+      if(value.err){
+        console.log(value.err);
+        res.status(404); // Return a 404 bad request back to the sender
+        res.json({'err': value});
+      } else {
+        var username = value.username;
+        var password = value.password;
+        console.log(username);
+        console.log(password);
+        // Finds the existing user in the database
+        userRepo.FindUser(username).then(function(value){
+          console.log("HERE FKER");
+          var queriedUser = value.User;
+          console.log(queriedUser);
+          if (queriedUser.length === 0) {
+            // User does not exist return an error
+            res.status(404);
+            res.json({'err' : 'User does not exist'});
+          } else {
+            var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
+            var passHashed = CryptoJS.HmacSHA256(password, saltStrPass).toString();
+            // Update db with new hashed password and salt
+            userRepo.ResetCredential(username,passHashed,saltStrPass);
             res.status(200);
-        }
-      });
-    });
-  } catch(err){
-    console.log("Received a bad token");
-    res.json({success: false});
-  }
-};
-
+            res.json({success: true});
+          }
+        });
+    }
+  })
+})
+}
 
 module.exports = api;
