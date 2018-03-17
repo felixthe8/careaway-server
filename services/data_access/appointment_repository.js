@@ -2,6 +2,7 @@ const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
 /**
  * Constructor of the User Repository
+ * @param {*} dbConnection the database connection string
  */
 function AppointmentAccess(dbConnection)
 {
@@ -33,7 +34,7 @@ AppointmentAccess.prototype.CreateAppointment = function(initiator, appointee, a
       console.log('Added appointment');
    }
   );
-}
+};
 
 /**
  * This edit a new appointment into the appointment 
@@ -42,7 +43,7 @@ AppointmentAccess.prototype.CreateAppointment = function(initiator, appointee, a
  * 
  * @param {*} initiator the initiator username
  * @param {*} appointee the appointee username
- * @param {*} appointmentDate the old appointment Date that needs to be changed
+ * @param {*} startTime the old appointment startTime that needs to be changed
  * @param {*} appointment the new update to the appointment
  */
 AppointmentAccess.prototype.EditAppointment= function(initiator, appointee, startTime, appointment){
@@ -61,7 +62,7 @@ AppointmentAccess.prototype.EditAppointment= function(initiator, appointee, star
       console.log('Edited appointment');
     }
   );
-}
+};
 /**
  * This deletes a appointment into the appointment 
  * attribute of the appointee and initiator
@@ -85,11 +86,12 @@ AppointmentAccess.prototype.DeleteAppointment= function(initiator, appointee, ap
       function(err, result){
       console.log('Remove appointment');
   });
-}
+};
 
 /**
  * This gets all appointments of a particular user in the system
  * @param {*} username the user identifier
+ * @returns {*} a promise that returns a list of appointments of a user
  */
 AppointmentAccess.prototype.GetAppointment= function(username){
   const collection = this.db.collection('Users');
@@ -106,7 +108,7 @@ AppointmentAccess.prototype.GetAppointment= function(username){
       else
       {
         console.log('Successfully got query');
-        if(result != null){        
+        if(result !== null){        
           var appointments = result.accountType.appointment;
           //return an object containing all the appointments of the user
           var appointmentList = {'appointments' : appointments};
@@ -118,8 +120,8 @@ AppointmentAccess.prototype.GetAppointment= function(username){
       } 
     });
   });
-}
+};
 
 
 
-module.exports = AppointmentAccess
+module.exports = AppointmentAccess;

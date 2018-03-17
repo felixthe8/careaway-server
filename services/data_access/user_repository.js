@@ -45,9 +45,8 @@ UserAccess.prototype.addAccountType= function(username,accountType,security,iden
       console.log('Updated Account Type');
     }
   );
-}
+};
 /**
- * This function edits the patient diagnosis
  * @param {*} username the unique identifier of the object
  * @param {*} diagnosis the illness of the patient
  */
@@ -60,7 +59,7 @@ UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
       console.log('Updated Diagnosis');
     }
   );
-}
+};
 /**
  * This function edits a user's password into the 
  * mongodb database with received information
@@ -83,7 +82,7 @@ UserAccess.prototype.ResetCredential = function(username,password,salt){
  * it will return the user info as an object if found or 
  * return an empty object if the user does not exist 
  * @param {*} username the user that is being queried for
- * @returns {*} the user the system is looking for
+ * @returns {*} a promise that returns a user
  */
 UserAccess.prototype.FindUser= function(username)
 {
@@ -95,18 +94,17 @@ UserAccess.prototype.FindUser= function(username)
       if(err)
       {
         console.log('Failed to get query');
-          reject(err);
+        reject(err);
       }
       else
       {
         console.log('Successfully got query');
-        var results = {"User" : docs}
+        var results = {"User" : docs};
         fullfill(results);
       }
     });
   });
 };
-
 /**
  * This function finds an existing user in the database
  * it will return the user info as an object if found or 
@@ -114,12 +112,12 @@ UserAccess.prototype.FindUser= function(username)
  * @param {*} id the user that is being queried for
  * @returns {*} the promise to look for the user
  */
-UserAccess.prototype.FindUserId= function(id)
+UserAccess.prototype.FindMP = function(mpcode)
 {
   const collection = this.db.collection('Users');
   return new promise(function(fullfill,reject)
   { 
-    collection.find({'_id' : id}).toArray(function(err, docs) 
+    collection.findOne({'accountType.medicalcode' : mpcode, 'accountType.role' : "medical-professional"}, (err, result) => 
     {
       if(err)
       {
@@ -129,9 +127,7 @@ UserAccess.prototype.FindUserId= function(id)
       else
       {
         console.log('Successfully got query');
-        console.log(docs);
-        var results = {"User" : docs}
-        fullfill(results);
+        fullfill(result);
       }
     });
   });
@@ -184,7 +180,7 @@ UserAccess.prototype.GetMedicalCodes = function(){
       {
         console.log('Successfully got query');
         //grabs just the Medical Professional Code and save it to an array
-        var mpCode = []
+        var mpCode = [];
         for(var i=0; i<docs.length; i++){
           mpCode.push(docs[i].accountType.medicalcode);
         }
@@ -195,5 +191,5 @@ UserAccess.prototype.GetMedicalCodes = function(){
     });
   });
 
-}
+};
 module.exports = UserAccess;
