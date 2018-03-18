@@ -81,14 +81,14 @@ app.use('/breach', function (req,res){
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
         
-        // request('http://localhost:4200/breach', function (error, response, body) {
-        //   console.log('error:', error); // Print the error if one occurred and handle it
-        //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        // });
-        // request('http://localhost:4400/breach', function (error, response, body) {
-        //   console.log('error:', error); // Print the error if one occurred and handle it
-        //   console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        // });
+        request('http://localhost:4200/breach', function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
+        request('http://localhost:4400/breach', function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
 
         console.log('Account module closed.');
         console.log('Treatment module closed.');
