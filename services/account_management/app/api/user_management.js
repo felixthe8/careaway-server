@@ -8,6 +8,7 @@ const returnUser = (userObject) => {
   }
   return user;
 }
+
 const processPatientList = (patientList) => {
   let patients = [];
   for(let i in patientList) {
@@ -15,6 +16,7 @@ const processPatientList = (patientList) => {
   }
   return patients;
 }
+
 api.getUser = (UserRepo, DB) => (req, res) => {
   // Gets the data of one user.
   DB.then(database => {
@@ -39,7 +41,6 @@ api.getAllPatients = (UserRepo, DB) => (req, res) => {
       // Successfully queried a list of patients. Sends back to client.
       result.success = true;
       result.patients = processPatientList(result.patients);
-      console.log("The patient list: " + result.patients);
       res.json(result);
     }).catch(error => {
       console.log("An error has occurred getting the medical professional's patients.");

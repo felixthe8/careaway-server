@@ -2,21 +2,19 @@ const moment = require('moment');
 
 // Tests whether the date and times overlap
 const checkTimes = (existing, newAppointment) => {
-  existing.startTime = moment(existing.startTime);
-  existing.endTime = moment(existing.endTime);
-  newAppointment.startTime = moment(newAppointment.startTime);
-  newAppointment.endTime = moment(newAppointment.endTime);
+  const existingStartTime = moment(existing.startTime);
+  const existingEndTime = moment(existing.endTime);
+  const newAppointmentStartTime = moment(newAppointment.startTime);
+  const newAppointmentEndTime = moment(newAppointment.endTime);
 
-  //console.log(`existing ${existing.startTime} ${existing.endTime}\n newAppointment ${newAppointment.startTime} ${newAppointment.endTime}`);
-  
   // The end time of the new appointment is between an existing appointment's start and end time.
-  const firstTest = (existing.startTime).isBefore(newAppointment.endTime) && (existing.endTime).isAfter(newAppointment.endTime);
+  const firstTest = (existingStartTime).isBefore(newAppointmentEndTime) && (existingEndTime).isAfter(newAppointmentEndTime);
   // The start of the new appointment is between an existing appointment's start and end time.
-  const secondTest = (existing.startTime).isBefore(newAppointment.startTime) && (existing.endTime).isAfter(newAppointment.startTime);
+  const secondTest = (existingStartTime).isBefore(newAppointmentStartTime) && (existingEndTime).isAfter(newAppointmentStartTime);
   // The new appointment starts at the same time an existing one does.
-  const thirdTest = (existing.startTime).isSame(newAppointment.startTime);
+  const thirdTest = (existingStartTime).isSame(newAppointmentStartTime);
   // The new appointment ends at the same time an existing one does.
-  const fourthTest = (existing.endTime).isSame(newAppointment.endTime);
+  const fourthTest = (existingEndTime).isSame(newAppointmentEndTime);
   return firstTest || secondTest || thirdTest || fourthTest;
 };
 
