@@ -27,10 +27,9 @@ api.create = (Appointment, AppointmentRepo, DB) => (req, res) => {
 }
 
 // Modifies the appointment.
-api.modify = (AppointmentRepo, DB) => (req, res) => {
+api.modify = (Appointment,AppointmentRepo, DB) => (req, res) => {
   DB.then(database => {
     const repo = new AppointmentRepo(database);
-
     const newAppointment = Appointment.constructFromObject(req.body.newAppointment);
     const originalAppointment = Appointment.constructFromObject(req.body.originalAppointment);
     const appointee = originalAppointment.appointee;
