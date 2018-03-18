@@ -1,10 +1,19 @@
 var CryptoJS = require('crypto-js');
 var jwt = require('jsonwebtoken');
 const api = {};
-// Register a new user from sso into the careaway system
+
+/**
+ * Register a new user from third party source into the careaway system
+ * @param {*} User is the model of the user in the careaway system
+ * @param {*} Salt the model identifier that contains the salt for the password
+ * @param {*} UserRepo the data access repository for users
+ * @param {*} DB the database connection
+ * @param {*} Transformer the object that contains the logic to transform the message
+ * @return {*} A status code and a object containing a success or error message
+ */
 api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
   // The message received from the third party service
-  var token = req.body.token;
+  var token = req.headers.token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
@@ -43,11 +52,18 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
       }
     });
   });
-}
-// Authenticates the SSO user into our careaway system
+};
+
+/**
+ * Check's incoming login credentials from third party source
+ * @param {*} UserRepo the data access repository for users
+ * @param {*} DB the database connection
+ * @param {*} Transformer the object that contains the logic to transform the message
+ * @return {*} A status code and a file containing the login account type the user is accessing
+ */
 api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
-       // The message received from the third party service
-  var token = req.body.token;
+  // The message received from the third party service
+  var token = req.headers.token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
@@ -92,10 +108,16 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
     });
   });
 };
-//  This Edits an existing user's password into our system
+/**
+ * This Edits an existing user's password into our system
+ * @param {*} UserRepo the data access repository for users
+ * @param {*} DB the database connection
+ * @param {*} Transformer the object that contains the logic to transform the message
+ * @return {*} A status code and a object containing a success or error message
+ */
 api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
-  var token = req.body.token;
+  var token = req.headers.token;
   console.log(token);
   DB.then(database => {
     var userRepo = new UserRepo(database);
@@ -104,7 +126,7 @@ api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
-      if(value.err){
+      if(value.err) {
         console.log(value.err);
         res.status(400); // Return a 400 bad request back to the sender
         res.json({'err': value});
