@@ -24,6 +24,10 @@ config.routes = {
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
   ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
 
+  getPatients : `${accountConfig.routes.getPatients}`,
+  getUser : `${accountConfig.routes.getUser}`,
+  patientAppointmentInfo : `${accountConfig.routes.getAllInfoForPatientAppointment}`,
+  
   creatTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
 
