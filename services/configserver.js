@@ -184,13 +184,13 @@ app.get('/patient-appointment-info', proxy(config.url.account, {
   }
 }));
 
-app.use('/createAppt', proxy(config.url.appointment, {
+app.use('/createAppointment', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
   }
 }));
 
-app.use('/updateAppt', proxy(config.url.appointment, {
+app.use('/updateAppointment', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }

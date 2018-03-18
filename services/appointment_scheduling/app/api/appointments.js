@@ -2,19 +2,23 @@ const validator = require('./appointment-validation');
 const api = {};
 //TODO: appointment model
 // Creates an appointment.
-api.create = (AppointmentRepo, DB) => (req, res) => {
+api.create = (Appointment, AppointmentRepo, DB) => (req, res) => {
   DB.then(database => { 
     const repo = new AppointmentRepo(database);
-    const appointment = req.body.appointment;
+
+    // Construct appointment object.
+    const appointment = Appointment.constructFromObject(req.body.appointment);
     const initiator = appointment.initiator;
     const appointee = appointment.appointee;
-    // Construct appointment object.
-    validator.validate_creation(repo, appointment, initiator, appointee).then(result => {
-      if(result.success) {
-        // No conflicting times, insert into the database.
-        repo.CreateAppointment(initiator, appointee, appointment);
-      }
-      res.send({success: result.success, reason: result.reason});
+
+    // Validates the appointment doesn't conflict with any other appointments the initator/appointee has.
+    validator.validate_creation(repo, appointment, initiator, appointee)
+      .then(result => {
+        if(result.success) {
+          // No conflicting times, insert into the database.
+          repo.CreateAppointment(initiator, appointee, appointment);
+        }
+        res.send({success: result.success, reason: result.reason});
     });
   }).catch(err => {
     console.log(err);
@@ -23,24 +27,26 @@ api.create = (AppointmentRepo, DB) => (req, res) => {
 }
 
 // Modifies the appointment.
-api.modify = (AppointmentRepo, DB) => (req, res) => {
+api.modify = (Appointment,AppointmentRepo, DB) => (req, res) => {
   DB.then(database => {
     const repo = new AppointmentRepo(database);
-    const newAppointment = req.body.newAppointment;
-    const originalAppointment = req.body.originalAppointment;
+    const newAppointment = Appointment.constructFromObject(req.body.newAppointment);
+    const originalAppointment = Appointment.constructFromObject(req.body.originalAppointment);
     const appointee = originalAppointment.appointee;
     const initiator = originalAppointment.initiator;
 
-    validator.validate_modification(repo, initiator, appointee, originalAppointment, newAppointment).then(result => {
-      if(result.success) {
-        // No conflicting times, can successfully modify appointment.
-        repo.EditAppointment(initiator, appointee, originalAppointment.startTime, newAppointment);
-      }
-      res.send({success: result.success, reason: result.reason});
-    });
+    // Validates the appointment doesn't conflict with any other appointment the initiator/appointee has.
+    validator.validate_modification(repo, initiator, appointee, originalAppointment, newAppointment)
+      .then(result => {
+        if(result.success) {
+          // No conflicting times, can successfully modify appointment.
+          repo.EditAppointment(initiator, appointee, originalAppointment.startTime, newAppointment);
+        }
+        res.send({success: result.success, reason: result.reason});
+      });
   }).catch(err => {
     console.log("There was an error accessing the database.");
-    res.json({"response" : err});
+    res.json({success: false, response : err});
   });
 }
 
