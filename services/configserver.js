@@ -12,6 +12,7 @@ const session = require('express-session');
 const csrf = require('csurf');
 var breached = false;
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+const request = require('request');
 app.set('trust proxy', 1) // trust first proxy - only if secure is true for express-session
 const MongoStore = require('connect-mongo')(session);
 const corsOptions = {
@@ -81,10 +82,10 @@ app.use('/breach', function (req,res){
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
         
-        request('http://localhost:4200/breach', function (error, response, body) {
-          console.log('error:', error); // Print the error if one occurred and handle it
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        });
+         request('http://localhost:4200/breach', function (error, response, body) {
+           console.log('error:', error); // Print the error if one occurred and handle it
+           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+         });
         request('http://localhost:4400/breach', function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received

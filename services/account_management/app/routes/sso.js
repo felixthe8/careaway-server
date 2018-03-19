@@ -10,7 +10,7 @@ module.exports = (app) => {
 
   // POST /SSO/login
   // Attempts to log user in with sent credentials from the database
-  app.route(config.routes.ssoLogin).post(api.ssoLogin(models.UserRepo, models.DB,models.Transformer));
+  app.route(config.routes.ssoLogin).post(api.ssoLogin(models.UserRepo, models.DB, models.Transformer));
     
   // PUT /SSO/ResetPassword
   // updates the user password within our system from the received information from sso

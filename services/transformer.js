@@ -35,16 +35,11 @@ Transformer.prototype.decodeJWT = function(token) {
           // This decodes the JWT into the orginal JSON object if the JWT was verified
           var decoded = jwt.decode(token,{complete: true});
           // Get's the intended application name
-          var applicationName = (decoded.payload.application).toLowerCase();
+          var applicationName = decoded.payload.application;
           // Checks if the JWT has an exp value or if the JWT was meant for careaway
-          if(applicationName === 'careaway' &&
-            decoded.payload.exp !== null){
+          if(applicationName === 'careaway' || applicationName === undefined){
             // Create the generic user information
-            var newUser = {
-              username : decoded.payload.username,
-              password : decoded.payload.password,
-              roleType : decoded.payload.roleType
-            };
+            var newUser = decoded.payload;
             // Return back the new user
             fullfill(newUser);
           } else {
