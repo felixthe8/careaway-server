@@ -17,9 +17,9 @@ Add the following Collections to the Mongo Database
 
 **`treatment_plan_repository.js`** This is the data access functionality for treatment plans within the careaway system. It contains the functionality to get treatment plans fo a particular patient, gets Treatments plans of a particular diagnosis, edits an existing treatment plan, delete an existing treatment plan, or saves a treatment plan to the database
  
+**`appointment_repository.js`** This is the data access functionality for appointments within the careaway system. It contains the functionality to get appointments for medical professionals and patients, save appointments into the database, edits any existing appointments, or delete appointments
 
-**`appointment_repository.js`** This is the data access functionality for appointments within the careaway system. It contains the functionality to get appointments for medical professionals and patients, save appointments nito the database, edits any existing appointments, or delete appointments
-
+**`token.js`** This is the data access functionality for Json Web Token within the careaway system. It contains the functionality to get Json Web Token, and save Json Web Token into the database
 
 
 

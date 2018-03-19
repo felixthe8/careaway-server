@@ -190,7 +190,7 @@ app.use('/createAppointment', proxy(config.url.appointment, {
   }
 }));
 
-app.use('/updateAppointment', proxy(config.url.appointment, {
+app.put('/updateAppointment', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }
