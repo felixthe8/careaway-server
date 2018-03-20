@@ -24,7 +24,10 @@ config.routes = {
   getAppt : `${appointmentConfig.routes.get}`,
   createAppt : `${appointmentConfig.routes.create}`,
   updateAppt : `${appointmentConfig.routes.modify}`,
-  updateApptStatus: `${appointmentConfig.routes.updateStatus}`
+  updateApptStatus: `${appointmentConfig.routes.updateStatus}`,
+
+  patientUpdate: `${treatmentConfig.routes.patientUpdate}`,
+  queryWidgets: `${treatmentConfig.routes.queryWidgets}`
 };
 
 config.url = {

@@ -10,7 +10,7 @@ module.exports = (app) => {
 
   // GET /treatment_plan/api/widgets
   // Get all widgets for patient
-  app.route(config.routes.queryWidgets).put(api.queryWidgets(models));
+  app.route(config.routes.queryWidgets).get(api.queryWidgets(models));
 
 
   // TEMPORARY since there's no endpoint to create a widget

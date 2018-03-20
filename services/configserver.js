@@ -154,6 +154,18 @@ app.use('/updateApptStatus', proxy(config.url.appointment, {
   }
 }));
 
+app.use('/getPatientTreatment', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.queryWidgets;
+  }
+}));
+
+app.use('/updatePatientTreatment', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.patientUpdate;
+  }
+}));
+
 
 
 module.exports = app;
