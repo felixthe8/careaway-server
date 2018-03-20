@@ -8,8 +8,18 @@ module.exports = (app) => {
     // POST /account/api/authentication
     // authenticates user and determines account type
     app.route(config.routes.login).post((req, res, next) => {
-      passport.authenticate('local-login', (message) => {
-        res.json(message);
+      passport.authenticate('local-login', (err, success, message) => {
+        req.login(message.user, (err) => {
+          if(err) {
+            console.log(`Error in login ${err}`);
+          } else {
+            res.cookie('authenticated', req.session);
+          }
+          res.json(message);
+        });
+        console.log(`The req user ${req.user}`);
+        console.log(`session in login: ${JSON.stringify(req.session)}`);
+        next();
       })(req, res, next);
     });
 
