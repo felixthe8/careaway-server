@@ -34,8 +34,12 @@ config.routes = {
   
   returnCode : `${treatmentConfig.routes.returnCode}`,
   getDiagnoses: `${treatmentConfig.routes.getDiagnoses}`,
+  getSingleDiagnosis: `${treatmentConfig.routes.getSingleDiagnosis}`,
+  getPatientUserNames: `${treatmentConfig.routes.getPatientUserNames}`,
   getTreatmentmeter: `${treatmentConfig.routes.getTreatmentmeter}`,
+  getSingleTreatmentmeter: `${treatmentConfig.routes.getSingleTreatmentmeter}`,
   getTreatmentchecklist: `${treatmentConfig.routes.getTreatmentchecklist}`,
+  getSingleTreatmentchecklist: `${treatmentConfig.routes.getSingleTreatmentchecklist}`,
 };
 
 // All urls the config server uses to route to the correct module.

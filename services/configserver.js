@@ -7,9 +7,10 @@ const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
 var http = require('http');
-const config = require('./config');
+const config = require('./config')
 const session = require('express-session');
 const csrf = require('csurf');
+const request = require('request');
 var breached = false;
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 app.set('trust proxy', 1) // trust first proxy - only if secure is true for express-session
@@ -202,16 +203,35 @@ app.use('/getDiagnoses', proxy(config.url.treatment, {
     return `${config.routes.getDiagnoses}?medicalcode=${req.query.medicalcode}`; 
   }
 }));
+app.use('/getSingleDiagnosis', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}`; 
+  }
+}));
 
 app.use('/getTreatmentmeter', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentmeter}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
   }
 }));
-
+app.use('/getSingleTreatmentmeter', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getSingleTreatmentmeter}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
+app.use('/getPatientUserNames', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getPatientUserNames}?medicalcode=${req.query.medicalcode}`; 
+  }
+}));
 app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentchecklist}?medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
+app.use('/getSingleTreatmentchecklist', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getSingleTreatmentchecklist}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
   }
 }));
 
