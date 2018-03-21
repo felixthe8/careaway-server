@@ -10,6 +10,7 @@ const Salt = require('@models/identifier');
 const Patient = require('@models/patient')
 const MedicalProfessional = require('@models/medicalprofessional');
 const SystemAdmin = require('@models/systemadmin')
+const Transformer = require('@root/services/transformer');
 
 const models = {
 	DB: new dbConnection().Connect(), // not model, but service/object
@@ -19,7 +20,8 @@ const models = {
     Salt: Salt,
     Patient: Patient,
     MedicalProfessional: MedicalProfessional,
-    SystemAdmin: SystemAdmin
+    SystemAdmin: SystemAdmin,
+    Transformer: Transformer
 }
 
 module.exports = models;

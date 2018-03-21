@@ -12,6 +12,7 @@ const session = require('express-session');
 const csrf = require('csurf');
 var breached = false;
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
+const request = require('request');
 app.set('trust proxy', 1) // trust first proxy - only if secure is true for express-session
 const MongoStore = require('connect-mongo')(session);
 const corsOptions = {
@@ -52,21 +53,56 @@ const csrfProtection = csrf();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.get('*',function(req,res,next){
+
+app.get('*',function(req, res, next) {
   if (breached) {
-      res.send({down:true});
+    res.send({ down : true });
   } else {
-      next();
+    next();
   }
-  
-});
-app.get('/isBreached',function(req,res){
-  res.send({down:false});
 });
 
-app.post('/breach', function (req,res){   
-  breached = true;
-  res.send('Server has been breached');
+app.get('/isBreached',function(req,res) {
+  res.send({ down : false }); // ? Shouldn't this send breached? res.send({down:breached})
+});
+
+app.use('/breach', function (req,res){   
+  var systemAdmin= {
+    username:req.body.username,
+    password: req.body.password
+  }
+  request.post({
+    url:     'http://localhost:4100/account/api/authentication',
+    form:   systemAdmin
+  }, function(err,httpResponse,body){ 
+
+      if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
+        request('http://localhost:4100/breach', function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
+        
+         request('http://localhost:4200/breach', function (error, response, body) {
+           console.log('error:', error); // Print the error if one occurred and handle it
+           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+         });
+        request('http://localhost:4400/breach', function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
+
+        console.log('Account module closed.');
+        console.log('Treatment module closed.');
+        console.log('Appointment module closed.');
+
+        breached = true;
+      
+        }
+        else{
+
+        }
+  });
+  res.send('Server has been breached'); 
 });
 
 app.use(morgan('dev'));
@@ -114,7 +150,7 @@ app.use('/validate-username', proxy(config.url.account, {
 
 app.get('/security-questions', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.securityQues}?username=${req.query.username}`; 
+    return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
@@ -130,27 +166,65 @@ app.use('/ssoRegisterMed', proxy(config.url.account, {
   }
 }));
 
-app.use('/createAppt', proxy(config.url.appointment, {
+app.get('/get-user', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getUser}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.get('/get-patients', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getPatients}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.get('/patient-appointment-info', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`
+  }
+}));
+
+app.use('/createAppointment', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
   }
 }));
 
-app.use('/updateAppt', proxy(config.url.appointment, {
+app.use('/updateAppointment', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }
 }));
 
-app.use('/getAppt', proxy(config.url.appointment, {
+app.get('/getAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getAppt}${req.query}`;
+    return `${config.routes.getAppt}${req._parsedOriginalUrl.search}`;
   }
 }));
 
-app.use('/updateApptStatus', proxy(config.url.appointment, {
+app.use('/deleteAppt', proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
-    return config.routes.updateApptStatus;
+    return config.routes.deleteAppt;
+  }
+}));
+
+
+
+app.use('/returnCode', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
+  }
+}));
+
+app.use('/getDiagnoses', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`; 
+  }
+}));
+
+app.use('/getTreatmentmeter', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
@@ -166,6 +240,11 @@ app.use('/updatePatientTreatment', proxy(config.url.treatment, {
   }
 }));
 
+app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`; 
+  }
+}));
 
 
 module.exports = app;

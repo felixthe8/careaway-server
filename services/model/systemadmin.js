@@ -4,5 +4,6 @@
 */
 function SystemAdmin () {
     this.role = 'system-admin';
+    this.roleType = 'private';
 }
 module.exports = SystemAdmin;

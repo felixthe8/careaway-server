@@ -95,7 +95,7 @@ TreatmentPlanAccess.prototype.GetPatientTreatment = function(patient){
  * Gets Treatments plans of a particular diagnosis
  * under a particular medical professional
  * 
- * @param {*} MPCode the mediacl professional code
+ * @param {*} MPCode the medical professional code
  * @param {*} Diagnosis the designated diagnosis
  */
 TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis){
