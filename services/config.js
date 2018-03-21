@@ -16,7 +16,7 @@ config.routes = {
   registerMed: `${accountConfig.routes.registerMedpro}`,
   validateUsername : `${accountConfig.routes.validateUsername}`,
   securityQues : `${accountConfig.routes.securityQuestions}`,
-  validAns : `${accountConfig.routes.validateAnswers}`,
+  validateAnswers : `${accountConfig.routes.validateAnswers}`,
   resetCreds : `${accountConfig.routes.resetCreds}`,
   updateDiagnosis : `${accountConfig.routes.updateDiagnosis}`,
   breach : `${accountConfig.routes.breach}`,

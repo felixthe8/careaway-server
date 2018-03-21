@@ -147,7 +147,11 @@ app.use('/validate-username', proxy(config.url.account, {
     return config.routes.validateUsername;
   }
 }));
-
+app.use('/validate-answers', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.validateAnswers;
+  }
+}));
 app.get('/security-questions', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.securityQues}?username=${req.query.username}`; 
@@ -205,7 +209,7 @@ app.use('/getDiagnoses', proxy(config.url.treatment, {
 }));
 app.use('/getSingleDiagnosis', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}`; 
+    return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
   }
 }));
 

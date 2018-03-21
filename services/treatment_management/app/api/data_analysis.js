@@ -18,7 +18,8 @@ api.getDiagnoses= (UserRepo, DB) => (req,res) => {
 api.getSingleDiagnosis= (UserRepo, DB) => (req,res) => {
   const username = req.query.username;
   const medicalcode = req.query.medicalcode;
-
+  const min = req.query.startDate;
+  const max = req.query.finalDate;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     userRepo.FindUser(username).then(function(value){ 
@@ -30,15 +31,16 @@ api.getSingleDiagnosis= (UserRepo, DB) => (req,res) => {
           var patientData = [];
           for (var singlePatient of value.patients) {
             for(var treatment of singlePatient.accountType.treatment) {
-              if(singlePatient.accountType.diagnosis ===diagnosis){
+              if(singlePatient.accountType.diagnosis === diagnosis){
                
                 patientData.push(treatment)
               }
+            
             }
           }
-          const meterData = patientData.filter ( treatment => treatment.label === "meter" )
-          const checkData = patientData.filter ( treatment => treatment.label === "checklist")
-          res.json({Meter: meterData, Checklist: checkData});
+          const meterData = patientData.filter ( treatment => treatment.label === "meter" && (treatment.due_date >=min && treatment.due_date <=max));
+          const checkData = patientData.filter ( treatment => treatment.label === "checklist" && (treatment.due_date >=min && treatment.due_date <=max));
+          res.json({meter: meterData, checklist: checkData, diagnosis: diagnosis});
         });
     });
   });
