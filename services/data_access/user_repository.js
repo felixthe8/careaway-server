@@ -1,4 +1,5 @@
 const mongoClient = require('mongodb').MongoClient;
+const objectID = require('mongodb').ObjectId;
 const promise = require('promise');
 /**
  * Constructor of the User Repository
@@ -90,6 +91,36 @@ UserAccess.prototype.FindUser= function(username)
   return new promise(function(fullfill,reject)
   { 
     collection.find({'username' : username}).toArray(function(err, docs) 
+    {
+      if(err)
+      {
+        console.log('Failed to get query');
+        reject(err);
+      }
+      else
+      {
+        console.log('Successfully got query');
+        var results = {"User" : docs};
+        fullfill(results);
+      }
+    });
+  });
+};
+/**
+ * This function finds an existing user in the database
+ * it will return the user info as an object if found or 
+ * return an empty object if the user does not exist 
+ * @param {*} username the user that is being queried for
+ * @returns {*} a promise that returns a user
+ */
+UserAccess.prototype.FindUserById= function(id)
+{
+  const collection = this.db.collection('Users');
+  console.log("here")
+  return new promise(function(fullfill,reject)
+  { 
+    console.log(id);
+    collection.find({'_id' : new objectID(id)}).toArray(function(err, docs) 
     {
       if(err)
       {

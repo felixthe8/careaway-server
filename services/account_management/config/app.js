@@ -4,11 +4,12 @@ const bodyParser = require('body-parser'); // Parses request bodies
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const passport = require('../app/setup/passport')();
+const passport = require('../../passport').run();
 const consign = require('consign');
 const corsOptions = {
     origin: 'http://localhost:8081',
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    credentials: true
 };
 var breached = false;
 // Allows only one cross origin site.
@@ -17,10 +18,12 @@ app.use(helmet());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use(passport.initialize());
-app.use(passport.session())
+//app.use(passport.session());
+
 app.use(morgan('dev'));
-app.all('*',function(req,res,next){
+app.use(function(req,res,next){
     if(breached){
         res.send({down:true});
         res.end();
@@ -29,8 +32,9 @@ app.all('*',function(req,res,next){
         }
 });
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:8081");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Credentials", "true");
     next();
   });
 app.use('/breach', function(req,res){

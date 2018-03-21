@@ -13,12 +13,16 @@ module.exports = (app) => {
           if(err) {
             console.log(`Error in login ${err}`);
           } else {
-            res.cookie('authenticated', req.session);
+            //res.cookie('authenticated', req.session);
+            message.cookie = req.session.passport.user;
+            
           }
-          res.json(message);
+          
         });
+        res.json(message);
         console.log(`The req user ${req.user}`);
         console.log(`session in login: ${JSON.stringify(req.session)}`);
+        
         next();
       })(req, res, next);
     });
