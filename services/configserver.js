@@ -230,7 +230,7 @@ app.use('/getTreatmentmeter', proxy(config.url.treatment, {
 
 app.use('/getPatientTreatment', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return config.routes.queryWidgets;
+    return `${config.routes.queryWidgets}${req._parsedOriginalUrl.search}`;
   }
 }));
 
