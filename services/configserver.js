@@ -9,7 +9,10 @@ const proxy = require('express-http-proxy');
 var http = require('http');
 const config = require('./config');
 const session = require('express-session');
-const csrf = require('csurf');
+const csrf = require('csrf');
+const cookieParser = require('cookie-parser');
+const database = require('@dataAccess/db_connection');
+const tokenRepository = require('@dataAccess/csrf_token_repository');
 var breached = false;
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 const request = require('request');
@@ -24,6 +27,7 @@ const corsOptions = {
 // Allows only one cross origin site.
 app.use(cors(corsOptions));
 app.use(helmet()); 
+app.use(cookieParser());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -48,11 +52,50 @@ app.use(session({
   })
 }));
 
-const csrfProtection = csrf();
-//app.use(csrfProtection);
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+function CsrfValidation(req,res,next){
+  new database().Connect().then(database => {
+    var tokens = new csrf(); 
+    var tRepo = new tokenRepository(database);
+    var csrfToken = req.headers['x-csrf-token'];
+    console.log("HERE");
+    if(csrfToken){
+      console.log("In validation");
+      tRepo.findExistingToken(csrfToken).then(function(value){
+        if (!tokens.verify(value.token.secret, value.token.value)) {
+          console.log('BAD CRSF Token');
+          res.statusCode(400);
+          res.end();
+        } else {
+          next();
+          }
+        }, function(error){
+          console.log('BAD CRSF Token');
+          res.statusCode(400);
+          res.end();
+        });
+      }
+      else{
+        console.log('BAD CRSF Token');
+        res.statusCode(400);
+        res.end();
+      }
+  });
+};
+
+app.get('/getToken', function(req,res){
+  new database().Connect().then(database => {
+  var tokens = new csrf(); 
+  var tRepo = new tokenRepository(database);
+  var secret = tokens.secretSync();
+  var token = tokens.create(secret);
+  tRepo.addToken({"value" : token, "secret" : secret});
+  console.log(token);
+  res.json({"csrfToken": token});
+  });
+})
 
 app.get('*',function(req, res, next) {
   if (breached) {
@@ -66,7 +109,7 @@ app.get('/isBreached',function(req,res) {
   res.send({ down : false }); // ? Shouldn't this send breached? res.send({down:breached})
 });
 
-app.use('/breach', function (req,res){   
+app.use('/breach',CsrfValidation, function (req,res){   
   var systemAdmin= {
     username:req.body.username,
     password: req.body.password
@@ -98,9 +141,6 @@ app.use('/breach', function (req,res){
         breached = true;
       
         }
-        else{
-
-        }
   });
   res.send('Server has been breached'); 
 });
@@ -108,127 +148,117 @@ app.use('/breach', function (req,res){
 app.use(morgan('dev'));
 app.use('/', (req, res, next) => {
   next();
-})
-/* app.use('/', (req, res) => {
-  const token = req.csrfToken();
-  res.locals.csrfToken = token;
-  res.header['x-csrf-token'] = token;
-  console.log(`The token ${token}`);
-  return res.json({ csrfToken : token });
-}); */
+});
 
-
-app.use('/registerPatient', proxy(config.url.account, {
+app.use('/registerPatient',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerPatient;
   } 
 }));
 
-app.use('/registerMed', proxy(config.url.account, {
+app.use('/registerMed',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerMed;
   } 
 }));
 
-app.use('/login', proxy(config.url.account, {
+app.use('/login',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.login;
   }
 }));
 
-app.use('/ssoRegisterPatient', proxy(config.url.account, {
+app.use('/ssoRegisterPatient', CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterPatient;
   }
 }));
 
-app.use('/validate-username', proxy(config.url.account, {
+app.use('/validate-username',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.validateUsername;
   }
 }));
 
-app.get('/security-questions', proxy(config.url.account, {
+app.get('/security-questions',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
-app.use('/reset-creds', proxy(config.url.account, {
+app.use('/reset-creds', CsrfValidation,proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.resetCreds;
   }
 }));
 
-app.use('/ssoRegisterMed', proxy(config.url.account, {
+app.use('/ssoRegisterMed', CsrfValidation,proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.ssoRegisterMed;
   }
 }));
 
-app.get('/get-user', proxy(config.url.account, {
+app.get('/get-user', CsrfValidation,proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getUser}${req._parsedOriginalUrl.search}`;
   }
 }));
 
-app.get('/get-patients', proxy(config.url.account, {
+app.get('/get-patients',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getPatients}${req._parsedOriginalUrl.search}`;
   }
 }));
 
-app.get('/patient-appointment-info', proxy(config.url.account, {
+app.get('/patient-appointment-info',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`
   }
 }));
 
-app.use('/createAppointment', proxy(config.url.appointment, {
+app.use('/createAppointment',CsrfValidation, proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createAppt;
   }
 }));
 
-app.use('/updateAppointment', proxy(config.url.appointment, {
+app.use('/updateAppointment',CsrfValidation, proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.updateAppt;
   }
 }));
 
-app.get('/getAppt', proxy(config.url.appointment, {
+app.get('/getAppt', CsrfValidation,proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getAppt}${req._parsedOriginalUrl.search}`;
   }
 }));
 
-app.use('/deleteAppt', proxy(config.url.appointment, {
+app.use('/deleteAppt', CsrfValidation,proxy(config.url.appointment, {
   proxyReqPathResolver: function(req) {
     return config.routes.deleteAppt;
   }
 }));
 
-
-
-app.use('/returnCode', proxy(config.url.treatment, {
+app.use('/returnCode',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
-app.use('/getDiagnoses', proxy(config.url.treatment, {
+app.use('/getDiagnoses',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
-app.use('/getTreatmentmeter', proxy(config.url.treatment, {
+app.use('/getTreatmentmeter',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`; 
   }
 }));
 
-app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
+app.use('/getTreatmentchecklist', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`; 
   }
