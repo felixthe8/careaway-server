@@ -158,12 +158,30 @@ app.use('/', (req, res, next) => {
 
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use('/registerPatient',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerPatient;
   } 
 }));
 
+app.use('/Sso/Registration', proxy(config.url.account,{
+  proxyReqPathResolver: function(req) {
+    return config.routes.ssoRegistration;
+  }
+}));
+
+app.use('/Sso/Login', proxy(config.url.account,{
+  proxyReqPathResolver: function(req) {
+    return config.routes.ssoLogin;
+  }
+}));
+
+app.use('/Sso/ResetPassword', proxy(config.url.account,{
+  proxyReqPathResolver: function(req) {
+    return config.routes.ssoResetPassword;
+  }
+}));
 app.use('/registerMed',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerMed;
@@ -321,23 +339,7 @@ app.use('/getSingleTreatmentchecklist', CsrfValidation,proxy(config.url.treatmen
   }
 }));
 
-app.use('/Sso/Registration', proxy(config.url.account,{
-  proxyReqPathResolver: function(req) {
-    return config.routes.ssoRegistration;
-  }
-}));
 
-app.use('/Sso/Login', proxy(config.url.account,{
-  proxyReqPathResolver: function(req) {
-    return config.routes.ssoLogin;
-  }
-}));
-
-app.use('/Sso/ResetPassword', proxy(config.url.account,{
-  proxyReqPathResolver: function(req) {
-    return config.routes.ssoResetPassword;
-  }
-}));
 
 
 module.exports = app;

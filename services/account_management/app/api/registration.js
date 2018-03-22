@@ -46,18 +46,20 @@ function createGenericUser(User, Security, Salt, req) {
 api.register = (passport) => (req, res, next) => {
   passport.authenticate('local-registration', (err, success, message) => {
     if(success) {
-      console.log("Registration success, authenticating");
       req.login(message.user, (err) => {
         if(err) {
           console.log("Error authenticating user " + err);
+          res.json(message);
+          res.end();
         } else {
-          console.log("Successful authentication. ");
+          message.cookie = req.session.passport.user;
+          res.json(message);
+          res.end();
         }
       });
-      res.json(message);
     } else {
-      console.log("Registration failed");
       res.json(message);
+      res.end();
     }
   })(req, res, next);
 }
