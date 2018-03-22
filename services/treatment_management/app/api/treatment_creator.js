@@ -28,6 +28,7 @@ api.createTreatmentmeter = (UserRepo,DB) => (req,res) => {
       question: req.query.question,
       scale: req.query.scale,
       due_date: req.query.due_date,
+      patient_input: null,
       created_at: moment(new Date(Date.now()).format("YYYY-MM-DD"),
       updated_at: null
   }
