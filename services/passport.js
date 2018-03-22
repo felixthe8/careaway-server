@@ -73,10 +73,8 @@ service.run = () => {
   const verifyUsername = (username) => {
     return new Promise((fulfill, reject) => {
       DB.then(database => {
-        //console.log("Before veri")
         const userRepo = new UserRepo(database);
         userRepo.FindUser(username).then(value => {
-          //console.log("Verifying");
           const users = value.User;
           const exists = users.length > 0;
           fulfill({repo: userRepo, exists: exists});
@@ -88,6 +86,7 @@ service.run = () => {
     const Patient = models.Patient;
     const Security = models.Security;
     const Salt = models.Salt;
+    
     // Test if patient's medical code is valid
     const medicalCode = req.body.medicalCode;
     if(codes.indexOf(medicalCode) === -1) {
@@ -98,7 +97,7 @@ service.run = () => {
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
       // create user object with patient role
-      var newUser = User.createGenericUser(User, Security, Salt, req.body);
+      var newUser = User.createGenericUser(Security, Salt, req.body);
       var role = new Patient(firstName, lastName, medicalCode);
       newUser.accountType = role;
       // put user in db
