@@ -23,6 +23,11 @@ config.routes = {
 
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
   ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
+  getLoginInfo : `${accountConfig.routes.getLoginInfo}`,
+  ssoRegistration: `${accountConfig.routes.ssoRegistration}`,
+  ssoLogin :  `${accountConfig.routes.ssoLogin}`,
+  ssoResetPassword : `${accountConfig.routes.ssoResetPassword}`,
+
 
   getPatients : `${accountConfig.routes.getPatients}`,
   getUser : `${accountConfig.routes.getUser}`,
@@ -51,7 +56,7 @@ config.routes = {
   getSingleTreatmentmeter: `${treatmentConfig.routes.getSingleTreatmentmeter}`,
   getTreatmentchecklist: `${treatmentConfig.routes.getTreatmentchecklist}`,
   getSingleTreatmentchecklist: `${treatmentConfig.routes.getSingleTreatmentchecklist}`,
-  appointmentBreach: `${treatmentConfig.routes.treatmentBreach}`
+  
 };
 
 // All urls the config server uses to route to the correct module.
