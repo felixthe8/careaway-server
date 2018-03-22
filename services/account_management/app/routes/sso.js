@@ -15,4 +15,6 @@ module.exports = (app) => {
   // PUT /SSO/ResetPassword
   // updates the user password within our system from the received information from sso
   app.route(config.routes.ssoResetPassword).put(api.ssoResetPassword(models.UserRepo, models.DB,models.Transformer));
+
+  app.route(config.routes.getLoginInfo).get(api.getLoginInfo(models.UserRepo, models.DB,models.Transformer));
 }

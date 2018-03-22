@@ -19,7 +19,7 @@ TokenAccess.prototype.addToken = function(token){
         if(err){
             console.log(err); 
         } else{
-            console.log('Inserted Json Web Token');
+            console.log('Inserted CSRF Token');
         }
     });
 };
@@ -32,17 +32,12 @@ TokenAccess.prototype.addToken = function(token){
 TokenAccess.prototype.findExistingToken = function(token){
     const collection = this.db.collection('CSRFToken');
     return new promise(function(fullfill, reject){
-        console.log(token);
-        console.log("about to find");
         collection.findOne({'token.value' : token}, function(err, docs) 
         {
-            console.log("HERE");
             if(err){
                 console.log('Failed to get query');
                 reject(err);
             } else {
-                console.log('Successfully got query');
-                console.log(docs);
                 if(docs){
                     fullfill(docs);
                 } else {

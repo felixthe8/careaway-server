@@ -23,6 +23,7 @@ config.routes = {
 
   ssoRegisterPatient : `${accountConfig.routes.ssoRegisterPatient}`,
   ssoRegisterMed : `${accountConfig.routes.ssoRegisterMed}`,
+  getLoginInfo : `${accountConfig.routes.getLoginInfo}`,
 
   getPatients : `${accountConfig.routes.getPatients}`,
   getUser : `${accountConfig.routes.getUser}`,
