@@ -8,10 +8,12 @@ const consign = require('consign');
 var breached = false;
 // Allows only one cross origin site
 const corsOptions = {
-  origin: 'http://localhost:8080',
-  optionsSuccessStatus: 200
+  origin: 'http://localhost:8081',
+  optionsSuccessStatus: 200,
+  credentials: true
 };
-app.all('*',function(req,res,next){
+
+app.use(function(req,res,next){
   if(breached){
       res.send({down:true});
       res.end();
@@ -21,7 +23,12 @@ app.all('*',function(req,res,next){
 });
 app.use(cors(corsOptions));
 app.use(helmet());
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:8081");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -31,11 +38,7 @@ app.use('/breach', function(req,res){
  });
 
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+
 
 // Makes sure setup, api, and routes are loaded before anything else .
 consign({ cwd: 'services' })

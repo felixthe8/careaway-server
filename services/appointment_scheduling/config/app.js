@@ -8,10 +8,11 @@ const consign = require('consign');
 var breached = false;
 // Allows only one cross origin site
 const corsOptions = {
-  origin: ['http://localhost:8080', 'http://localhost:8081'],
-  optionsSuccessStatus: 200
+  origin: 'http://localhost:8081',
+  optionsSuccessStatus: 200,
+  credentials: true
 };
-app.all('*',function(req,res,next){
+app.use(function(req,res,next){
   if(breached){
       res.send({down:true});
       res.end();
