@@ -7,9 +7,10 @@ const morgan = require('morgan');
 const consign = require('consign');
 const proxy = require('express-http-proxy');
 var http = require('http');
-const config = require('./config');
+const config = require('./config')
 const session = require('express-session');
 const csrf = require('csurf');
+const request = require('request');
 var breached = false;
 var expiryDate = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 const request = require('request');
@@ -72,6 +73,9 @@ app.use((req, res, next) => {
 });
 app.use('/logout', passportConfig.logout);
 app.use(function(req, res, next) {
+
+app.get('*',function(req, res, next) {
+  // Middleware handler for breach
   if (breached) {
     res.send({ down : true });
   } else {
@@ -80,30 +84,34 @@ app.use(function(req, res, next) {
 });
 
 app.get('/isBreached',function(req,res) {
-  res.send({ down : false }); // ? Shouldn't this send breached? res.send({down:breached})
+  // Middleware handle for breach for homepage
+  res.send({ down : false }); 
 });
 
 app.use('/breach', function (req,res){   
-  var systemAdmin= {
+  // Create System admin from response
+  const systemAdmin= {
     username:req.body.username,
     password: req.body.password
   }
+  // Use request module to validate System Admin
   request.post({
-    url:     'http://localhost:4100/account/api/authentication',
+    url:     config.url.accountValidation,
     form:   systemAdmin
   }, function(err,httpResponse,body){ 
-
+      // Check if valid system admin
       if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
-        request('http://localhost:4100/breach', function (error, response, body) {
+        // Close all modules
+        request(config.routes.accountBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
         
-         request('http://localhost:4200/breach', function (error, response, body) {
-           console.log('error:', error); // Print the error if one occurred and handle it
-           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-         });
-        request('http://localhost:4400/breach', function (error, response, body) {
+        request(config.routes.appointmentBreach, function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
+        request(config.routes.treatmentBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
@@ -111,12 +119,9 @@ app.use('/breach', function (req,res){
         console.log('Account module closed.');
         console.log('Treatment module closed.');
         console.log('Appointment module closed.');
-
+        // Set MiddleWare Boolean to true
         breached = true;
       
-        }
-        else{
-
         }
   });
   res.send('Server has been breached'); 
@@ -159,7 +164,11 @@ app.use('/validate-username', proxy(config.url.account, {
     return config.routes.validateUsername;
   }
 }));
-
+app.use('/validate-answers', proxy(config.url.account, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.validateAnswers;
+  }
+}));
 app.get('/security-questions', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
@@ -234,6 +243,11 @@ app.use('/getDiagnoses', proxy(config.url.treatment, {
     return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`; 
   }
 }));
+app.use('/getSingleDiagnosis', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
 
 app.use('/getTreatmentmeter', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
@@ -253,9 +267,24 @@ app.use('/updatePatientTreatment', proxy(config.url.treatment, {
   }
 }));
 
+app.use('/getSingleTreatmentmeter', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getSingleTreatmentmeter}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+  }
+}));
+app.use('/getPatientUserNames', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getPatientUserNames}?medicalcode=${req.query.medicalcode}`; 
+  }
+}));
 app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`; 
+  }
+}));
+app.use('/getSingleTreatmentchecklist', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getSingleTreatmentchecklist}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
   }
 }));
 

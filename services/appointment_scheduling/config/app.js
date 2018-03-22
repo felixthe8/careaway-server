@@ -12,7 +12,8 @@ const corsOptions = {
   optionsSuccessStatus: 200,
   credentials: true
 };
-app.use(function(req,res,next){
+app.all('*',function(req,res,next){
+// Middleware for breach notifcation
   if(breached){
       res.send({down:true});
       res.end();
@@ -27,9 +28,9 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 app.use('/breach', function(req,res){
-  app.use('/breach', function(req,res){
+  // Middleware boolean true
     breached = true;
-});
+
 });
 // Makes sure setup, api, and routes are loaded before anything else.
 consign({ cwd: 'services' })

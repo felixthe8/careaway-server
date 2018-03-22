@@ -9,7 +9,7 @@ module.exports = {
     modify: '/appointment/api/edit',
     get: '/appointment/api/get',
     delete: '/appointment/api/delete',
-    breach: '/breach',
+    appointmentBreach: 'http://localhost:4200/breach',
   },
   server: {
     port: 4200

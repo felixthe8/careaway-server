@@ -16,4 +16,5 @@ module.exports = (app) => {
   // TEMPORARY since there's no endpoint to create a widget
   // PUT /treatment_plan/api/create_widget
   app.route('treatment_plan/api/create_widget').put(api.createWidget(models));
+
 }
