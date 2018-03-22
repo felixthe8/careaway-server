@@ -23,7 +23,7 @@ const corsOptions = {
 
 // Allows only one cross origin site.
 app.use(cors(corsOptions));
-app.use(helmet()); 
+app.use(helmet());
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:8081");
@@ -83,7 +83,7 @@ app.get('/isBreached',function(req,res) {
   res.send({ down : false }); // ? Shouldn't this send breached? res.send({down:breached})
 });
 
-app.use('/breach', function (req,res){   
+app.use('/breach', function (req,res){
   var systemAdmin= {
     username:req.body.username,
     password: req.body.password
@@ -91,14 +91,14 @@ app.use('/breach', function (req,res){
   request.post({
     url:     'http://localhost:4100/account/api/authentication',
     form:   systemAdmin
-  }, function(err,httpResponse,body){ 
+  }, function(err,httpResponse,body){
 
       if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
         request('http://localhost:4100/breach', function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
-        
+
          request('http://localhost:4200/breach', function (error, response, body) {
            console.log('error:', error); // Print the error if one occurred and handle it
            console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
@@ -113,13 +113,13 @@ app.use('/breach', function (req,res){
         console.log('Appointment module closed.');
 
         breached = true;
-      
+
         }
         else{
 
         }
   });
-  res.send('Server has been breached'); 
+  res.send('Server has been breached');
 });
 
 app.use(morgan('dev'));
@@ -133,13 +133,13 @@ app.use(passport.session());
 app.use('/registerPatient', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerPatient;
-  } 
+  }
 }));
 
 app.use('/registerMed', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerMed;
-  } 
+  }
 }));
 
 app.use('/login', proxy(config.url.account, {
@@ -162,7 +162,7 @@ app.use('/validate-username', proxy(config.url.account, {
 
 app.get('/security-questions', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`;
   }
 }));
 
@@ -225,27 +225,38 @@ app.use('/deleteAppt', proxy(config.url.appointment, {
 
 app.use('/returnCode', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`;
   }
 }));
 
 app.use('/getDiagnoses', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`;
   }
 }));
 
 app.use('/getTreatmentmeter', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.use('/createMeter', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.createMeter}${req._parsedOriginalUrl.search}`;
   }
 }));
 
 app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`;
   }
 }));
 
+app.use('/createChecklist', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.createChecklist}${req._parsedOriginalUrl.search}`;
+  }
+}));
 
 module.exports = app;
