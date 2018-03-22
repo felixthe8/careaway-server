@@ -43,6 +43,24 @@ function createGenericUser(User, Security, Salt, req) {
    return new User(username,passHashed,null,sQ,salt);
 };
 
+api.register = (passport) => (req, res, next) => {
+  passport.authenticate('local-registration', (err, success, message) => {
+    if(success) {
+      console.log("Registration success, authenticating");
+      req.login(message.user, (err) => {
+        if(err) {
+          console.log("Error authenticating user " + err);
+        } else {
+          console.log("Successful authentication. ");
+        }
+      });
+      res.json(message);
+    } else {
+      console.log("Registration failed");
+      res.json(message);
+    }
+  })(req, res, next);
+}
 
 api.registerPatient = (User, Security, Salt, Patient, UserRepo, DB) => (req, res) => {
    // grab just username from body

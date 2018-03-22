@@ -26,8 +26,9 @@ app.use(cors(corsOptions));
 app.use(helmet()); 
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://localhost:8081");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
 
@@ -48,13 +49,29 @@ app.use(session({
   })
 }));
 
+const passportConfig = require('./passport');
+const passport = passportConfig.run();
+
+
 const csrfProtection = csrf();
 //app.use(csrfProtection);
-
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-app.get('*',function(req, res, next) {
+app.use((req, res, next) => {
+  console.log("Here going to "  + req.originalUrl);
+  // Used for debugging/testing
+  if(!req.cookies) {
+    //console.log('setting cookie monster');
+    //res.cookie('cookie', 'monster', {});
+  } else {
+    console.log(JSON.stringify(req.cookies));
+  }
+  next();
+});
+app.use('/logout', passportConfig.logout);
+app.use(function(req, res, next) {
   if (breached) {
     res.send({ down : true });
   } else {
@@ -109,14 +126,9 @@ app.use(morgan('dev'));
 app.use('/', (req, res, next) => {
   next();
 })
-/* app.use('/', (req, res) => {
-  const token = req.csrfToken();
-  res.locals.csrfToken = token;
-  res.header['x-csrf-token'] = token;
-  console.log(`The token ${token}`);
-  return res.json({ csrfToken : token });
-}); */
 
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/registerPatient', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
@@ -166,6 +178,7 @@ app.use('/ssoRegisterMed', proxy(config.url.account, {
   }
 }));
 
+app.use(passportConfig.isAuthenticated);
 app.get('/get-user', proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getUser}${req._parsedOriginalUrl.search}`;

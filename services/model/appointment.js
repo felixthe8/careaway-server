@@ -38,7 +38,7 @@ const constructFromObject = (appointment) => {
   const initiatorName = appointment.initiatorName;
   const status = appointment.status;
 
-  // Construct the object and return it.
+  // Construct the appointment object and return it.
   return new Appointment(date, startTime, endTime, appointee, appointeeName, initiator, initiatorName, status);
 }
 module.exports = {Appointment, constructFromObject};
