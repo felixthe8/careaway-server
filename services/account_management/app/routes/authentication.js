@@ -20,8 +20,6 @@ module.exports = (app) => {
           
         });
         res.json(message);
-        console.log(`The req user ${req.user}`);
-        console.log(`session in login: ${JSON.stringify(req.session)}`);
         
         next();
       })(req, res, next);

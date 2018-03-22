@@ -63,9 +63,9 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
  */
 api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
-  var token = req.headers.token;
-  // var obj = Object.keys(req.body)[0];
-  // var token = JSON.parse(obj).token;
+  // var token = req.headers.token;
+  var obj = Object.keys(req.body)[0];
+  var token = JSON.parse(obj).token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
@@ -189,7 +189,7 @@ api.getLoginInfo = (UserRepo, DB,Transformer) => (req, res) => {
       var username = value.username;
       userRepo.FindUser(username).then(function(value){
         var user = value.User[0];       
-        const obj = {csrfToken : req.query.csrfToken, username : user.username, role : user.accountType.role};
+        const obj = {csrfToken : req.query.csrfToken, username : user.username, role : user.accountType.role, 'cookie': user._id};
         console.log(JSON.stringify(obj));
         res.json(obj);
     });

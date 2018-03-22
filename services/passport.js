@@ -10,12 +10,10 @@ const DB = models.DB;
 var randomstring = require('randomstring');
 service.run = () => {
   passport.serializeUser((user, done) => {
-    console.log("Serialize " + user);
     done(null, user);
   });
 
   passport.deserializeUser((id, done) => {
-    console.log("Deserializing");
     DB.then(database => {
       const repo = new UserRepo(database);
       repo.findUser(id).then(user => {
@@ -49,20 +47,16 @@ service.run = () => {
 
             if (passHashed === queriedUser.password) {
               if((Object.keys(queriedUser.accountType).length ===0)){
-                console.log("SSO user");
                 //send a request telling client to register the user
                 return done(null, true, {success: true, accountType: 'SSO'});
               } else{
                 if (passHashed === queriedUser.password) {
-                  console.log("Valid username and pass.");
                   return done(null, true,{success: true, accountType: queriedUser.accountType.role, user: queriedUser._id});       
                 } else {
-                  console.log("Wrong password but valid username.");
                   return done(null, false, {error: 'Wrong password.'})
                 } 
               }
             } else {
-              console.log("Wrong pass");
               return done(null, false, {error: 'Wrong password.'})
             }
           }
@@ -130,7 +124,6 @@ service.run = () => {
     var role = new MedicalProfessional(firstName, lastName, medicalCode);
     
     newUser.accountType = role;
-    console.log(newUser.accountType);
     // put user in db
     userRepo.Create(newUser);
     userRepo.FindUser(newUser.username).then(result => {
@@ -205,39 +198,31 @@ service.isAuthenticated = (req, res, next) => {
         //console.log(valid);
         if(valid.success) {
           // Valid user, lets their request move through the rest our routes
-          console.log("Valid user: " + valid.user.username);
           next();
         } else {
           // Ends their request here, only a valid user can access the rest of the routes.
-          console.log("Not a valid user");
           res.end();
         }
       });
     } else {
       // Ends their request here, only an authenticated user can access the remaining routes.
-      console.log("No user cookies");
       res.end();
     }
   } else {
     // Ends their request here, only an authenticated user can access the remaining routes.
-    console.log("No cookies yet");
     res.end();
   }
 }
 service.logout = (req, res, next) => {
-  console.log("Ending session");
   if(req.cookies) {
     const user = req.cookies.user;
     if(user) {
-      console.log("Destroying cookie . . .");
       res.clearCookie(user);
       res.end();
     } else {
-      console.log("No user authenticated . . .");
       res.end();
     }
   } else {
-    console.log("No cookies to destroy");
     res.end();
   }
 }
