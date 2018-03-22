@@ -30,6 +30,7 @@ module.exports = (app) => {
     
     // GET /account/api/security-questions
     // query security questions for user
+    // query security questions for user
     app.route(config.routes.securityQuestions).get(api.securityQs(models.UserRepo, models.DB));
     
     // POST /account/api/validate-answers

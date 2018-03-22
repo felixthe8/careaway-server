@@ -43,7 +43,7 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
             // Saves all salt to an object
             var identifier = new Salt(saltStrPass);
             // Generates a new user using the received username and password from sso
-            var newUser = new User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
+            var newUser = new User.User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
             userRepo.Create(newUser);
             // Return success message
             res.json({success: true});
@@ -83,7 +83,6 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
         userRepo.FindUser(username).then(function(value){
           // Gets the users queried for from the username
           var queriedUser = value.User;
-          console.log(queriedUser);
           // Checks if a user was found
           if (queriedUser.length === 0) {
             // User was not found
