@@ -18,7 +18,6 @@ Database.prototype.Connect = function()
     MongoClient.connect('mongodb://localhost:27017', 
       function(err, client)
       {
-        console.log("Connected to DB");
         var db=client.db('CareAway');
         //return the error if some error happened
         if(err)

@@ -58,19 +58,9 @@ const passportConfig = require('./passport');
 const passport = passportConfig.run();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use((req, res, next) => {
-  console.log("Here going to "  + req.originalUrl);
-  // Used for debugging/testing
-  if(!req.cookies) {
-    console.log('setting cookie monster');
-    res.cookie('cookie', 'monster', {});
-  } else {
-    console.log(JSON.stringify(req.cookies));
-  }
-  next();
-});
+
 app.use('/logout', passportConfig.logout);
-app.use(function(req, res, next) {
+
 
 function CsrfValidation(req,res,next){
   new database().Connect().then(database => {
@@ -107,7 +97,6 @@ function createCSRFToken (req,res,next){
     var secret = tokens.secretSync();
     var token = tokens.create(secret);
     tRepo.addToken({"value" : token, "secret" : secret});
-    console.log(token);
     req.csrfToken = token;
     next();
   });
@@ -154,10 +143,6 @@ app.use('/breach',CsrfValidation, function (req,res){
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
-
-        console.log('Account module closed.');
-        console.log('Treatment module closed.');
-        console.log('Appointment module closed.');
         // Set MiddleWare Boolean to true
         breached = true;
       
@@ -354,5 +339,5 @@ app.use('/Sso/ResetPassword', proxy(config.url.account,{
   }
 }));
 
-});
+
 module.exports = app;

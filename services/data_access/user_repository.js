@@ -116,7 +116,6 @@ UserAccess.prototype.FindUser= function(username)
 UserAccess.prototype.FindUserById= function(id)
 {
   const collection = this.db.collection('Users');
-  console.log("here")
   return new promise(function(fullfill,reject)
   { 
     console.log(id);
