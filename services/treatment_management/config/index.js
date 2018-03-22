@@ -15,7 +15,7 @@ module.exports = {
     getSingleTreatmentmeter: '/treatment_plan/api/getSingleTreatmentmeter',
     getTreatmentchecklist: '/treatment_plan/api/getTreatmentchecklist',
     getSingleTreatmentchecklist: '/treatment_plan/api/getSingleTreatmentchecklist',
-    breach: '/breach',
+    treatmentBreach: 'http://localhost:4400/breach',
     queryWidgets: '/treatment_plan/api/widgets',
     patientUpdate: '/treatment_plan/api/patient_edit',
   },

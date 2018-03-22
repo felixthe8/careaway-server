@@ -55,6 +55,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get('*',function(req, res, next) {
+  // Middleware handler for breach
   if (breached) {
     res.send({ down : true });
   } else {
@@ -63,30 +64,34 @@ app.get('*',function(req, res, next) {
 });
 
 app.get('/isBreached',function(req,res) {
-  res.send({ down : false }); // ? Shouldn't this send breached? res.send({down:breached})
+  // Middleware handle for breach for homepage
+  res.send({ down : false }); 
 });
 
 app.use('/breach', function (req,res){   
-  var systemAdmin= {
+  // Create System admin from response
+  const systemAdmin= {
     username:req.body.username,
     password: req.body.password
   }
+  // Use request module to validate System Admin
   request.post({
-    url:     'http://localhost:4100/account/api/authentication',
+    url:     config.url.accountValidation,
     form:   systemAdmin
   }, function(err,httpResponse,body){ 
-
+      // Check if valid system admin
       if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
-        request('http://localhost:4100/breach', function (error, response, body) {
+        // Close all modules
+        request(config.routes.accountBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
         
-        request('http://localhost:4200/breach', function (error, response, body) {
+        request(config.routes.appointmentBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
-        request('http://localhost:4400/breach', function (error, response, body) {
+        request(config.routes.treatmentBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
@@ -94,12 +99,9 @@ app.use('/breach', function (req,res){
         console.log('Account module closed.');
         console.log('Treatment module closed.');
         console.log('Appointment module closed.');
-
+        // Set MiddleWare Boolean to true
         breached = true;
       
-        }
-        else{
-
         }
   });
   res.send('Server has been breached'); 
