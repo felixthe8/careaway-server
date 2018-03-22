@@ -12,16 +12,15 @@ module.exports = (app) => {
         req.login(message.user, (err) => {
           if(err) {
             console.log(`Error in login ${err}`);
+            res.end();
           } else {
             //res.cookie('authenticated', req.session);
             message.cookie = req.session.passport.user;
-            
+            res.json(message);
+            res.end();
           }
           
         });
-        res.json(message);
-        
-        next();
       })(req, res, next);
     });
 

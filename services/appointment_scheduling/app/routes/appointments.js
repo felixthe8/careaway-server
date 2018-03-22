@@ -15,7 +15,7 @@ module.exports = (app) => {
   app.route(config.routes.get).get(api.get(models.AppointmentRepo,models.DB));
   // POST /appointment/api/delete
   // Delete an appointment.
-  app.route(config.routes.delete).post(api.delete(models.AppointmentRepo,models.DB));
+  app.route(config.routes.delete).post(api.delete(models.Appointment,models.AppointmentRepo,models.DB));
   // GET 
   // test route
   app.route('/').get((req,res) => {

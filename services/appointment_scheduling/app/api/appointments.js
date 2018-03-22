@@ -75,18 +75,21 @@ api.get = (AppointmentRepo, DB) => (req, res) => {
 }
 /**
  * Deletes the appointment
+ * @param {*} Appointment the appointment model
  * @param {*} AppointmentRepo this contains the data_access functions to Create/Read/Update/Delete appointments
  * @param {*} DB this is the database connection object
  * @returns {*} A JSON object of the appointments
  */
-api.delete = (AppointmentRepo, DB) => (req, res) => {
+api.delete = (Appointment, AppointmentRepo, DB) => (req, res) => {
+  
   DB.then(database => {
     const repo = new AppointmentRepo(database);
-    const appointment = req.body.appointment;
+    const appointment = Appointment.constructFromObject(req.body.appointment);
+    console.log(appointment);
     // Sends a request to delete the appointment in th data store
     repo.DeleteAppointment(appointment.initiator, appointment.appointee, appointment);
     // Return success response
-    res.send({success: result.success, reason: result.reason});
+    res.json({success: "success"});
   }).catch(err => {
     // Return a error is something went wrong
     console.log("There was an error accessing the database.");

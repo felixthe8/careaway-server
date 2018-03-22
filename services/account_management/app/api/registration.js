@@ -49,13 +49,17 @@ api.register = (passport) => (req, res, next) => {
       req.login(message.user, (err) => {
         if(err) {
           console.log("Error authenticating user " + err);
+          res.json(message);
+          res.end();
         } else {
           message.cookie = req.session.passport.user;
+          res.json(message);
+          res.end();
         }
       });
-      res.json(message);
     } else {
       res.json(message);
+      res.end();
     }
   })(req, res, next);
 }
