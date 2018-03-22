@@ -18,7 +18,8 @@ module.exports = {
     ssoLogin: '/SSO/login',
     ssoRegistration: '/SSO/registration',
     ssoResetPassword:'/SSO/ResetPassword',
-    breach: '/breach',
+    getLoginInfo:'/account/api/getLoginInfo',
+        accountBreach: 'http://localhost:4100/breach',
     getUser: '/account/api/get-user',
     getPatients: '/account/api/get-all-patients',
     getAllInfoForPatientAppointment: '/account/api/get-patient-appointment-info'
