@@ -8,10 +8,12 @@ const consign = require('consign');
 var breached = false;
 // Allows only one cross origin site
 const corsOptions = {
-  origin: ['http://localhost:8080', 'http://localhost:8081'],
-  optionsSuccessStatus: 200
+  origin: 'http://localhost:8081',
+  optionsSuccessStatus: 200,
+  credentials: true
 };
 app.all('*',function(req,res,next){
+// Middleware for breach notifcation
   if(breached){
       res.send({down:true});
       res.end();
@@ -26,9 +28,9 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 app.use('/breach', function(req,res){
-  app.use('/breach', function(req,res){
+  // Middleware boolean true
     breached = true;
-});
+
 });
 // Makes sure setup, api, and routes are loaded before anything else.
 consign({ cwd: 'services' })
