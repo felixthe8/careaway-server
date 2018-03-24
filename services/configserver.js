@@ -315,6 +315,12 @@ app.use('/updatePatientTreatment',CsrfValidation, proxy(config.url.treatment, {
   }
 }));
 
+app.use('/getDiagnosisList', CsrfValidation,proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getDiagnosisList}`; 
+  }
+}));
+
 app.use('/getSingleTreatmentmeter',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getSingleTreatmentmeter}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 

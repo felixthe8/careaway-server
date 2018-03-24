@@ -35,6 +35,7 @@ config.routes = {
   
   creatTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
+  getDiagnosisList: `${treatmentConfig.routes.getDiagnosisList}`,
   treatmentBreach: `${treatmentConfig.routes.treatmentBreach}`,
 
   getAppt : `${appointmentConfig.routes.get}`,
