@@ -9,7 +9,6 @@ const CryptoJS = require('crypto-js');
   level of the object hierarchy. 
 */
 function User (username, password, role, security, identifier) {
-  console.log("Here");
   this.username = username || '';
   this.password = password || '';
   // accountType refers to the role of the user in the system (ie. patient, medical professional
@@ -24,7 +23,6 @@ function User (username, password, role, security, identifier) {
 }
 // creates a user object that both patient and medical professional need for registration
 const createGenericUser = (Security, Salt, req) => {
-  console.log("Called user object generic");
   // grab all registration info from body
   const username = req.username;
   const password = req.password;

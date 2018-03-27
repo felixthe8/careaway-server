@@ -12,18 +12,15 @@ module.exports = (app) => {
         req.login(message.user, (err) => {
           if(err) {
             console.log(`Error in login ${err}`);
+            res.end();
           } else {
             //res.cookie('authenticated', req.session);
             message.cookie = req.session.passport.user;
-            
+            res.json(message);
+            res.end();
           }
           
         });
-        res.json(message);
-        console.log(`The req user ${req.user}`);
-        console.log(`session in login: ${JSON.stringify(req.session)}`);
-        
-        next();
       })(req, res, next);
     });
 
@@ -32,6 +29,7 @@ module.exports = (app) => {
     app.route(config.routes.validateUsername).post(api.validateUsername(models.UserRepo, models.DB));
     
     // GET /account/api/security-questions
+    // query security questions for user
     // query security questions for user
     app.route(config.routes.securityQuestions).get(api.securityQs(models.UserRepo, models.DB));
     

@@ -43,7 +43,7 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
             // Saves all salt to an object
             var identifier = new Salt(saltStrPass);
             // Generates a new user using the received username and password from sso
-            var newUser = new User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
+            var newUser = new User.User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
             userRepo.Create(newUser);
             // Return success message
             res.json({success: true});
@@ -63,7 +63,9 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
  */
 api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
-  var token = req.headers.token;
+  // var token = req.headers.token;
+  var obj = Object.keys(req.body)[0];
+  var token = JSON.parse(obj).token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
@@ -94,11 +96,32 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
             const passHashed = CryptoJS.HmacSHA256(password,salt).toString();
             // Checks if password matches with that in the database
             if (passHashed === user.password) {
-              //TODO: SERVE UP CORRECT FILE TO SSO
-              console.log("LOG THEM IN");
+              var loginInfo = transformer.createToken(username);
+              if(user.accountType.role === "medical-professional"){
+                res.writeHead(301,
+                  {Location: 'http://localhost:8081/MedicHome/'+ "?jwt="+loginInfo}
+                );
+                res.end();
+              }
+              else if(user.accountType.role === "patient"){
+                res.writeHead(301,
+                  {Location: 'http://localhost:8081/PatientHome/'+ "?jwt="+loginInfo}
+                );
+                res.end();
+              }
+              else if(user.accountType.role === "system-admin"){
+                res.writeHead(301,
+                  {Location: 'http://localhost:8081/AdminHome/'+ "?jwt="+loginInfo}
+                );
+                res.end();
+              }
+              else if(user.accountType.role === "SSO"){
+                res.writeHead(301,
+                  {Location: 'http://localhost:8081/Registration/'+ "?jwt="+loginInfo}
+                );
+                res.end();
+              }
             } else {
-              // res.json({error: 'Wrong password.'})
-              console.log("Wrong pass");
               res.status(400);
               res.json({error: 'Password was incorrect'});     
             }
@@ -118,7 +141,6 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
 api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
   var token = req.headers.token;
-  console.log(token);
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
@@ -127,16 +149,14 @@ api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
       if(value.err) {
-        console.log(value.err);
         res.status(400); // Return a 400 bad request back to the sender
-        res.json({'err': value});
+        res.json({'err': value}); 
       } else {
         var username = value.username;
         var password = value.password;
         // Finds the existing user in the database
         userRepo.FindUser(username).then(function(value){
           var queriedUser = value.User;
-          console.log(queriedUser);
           if (queriedUser.length === 0) {
             // User does not exist return an error
             res.status(400);
@@ -153,6 +173,27 @@ api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
       }
     });
   });
-};
+ };
+
+
+api.getLoginInfo = (UserRepo, DB,Transformer) => (req, res) => {
+  // The message received from the third party service
+  var token = req.query.token;
+  DB.then(database => {
+    var userRepo = new UserRepo(database);
+    // Transfomer for the message received
+    var transformer = new Transformer(database);
+    // This morphs the message received to a generic user object for our system
+    transformer.decodeJWT(token).then(function(value){
+      var username = value.username;
+      userRepo.FindUser(username).then(function(value){
+        var user = value.User[0];       
+        const obj = {csrfToken : req.query.csrfToken, username : user.username, role : user.accountType.role, 'cookie': user._id};
+        console.log(JSON.stringify(obj));
+        res.json(obj);
+    });
+  });
+});
+}
 
 module.exports = api;

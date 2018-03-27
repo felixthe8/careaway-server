@@ -23,8 +23,10 @@ app.use(passport.initialize());
 //app.use(passport.session());
 
 app.use(morgan('dev'));
-app.use(function(req,res,next){
+// Middleware handle for breach Notification
+app.all('*',function(req,res,next){
     if(breached){
+    
         res.send({down:true});
         res.end();
         }else{
@@ -38,7 +40,8 @@ app.use(function(req, res, next) {
     next();
   });
 app.use('/breach', function(req,res){
- breached = true;
+    //set to true when breach is hit from validated System Admin
+    breached = true;
 });
 app.passport = passport;
 // Makes sure setup, api, and routes are loaded before the app.

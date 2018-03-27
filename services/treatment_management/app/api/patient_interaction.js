@@ -10,7 +10,6 @@ api.patientUpdate = (models) => (req, res) => {
   models.DB.then(database => {
     var treatmentRepo = new models.TreatmentRepo(database);
 
-    // find user in db
     treatmentRepo.EditTreatment(username, treatment);
     res.json({success: true});
   });
@@ -18,7 +17,7 @@ api.patientUpdate = (models) => (req, res) => {
 
 api.queryWidgets = (models) => (req, res) => {
   // get username, created_at, and question array from body
-  const username = req.body.username;
+  const username = req.query.username;
   //const password = req.body.password;
   
   models.DB.then(database => {
