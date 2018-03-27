@@ -221,8 +221,6 @@ app.use('/deleteAppt', proxy(config.url.appointment, {
   }
 }));
 
-
-
 app.use('/returnCode', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`;
@@ -235,27 +233,28 @@ app.use('/getDiagnoses', proxy(config.url.treatment, {
   }
 }));
 
+app.use('/createTreatmentMeter', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+      console.log("created");
+    return `${config.routes.createTreatmentMeter}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.use('/createTreatmentChecklist', proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.createTreatmentChecklist}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
 app.use('/getTreatmentmeter', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`;
   }
 }));
 
-app.use('/createMeter', proxy(config.url.treatment, {
-  proxyReqPathResolver: function(req) {
-    return `${config.routes.createMeter}${req._parsedOriginalUrl.search}`;
-  }
-}));
-
 app.use('/getTreatmentchecklist', proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`;
-  }
-}));
-
-app.use('/createChecklist', proxy(config.url.treatment, {
-  proxyReqPathResolver: function(req) {
-    return `${config.routes.createChecklist}${req._parsedOriginalUrl.search}`;
   }
 }));
 

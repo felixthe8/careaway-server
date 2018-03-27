@@ -28,7 +28,7 @@ config.routes = {
   getUser : `${accountConfig.routes.getUser}`,
   patientAppointmentInfo : `${accountConfig.routes.getAllInfoForPatientAppointment}`,
 
-  creatTreatment : `${treatmentConfig.routes.create}`,
+  createTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
 
   getAppt : `${appointmentConfig.routes.get}`,
@@ -36,8 +36,8 @@ config.routes = {
   updateAppt : `${appointmentConfig.routes.modify}`,
   deleteAppt : `${appointmentConfig.routes.delete}`,
 
-  createMeter : `${treatmentConfig.routes.meter}`,
-  createChecklist : `${treatmentConfig.routes.checklist}`,
+  createTreatmentMeter : `${treatmentConfig.routes.createTreatmentMeter}`,
+  createTreatmentChecklist : `${treatmentConfig.routes.createTreatmentChecklist}`,
 
   returnCode : `${treatmentConfig.routes.returnCode}`,
   getDiagnoses: `${treatmentConfig.routes.getDiagnoses}`,
