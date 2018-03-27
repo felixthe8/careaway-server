@@ -53,9 +53,9 @@ config.routes = {
   getDiagnoses: `${treatmentConfig.routes.getDiagnoses}`,
   getSingleDiagnosis: `${treatmentConfig.routes.getSingleDiagnosis}`,
   getPatientUserNames: `${treatmentConfig.routes.getPatientUserNames}`,
-  getTreatmentmeter: `${treatmentConfig.routes.getTreatmentmeter}`,
+  getTreatmentMeter: `${treatmentConfig.routes.getTreatmentMeter}`,
   getSingleTreatmentmeter: `${treatmentConfig.routes.getSingleTreatmentmeter}`,
-  getTreatmentchecklist: `${treatmentConfig.routes.getTreatmentchecklist}`,
+  getTreatmentChecklist: `${treatmentConfig.routes.getTreatmentChecklist}`,
   getSingleTreatmentchecklist: `${treatmentConfig.routes.getSingleTreatmentchecklist}`,
   
 };
