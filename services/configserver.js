@@ -26,7 +26,7 @@ const corsOptions = {
 
 // Allows only one cross origin site.
 app.use(cors(corsOptions));
-app.use(helmet()); 
+app.use(helmet());
 app.use(cookieParser());
 
 app.use(function(req, res, next) {
@@ -64,7 +64,7 @@ app.use('/logout', passportConfig.logout);
 
 function CsrfValidation(req,res,next){
   new database().Connect().then(database => {
-    var tokens = new csrf(); 
+    var tokens = new csrf();
     var tRepo = new tokenRepository(database);
     var csrfToken = req.headers['x-csrf-token'];
     if(csrfToken){
@@ -92,7 +92,7 @@ function CsrfValidation(req,res,next){
 
 function createCSRFToken (req,res,next){
     new database().Connect().then(database => {
-    var tokens = new csrf(); 
+    var tokens = new csrf();
     var tRepo = new tokenRepository(database);
     var secret = tokens.secretSync();
     var token = tokens.create(secret);
@@ -116,7 +116,7 @@ app.get('/isBreached', createCSRFToken, function(req,res) {
   res.send({ down : false, 'csrfToken' : req.csrfToken }); // ? Shouldn't this send breached? res.send({down:breached})
 });
 
-app.use('/breach',CsrfValidation, function (req,res){   
+app.use('/breach',CsrfValidation, function (req,res){
   // Create System admin from response
   const systemAdmin = {
     username:req.body.username,
@@ -126,7 +126,7 @@ app.use('/breach',CsrfValidation, function (req,res){
   request.post({
     url:     config.url.accountValidation,
     form:   systemAdmin
-  }, function(err,httpResponse,body){ 
+  }, function(err,httpResponse,body){
       // Check if valid system admin
       if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
         // Close all modules
@@ -134,7 +134,7 @@ app.use('/breach',CsrfValidation, function (req,res){
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
-        
+
         request(config.routes.appointmentBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
@@ -145,10 +145,10 @@ app.use('/breach',CsrfValidation, function (req,res){
         });
         // Set MiddleWare Boolean to true
         breached = true;
-      
+
         }
   });
-  res.send('Server has been breached'); 
+  res.send('Server has been breached');
 });
 
 app.use(morgan('dev'));
@@ -162,7 +162,7 @@ app.use(passport.session());
 app.use('/registerPatient',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerPatient;
-  } 
+  }
 }));
 
 app.use('/Sso/Registration', proxy(config.url.account,{
@@ -185,7 +185,7 @@ app.use('/Sso/ResetPassword', proxy(config.url.account,{
 app.use('/registerMed',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
     return config.routes.registerMed;
-  } 
+  }
 }));
 
 app.use('/login',CsrfValidation, proxy(config.url.account, {
@@ -214,7 +214,7 @@ app.use('/validate-answers',CsrfValidation,  proxy(config.url.account, {
 
 app.get('/security-questions',CsrfValidation, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`;
   }
 }));
 
@@ -251,7 +251,7 @@ app.get('/patient-appointment-info',CsrfValidation, proxy(config.url.account, {
 
 app.get('/getLoginInfo', createCSRFToken, proxy(config.url.account, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`; 
+    return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`;
   }
 }));
 
@@ -281,25 +281,37 @@ app.use('/deleteAppt', CsrfValidation,proxy(config.url.appointment, {
 
 app.use('/returnCode',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`;
   }
 }));
 
 app.use('/getDiagnoses',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getDiagnoses}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
+app.use('/createTreatmentMeter', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.createTreatmentMeter;
+  }
+}));
+
+app.use('/createTreatmentChecklist', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.createTreatmentChecklist;
   }
 }));
 
 app.use('/getSingleDiagnosis', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+    return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`;
   }
 }));
 
 app.use('/getTreatmentmeter',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getTreatmentmeter}${req._parsedOriginalUrl.search}`;
   }
 }));
 
@@ -317,29 +329,26 @@ app.use('/updatePatientTreatment',CsrfValidation, proxy(config.url.treatment, {
 
 app.use('/getSingleTreatmentmeter',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getSingleTreatmentmeter}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+    return `${config.routes.getSingleTreatmentmeter}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`;
   }
 }));
 
 app.use('/getPatientUserNames', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getPatientUserNames}?medicalcode=${req.query.medicalcode}`; 
+    return `${config.routes.getPatientUserNames}?medicalcode=${req.query.medicalcode}`;
   }
 }));
 
 app.use('/getTreatmentchecklist', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getTreatmentchecklist}${req._parsedOriginalUrl.search}`;
   }
 }));
 
 app.use('/getSingleTreatmentchecklist', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getSingleTreatmentchecklist}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
+    return `${config.routes.getSingleTreatmentchecklist}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`;
   }
 }));
-
-
-
 
 module.exports = app;

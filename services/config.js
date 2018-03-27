@@ -32,8 +32,8 @@ config.routes = {
   getPatients : `${accountConfig.routes.getPatients}`,
   getUser : `${accountConfig.routes.getUser}`,
   patientAppointmentInfo : `${accountConfig.routes.getAllInfoForPatientAppointment}`,
-  
-  creatTreatment : `${treatmentConfig.routes.create}`,
+
+  createTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
   treatmentBreach: `${treatmentConfig.routes.treatmentBreach}`,
 
@@ -45,9 +45,12 @@ config.routes = {
   patientUpdate: `${treatmentConfig.routes.patientUpdate}`,
   queryWidgets: `${treatmentConfig.routes.queryWidgets}`,
   deleteAppt : `${appointmentConfig.routes.delete}`,
+
+  createTreatmentMeter : `${treatmentConfig.routes.createTreatmentMeter}`,
+  createTreatmentChecklist : `${treatmentConfig.routes.createTreatmentChecklist}`,
+
   appointmentBreach: `${appointmentConfig.routes.appointmentBreach}`,
-  
-  
+
   returnCode : `${treatmentConfig.routes.returnCode}`,
   getDiagnoses: `${treatmentConfig.routes.getDiagnoses}`,
   getSingleDiagnosis: `${treatmentConfig.routes.getSingleDiagnosis}`,
@@ -56,7 +59,7 @@ config.routes = {
   getSingleTreatmentmeter: `${treatmentConfig.routes.getSingleTreatmentmeter}`,
   getTreatmentchecklist: `${treatmentConfig.routes.getTreatmentchecklist}`,
   getSingleTreatmentchecklist: `${treatmentConfig.routes.getSingleTreatmentchecklist}`,
-  
+
 };
 
 // All urls the config server uses to route to the correct module.
