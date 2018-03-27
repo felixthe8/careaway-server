@@ -93,7 +93,7 @@ api.getSingleTreatmentmeter = (UserRepo,DB) => (req,res) => {
   })
 }
 // Returns all meter widget data for all patients associated with a medical professional
-api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
+api.getTreatmentMeter = (UserRepo,DB) => (req,res) => {
   // Medical professional code
   const mpCode = req.query.medicalcode;
   // Date range that will be used to retrieve information
@@ -117,7 +117,7 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
   })
 }
 
-api.getTreatmentchecklist = (UserRepo,DB) => (req,res) => {
+api.getTreatmentChecklist = (UserRepo,DB) => (req,res) => {
   // Medical professional code
   const mpCode = req.query.medicalcode;
   // Date range that will be used to retrieve information

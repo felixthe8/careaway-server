@@ -127,4 +127,24 @@ TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis
   });
 };
 
+/**
+ * Gets the diagnose(s) supported by the CareAway Treatment Planner
+ * that they medical professional can choose from  
+*/
+TreatmentPlanAccess.prototype.getDiagnosisList = function() {
+  const collection = this.db.collection('Conditions');
+  return new promise(function(fullfill,reject) {
+    collection.findOne( {'Condition' : {$exists:true}} ,function(err, docs) {
+      if(err) {
+        console.log("Failed to get the query");
+        reject(err);
+      } else {
+        var results = {'conditions': docs.Condition};
+        fullfill(results);
+      }
+    })
+  } )
+}
+
+
 module.exports = TreatmentPlanAccess
