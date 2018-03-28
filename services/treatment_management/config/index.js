@@ -10,6 +10,8 @@ module.exports = {
     returnCode: '/treatment_plan/api/returnCode',
     getPatientUserNames:'/treatment_plan/api/getPatientUserNames',
     getDiagnoses: '/treatment_plan/api/getDiagnoses',
+    createTreatmentMeter: '/treatment_plan/api/createTreatmentMeter',
+    createTreatmentChecklist: '/treatment_plan/api/createTreatmentChecklist',
     getSingleDiagnosis: '/treatment_plan/api/getSingleDiagnosis',
     getTreatmentMeter: '/treatment_plan/api/getTreatmentMeter',
     getSingleTreatmentmeter: '/treatment_plan/api/getSingleTreatmentmeter',
