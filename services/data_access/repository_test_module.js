@@ -56,7 +56,8 @@ app.get('/Treatment', function (req, res) {
     //Creates the Repository for the users
     var TreatmentAccess = new TreatmentRepo(db);
     var Treatment = new Treatments("HOW DO YOU DO?",10,"1/1/2010");
-    //TreatmentAccess.CreateTreatment("Lazer777",Treatment);
+
+    TreatmentAccess.CreateTreatment("Lazer777",Treatment);
     //TreatmentAccess.EditTreatment("Lazer777",Treatment);
     //TreatmentAccess.DeleteTreatment("Lazer777",Treatment);
     // TreatmentAccess.GetPatientTreatment("Lazer777").then(function(value)
@@ -98,11 +99,11 @@ app.get('/', function (req, res) {
                new security(9,"Answer")
     ]
     var role = new Patient('Lazer','Man','MPCODE777')
-    var newUser = new User('Lazer777',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
+    var newUser = new User.User('Lazer777',CryptoJS.HmacSHA256('Lazer',userSalt.salt).toString(),role,sQ,userSalt);
     //This saves a new Medical Professional into the database
-    //userAccessTool.Create(newUser);
+    userAccessTool.Create(newUser);
     //The code below resets a passwrod with that username
-    userAccessTool.ResetCredential('Lazer777','Lazer7777',"FK");
+    //userAccessTool.ResetCredential('Lazer777','Lazer7777',"FK");
 
     // This code finds any patient with that MPCODE777 (use data seed to check for functionality)
     // userAccessTool.FindPatient('MPCODE777').then(function(value){

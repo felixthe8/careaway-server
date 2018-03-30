@@ -62,7 +62,7 @@ api.getPatientUserNames= (UserRepo, DB) => (req,res) => {
        // Create an array to hold all patients of the medical professional
       var patientUserName = [];
         for (var p of value.patients) {
-          patientUserName.push({FirstName: p.accountType.firstName , UserName: p.username});
+          patientUserName.push({fullName: p.accountType.firstName + ' '+p.accountType.lastName, userName: p.username, diagnosis: p.accountType.diagnosis});
         }
         //send patient First Name and UserName
         res.json(patientUserName);
@@ -93,7 +93,7 @@ api.getSingleTreatmentmeter = (UserRepo,DB) => (req,res) => {
   })
 }
 // Returns all meter widget data for all patients associated with a medical professional
-api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
+api.getTreatmentMeter = (UserRepo,DB) => (req,res) => {
   // Medical professional code
   const mpCode = req.query.medicalcode;
   // Date range that will be used to retrieve information
@@ -117,7 +117,7 @@ api.getTreatmentmeter = (UserRepo,DB) => (req,res) => {
   })
 }
 
-api.getTreatmentchecklist = (UserRepo,DB) => (req,res) => {
+api.getTreatmentChecklist = (UserRepo,DB) => (req,res) => {
   // Medical professional code
   const mpCode = req.query.medicalcode;
   // Date range that will be used to retrieve information

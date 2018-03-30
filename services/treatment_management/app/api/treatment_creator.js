@@ -82,4 +82,14 @@ api.getDiagnosisList = (TreatmentRepo,DB) => (req,res) => {
 
 }
 
+
+api.getDiagnosisList = (TreatmentRepo, DB) => (req,res) => {
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.getDiagnosisList().then(function(value) {
+      // Response will be an array inside an object
+      res.send(value);
+    });
+  })
+}
 module.exports = api;

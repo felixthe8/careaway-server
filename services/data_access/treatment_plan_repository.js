@@ -129,7 +129,7 @@ TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis
 
 /**
  * Gets the diagnose(s) supported by the CareAway Treatment Planner
- * that they medical professional can choose from
+ * that they medical professional can choose from  
 */
 TreatmentPlanAccess.prototype.getDiagnosisList = function() {
   const collection = this.db.collection('Conditions');
@@ -145,5 +145,6 @@ TreatmentPlanAccess.prototype.getDiagnosisList = function() {
     })
   } )
 }
+
 
 module.exports = TreatmentPlanAccess

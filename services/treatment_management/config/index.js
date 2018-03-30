@@ -14,14 +14,14 @@ module.exports = {
     createTreatmentChecklist: '/treatment_plan/api/createTreatmentChecklist',
     deleteTreatment: '/treatment_plan/api/deleteTreatement',
     getSingleDiagnosis: '/treatment_plan/api/getSingleDiagnosis',
-    getTreatmentmeter: '/treatment_plan/api/getTreatmentmeter',
+    getTreatmentMeter: '/treatment_plan/api/getTreatmentMeter',
     getSingleTreatmentmeter: '/treatment_plan/api/getSingleTreatmentmeter',
-    getTreatmentchecklist: '/treatment_plan/api/getTreatmentchecklist',
+    getTreatmentChecklist: '/treatment_plan/api/getTreatmentChecklist',
     getSingleTreatmentchecklist: '/treatment_plan/api/getSingleTreatmentchecklist',
     treatmentBreach: 'http://localhost:4400/breach',
     queryWidgets: '/treatment_plan/api/widgets',
     patientUpdate: '/treatment_plan/api/patient_edit',
-    getDiagnosisList: '/treatment_plan/api/getDiagnosisList'
+    getDiagnosisList: '/treatment_plan/api/getDiagnosislist'
   },
   server: {
     port: 4400

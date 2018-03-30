@@ -8,7 +8,7 @@ module.exports = (app) => {
     app.route(config.routes.getSingleDiagnosis).get(api.getSingleDiagnosis(models.UserRepo, models.DB));
     app.route(config.routes.getPatientUserNames).get(api.getPatientUserNames(models.UserRepo, models.DB)); 
     app.route(config.routes.getSingleTreatmentmeter).get(api.getSingleTreatmentmeter(models.UserRepo, models.DB));   
-    app.route(config.routes.getTreatmentmeter).get(api.getTreatmentmeter(models.UserRepo, models.DB));
-    app.route(config.routes.getTreatmentchecklist).get(api.getTreatmentchecklist(models.UserRepo, models.DB));
+    app.route(config.routes.getTreatmentMeter).get(api.getTreatmentMeter(models.UserRepo, models.DB));
+    app.route(config.routes.getTreatmentChecklist).get(api.getTreatmentChecklist(models.UserRepo, models.DB));
     app.route(config.routes.getSingleTreatmentchecklist).get(api.getSingleTreatmentchecklist(models.UserRepo, models.DB));
 }
