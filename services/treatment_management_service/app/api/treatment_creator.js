@@ -7,19 +7,6 @@ api.create = () => (req, res) => {
 }
 
 // Returns the MP code of the medical professional
-// Function takes in a username as a parameter
-api.returnCode = (UserRepo,DB) => (req,res) => {
-  const username = req.query.username;
-  DB.then(database => {
-    var userRepo = new UserRepo(database);
-    userRepo.FindUser(username).then(
-      function(value){
-      res.json({medicalcode: value.User[0].accountType.medicalcode});
-    })
-  })
-}
-
-// Returns the MP code of the medical professional
 // Function takes in a meter as a parameter
 api.createTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
   var meter = {
@@ -101,6 +88,18 @@ api.getDiagnosisList = (TreatmentRepo, DB) => (req,res) => {
       // Response will be an array inside an object
       res.send(value);
     });
+  })
+}
+
+api.saveDiagnosis = (UserRepo, DB) => (req,res) => {
+  DB.then(database => {
+    // Extract the patient username and diagnosis
+    const patientUsername = req.body.username;
+    const patientDiagnosis = req.body.updatedDiagnosis;
+    var userRepo = new UserRepo(database);
+    // Update the patient diagnosis
+     userRepo.EditPatientDiagnosis(patientUsername, patientDiagnosis)
+     res.json({success: true});
   })
 }
 module.exports = api;

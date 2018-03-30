@@ -93,4 +93,10 @@ module.exports = (app) => {
       return `${config.routes.getSingleTreatmentchecklist}?username=${req.query.username}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`; 
     }
   }));
+
+  app.route('/saveDiagnosis').post(proxy(config.url.treatment, {
+    proxyReqPathResolver: function(req) {
+      return config.routes.saveDiagnosis;
+    }
+  }));
 }

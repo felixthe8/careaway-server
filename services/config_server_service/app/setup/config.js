@@ -59,6 +59,7 @@ config.routes = {
   getSingleTreatmentmeter: `${treatmentConfig.routes.getSingleTreatmentmeter}`,
   getTreatmentChecklist: `${treatmentConfig.routes.getTreatmentChecklist}`,
   getSingleTreatmentchecklist: `${treatmentConfig.routes.getSingleTreatmentchecklist}`,
+  saveDiagnosis: `${treatmentConfig.routes.saveDiagnosis}`
 };
 
 // All urls the config server uses to route to the correct module.
