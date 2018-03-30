@@ -63,7 +63,7 @@ api.deleteTreatment = (TreatmentRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.CreateTreatment(req.body.user, req.body.treatment);
+    treatmentRepo.DeleteTreatment(req.body.user, req.body.treatment);
     res.json({ success: true });
   })
 
