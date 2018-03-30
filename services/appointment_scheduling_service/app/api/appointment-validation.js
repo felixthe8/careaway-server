@@ -1,12 +1,12 @@
 const moment = require('moment');
-
+// TODO: Rename these functions
 /**
  * Tests whether the date and times of two appointments overlap.
  * @param {*} firstAppointment The first appointment object.
  * @param {*} secondAppointment The second appointment object.
  * @return {*} True if the two appointments do overlap, false if they don't.
  */
-const checkTimes = (firstAppointment, secondAppointment) => {
+const timesConflict = (firstAppointment, secondAppointment) => {
   // Construct moment objects for the existing appointment's times.
   const firstStartTime = moment(firstAppointment.startTime);
   const firstEndTime = moment(firstAppointment.endTime);
@@ -29,26 +29,16 @@ const checkTimes = (firstAppointment, secondAppointment) => {
 };
 
 // Validates whether or not the appointment conflicts with existing appointments.
-const creation_validate = (appointment, appointmentList) => {
+const validateCreate = (appointment, appointmentList) => {
   let valid = true;
   for(let i in appointmentList) {
     // Check if overlapping appointment times.
-    if(checkTimes(appointmentList[i], appointment)) {
+    if(timesConflict(appointmentList[i], appointment)) {
       // Invalid time.
       valid = false;
     }
   }
   return valid;
-};
-
-const isSame = (first, second) => {
-  const firstStart = moment(first.startTime);
-  const secondStart = moment(second.startTime);
-
-  const timesMatch = (firstStart).isSame(secondStart);
-  const initiatorsMatch = first.initiator === second.initiator;
-  const appointeesMatch = first.appointee === second.appointee;
-  return timesMatch && initiatorsMatch && appointeesMatch;
 };
 
 /**
@@ -57,13 +47,15 @@ const isSame = (first, second) => {
  * @param {*} newAppointment 
  * @param {*} appointmentList 
  */
-const validateModdedAppointment = (original, newAppointment, appointmentList) => {
+const validateModification = (appointments, appointmentList) => {
   let valid = true;
+  const newAppointment = appointments.modified;
+  const original = appointments.original;
   for(let i in appointmentList) {
     const match = isSame(appointmentList[i], original);
     if(!match) {
       // Check if overlapping appointment times.
-      if(checkTimes(appointmentList[i], newAppointment)) {
+      if(timesConflict(appointmentList[i], newAppointment)) {
         // Invalid time.
         valid = false;
       }
@@ -71,25 +63,17 @@ const validateModdedAppointment = (original, newAppointment, appointmentList) =>
   }
   return valid;
 };
-/**
- * Used to validate whether the appointment conflicts with both party's
- * existing appointments.
- * @param {*} repo The appointment repository.
- * @param {*} appointment The appointment object.
- * @param {*} initiator The username of the one who initiated this appointment.
- * @param {*} appointee The username of the person the intiator is requesting this appointment with.
- * @returns {*} a promise that returns if an appointment was created successfully
- */
-const validate_creation = (repo, appointment, initiator, appointee) => {
+
+const validate = (repo, appointment, initiator, appointee, validateFunction) => {
   return new Promise((fulfill, reject) => {
     // Gets all initiator's appointments. 
     repo.GetAppointment(initiator).then(initiatorResult => {
       // Validates no conflicting appointment times for initiator.
-      if(initiatorResult === null || creation_validate(appointment, initiatorResult.appointments)) {
+      if(initiatorResult === null || validateFunction(appointment, initiatorResult.appointments)) {
         // Gets all appointee's appointments.
         repo.GetAppointment(appointee).then(appointeeResult => {
           // Validates no conflicting appointment times for appointee.
-          if(appointeeResult === null || creation_validate(appointment, appointeeResult.appointments)) {
+          if(appointeeResult === null || validateFunction(appointment, appointeeResult.appointments)) {
             // No conflicting times.
             fulfill({success: true, reason: ""});
           } else {
@@ -107,29 +91,36 @@ const validate_creation = (repo, appointment, initiator, appointee) => {
   });
 };
 
-const validate_modification = (repo, initiator, appointee, originalAppointment, newAppointment) => {
+/**
+ * Helper function for validation. Passes in the correct validating function.
+ * Appointment modification.
+ * @param {*} repo 
+ * @param {*} appointments 
+ * @param {*} initiator 
+ * @param {*} appointee 
+ */
+const validate_modification = (repo, appointments, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
-    repo.GetAppointment(initiator).then(initiatorResult => {
-      // Validates no conflicting appointment times for initiator.
-      if(validateModdedAppointment(originalAppointment, newAppointment, initiatorResult.appointments)) {
-        // Gets all appointee's appointments.
-        repo.GetAppointment(appointee).then(appointeeResult => {
-          // Validates no conflicting appointment times for appointee.
-          if(validateModdedAppointment(originalAppointment, newAppointment, appointeeResult.appointments)) {
-            // No conflicting times.
-            fulfill({success: true, reason: ""});
-          } else {
-            console.log("Error appointment time unavailable for appointee.");
-            fulfill({success: false, reason: "Appointment time conflicts with the appointee's existing appointment."});
-          }
-        });
-      } else {
-        console.log("Error appointment time unavailable for initiator.");
-        fulfill({success: false, reason: "Appointment time conflicts with your existing appointment."});
-      }
-    }).catch(error => {
-      console.log(error);
+    validate(repo, appointments, initiator, appointee, validateModification).then(result => {
+      fulfill(result);
     });
   });
-};
+}
+
+/**
+ * Helper function for validation. Passes in the correct validation function.
+ * Create appointment.
+ * @param {*} repo 
+ * @param {*} appointment 
+ * @param {*} initiator 
+ * @param {*} appointee 
+ */
+const validate_creation = (repo, appointment, initiator, appointee) => {
+  return new Promise((fulfill, reject) => {
+    validate(repo, appointment, initiator, appointee, validateCreate).then(result => {
+      fulfill(result);
+    });
+  });
+}
+
 module.exports = {validate_creation, validate_modification};
