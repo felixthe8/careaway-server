@@ -4,24 +4,24 @@ const config = require('@configServer/app/setup/config.js');
 
 
 module.exports = (app) => {
-  app.use('/createTreatment', CsrfValidation, proxy(config.url.treatment, {
+  app.route('/createTreatment').post(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return config.routes.createTreatment;
     }
   }));
 
-  app.use('/deleteTreatment', CsrfValidation, proxy(config.url.treatment, {
+  app.route('/deleteTreatment').post(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return config.routes.deleteTreatment;
     }
   }));
   
-  app.use('/getTreatment', CsrfValidation, proxy(config.url.treatment, {
+  app.route('/getTreatment').get(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getTreatment}${req._parsedOriginalUrl.search}`;
     }
   }));
-  
+
   app.route('/createTreatmentMeter').post(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return config.routes.createTreatmentMeter;
