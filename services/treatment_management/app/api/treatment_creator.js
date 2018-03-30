@@ -59,7 +59,6 @@ api.createTreatmentChecklist = (UserRepo,DB) => (req,res) => {
 
 }
 
-
 api.getDiagnosisList = (TreatmentRepo, DB) => (req,res) => {
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
@@ -67,6 +66,18 @@ api.getDiagnosisList = (TreatmentRepo, DB) => (req,res) => {
       // Response will be an array inside an object
       res.send(value);
     });
+  })
+}
+
+api.saveDiagnosis = (UserRepo, DB) => (req,res) => {
+  DB.then(database => {
+    // Extract the patient username and diagnosis
+    const patientUsername = req.body.username;
+    const patientDiagnosis = req.body.updatedDiagnosis;
+    var userRepo = new UserRepo(database);
+    // Update the patient diagnosis
+     userRepo.EditPatientDiagnosis(patientUsername, patientDiagnosis)
+     res.json({success: true});
   })
 }
 module.exports = api;

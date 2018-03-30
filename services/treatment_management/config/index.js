@@ -20,7 +20,8 @@ module.exports = {
     treatmentBreach: 'http://localhost:4400/breach',
     queryWidgets: '/treatment_plan/api/widgets',
     patientUpdate: '/treatment_plan/api/patient_edit',
-    getDiagnosisList: '/treatment_plan/api/getDiagnosislist'
+    getDiagnosisList: '/treatment_plan/api/getDiagnosislist',
+    saveDiagnosis: '/treatment_plan/api/saveDiagnosis'
   },
   server: {
     port: 4400

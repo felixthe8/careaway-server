@@ -55,7 +55,7 @@ UserAccess.prototype.EditPatientDiagnosis= function(username,diagnosis){
   const collection = this.db.collection('Users');
   collection.updateOne(
     {'username' : username},//looks for username in the database
-    { $set: {'accountType.diagnosis ': diagnosis}},//inserts new password 
+    { $set: {'accountType.diagnosis': diagnosis}},//inserts new diagnosis
     function(err, result){
       console.log('Updated Diagnosis');
     }
