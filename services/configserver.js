@@ -291,6 +291,12 @@ app.use('/getDiagnoses',CsrfValidation, proxy(config.url.treatment, {
   }
 }));
 
+app.use('/createTreatment', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.createTreatment;
+  }
+}));
+
 app.use('/createTreatmentMeter', CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createTreatmentMeter;
@@ -303,6 +309,18 @@ app.use('/createTreatmentChecklist', CsrfValidation, proxy(config.url.treatment,
   }
 }));
 
+app.use('/deleteTreatment', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.deleteTreatment;
+  }
+}));
+
+app.use('/getTreatment', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return `${config.routes.getTreatment}${req._parsedOriginalUrl.search}`;
+  }
+}));
+
 app.use('/getSingleDiagnosis', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return `${config.routes.getSingleDiagnosis}?username=${req.query.username}&medicalcode=${req.query.medicalcode}&startDate=${req.query.startDate}&finalDate=${req.query.finalDate}`;
@@ -311,7 +329,7 @@ app.use('/getSingleDiagnosis', CsrfValidation,proxy(config.url.treatment, {
 
 app.use('/getTreatmentMeter',CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentMeter}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getTreatmentMeter}${req._parsedOriginalUrl.search}`;
   }
 }));
 
@@ -329,7 +347,7 @@ app.use('/updatePatientTreatment',CsrfValidation, proxy(config.url.treatment, {
 
 app.use('/getDiagnosisList', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getDiagnosisList}`; 
+    return `${config.routes.getDiagnosisList}`;
   }
 }));
 
@@ -347,7 +365,7 @@ app.use('/getPatientUserNames', CsrfValidation,proxy(config.url.treatment, {
 
 app.use('/getTreatmentChecklist', CsrfValidation,proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return `${config.routes.getTreatmentChecklist}${req._parsedOriginalUrl.search}`; 
+    return `${config.routes.getTreatmentChecklist}${req._parsedOriginalUrl.search}`;
   }
 }));
 
