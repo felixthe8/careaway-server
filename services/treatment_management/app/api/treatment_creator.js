@@ -44,9 +44,9 @@ api.createTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
 // Function takes in a meter as a parameter
 api.createTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
   var checklist = {
-      label: req.query.label,
-      list: req.query.list,
-      due_date: req.query.due_date,
+      label: req.body.label,
+      list: req.body.list,
+      due_date: req.body.due_date,
       created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
       updated_at: null
   }
@@ -54,6 +54,17 @@ api.createTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
     treatmentRepo.CreateTreatment(req.body.user, checklist);
+
+    res.json({ success: true });
+  })
+
+}
+
+api.deleteTreatment = (TreatmentRepo,DB) => (req,res) => {
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.CreateTreatment(req.body.user, req.body.treatment);
     res.json({ success: true });
   })
 

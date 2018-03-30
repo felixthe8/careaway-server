@@ -291,9 +291,15 @@ app.use('/getDiagnoses',CsrfValidation, proxy(config.url.treatment, {
   }
 }));
 
-app.use('/createTreatmentMeter', CsrfValidation, proxy(config.url.treatment, {
+app.use('/createTreatment', CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return config.routes.createTreatmentMeter;
+    return config.routes.createTreatment;
+  }
+}));
+
+app.use('/deleteTreatment', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.deleteTreatment;
   }
 }));
 

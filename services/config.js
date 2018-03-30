@@ -48,6 +48,7 @@ config.routes = {
 
   createTreatmentMeter : `${treatmentConfig.routes.createTreatmentMeter}`,
   createTreatmentChecklist : `${treatmentConfig.routes.createTreatmentChecklist}`,
+  deleteTreatment : `${treatmentConfig.routes.deleteTreatment}`,
 
   appointmentBreach: `${appointmentConfig.routes.appointmentBreach}`,
 
