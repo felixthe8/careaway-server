@@ -1,4 +1,4 @@
-const validator = require('./test');
+const validator = require('./appointment-validation');
 const api = {};
 
 /**
