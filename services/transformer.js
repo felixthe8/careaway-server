@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-var tokenRepository = require('./data_access/token_repository');
+var tokenRepository = require('@dataAccess/token_repository');
 /**
  * This is the constructor for the Transform Class
  * This will hold any logic to transform any message received to the 
