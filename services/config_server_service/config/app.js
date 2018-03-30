@@ -74,7 +74,7 @@ app.get('/isBreached', csrf.createCSRFToken, function(req,res) {
   res.send({ down : false, 'csrfToken' : req.csrfToken }); // ? Shouldn't this send breached? res.send({down:breached})
 });
 
-app.use(csrf.CsrfValidation);
+
 
 app.use('/breach', function (req,res){   
   // Create System admin from response

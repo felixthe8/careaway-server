@@ -7,6 +7,19 @@ const url = config.url.account;
  * @param {*} app 
  */
 module.exports = (app) => {
+  app.route('/Sso/Registration').post(proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.ssoRegistration;
+    }
+  }));
+
+  app.route('/Sso/ResetPassword').put(proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.ssoResetPassword;
+    }
+  }));
+    
+  app.use(csrf.CsrfValidation);
   // TODO: refactor registration in passport
   // Proxies POST request to register a patient the account management module. 
   // localhost:4100/account/api/registration
@@ -22,24 +35,14 @@ module.exports = (app) => {
       return config.routes.login;
     }
   }));
-  
-  app.route('/Sso/Registration').post(proxy(url, {
-    proxyReqPathResolver: function() {
-      return config.routes.ssoRegistration;
-    }
-  }));
-  
+
   app.route('/Sso/Login').post(csrf.createCSRFToken, proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.ssoLogin;
     }
   }));
   
-  app.route('/Sso/ResetPassword').put(proxy(url, {
-    proxyReqPathResolver: function() {
-      return config.routes.ssoResetPassword;
-    }
-  }));
+
 
 
   

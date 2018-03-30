@@ -1,9 +1,11 @@
-
 const proxy = require('express-http-proxy');
 const config = require('@configServer/app/setup/config.js');
+const csrf = require('@configServerAPI/csrfMiddleware');
 
 
 module.exports = (app) => {
+    
+  app.use(csrf.CsrfValidation);
   app.route('/createTreatment').post(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return config.routes.createTreatment;
