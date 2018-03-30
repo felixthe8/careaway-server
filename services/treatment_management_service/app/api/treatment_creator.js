@@ -21,20 +21,20 @@ api.returnCode = (UserRepo,DB) => (req,res) => {
 
 // Returns the MP code of the medical professional
 // Function takes in a meter as a parameter
-api.createTreatmentMeter = (UserRepo,DB) => (req,res) => {
+api.createTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
   var meter = {
-      label: req.query.label,
-      question: req.query.question,
-      scale: req.query.scale,
-      due_date: req.query.due_date,
+      label: req.body.label,
+      question: req.body.question,
+      scale: req.body.scale,
+      due_date: req.body.due_date,
       patient_input: null,
       created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
       updated_at: null
   }
 
   DB.then(database => {
-    var userRepo = new UserRepo(database);
-    userRepo.CreateTreatment(meter);
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.CreateTreatment(req.body.user, meter);
     res.json({ success: true });
   })
 
@@ -42,18 +42,52 @@ api.createTreatmentMeter = (UserRepo,DB) => (req,res) => {
 
 // Returns the MP code of the medical professional
 // Function takes in a meter as a parameter
-api.createTreatmentChecklist = (UserRepo,DB) => (req,res) => {
+api.createTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
   var checklist = {
-      label: req.query.label,
-      list: req.query.list,
-      due_date: req.query.due_date,
+      label: req.body.label,
+      list: req.body.list,
+      due_date: req.body.due_date,
       created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
       updated_at: null
   }
 
   DB.then(database => {
-    var userRepo = new UserRepo(database);
-    userRepo.CreateTreatment(checklist);
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.CreateTreatment(req.body.user, checklist);
+    res.json({ success: true });
+  })
+
+}
+
+api.deleteTreatment = (TreatmentRepo,DB) => (req,res) => {
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.DeleteTreatment(req.body.user, req.body.treatment);
+    res.json({ success: true });
+  })
+
+}
+
+api.getTreatment = (TreatmentRepo,DB) => (req,res) => {
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.getPatientTreatment(req.query.username).then(result => {
+      res.json(result);
+    });
+  })
+
+}
+
+api.getDiagnosisList = (TreatmentRepo,DB) => (req,res) => {
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.getDiagnosisList().then(function(value) {
+      // Response will be an array inside an object
+      res.send(value);
+    });
     res.json({ success: true });
   })
 

@@ -42,8 +42,12 @@ config.routes = {
   // Treatment routes.
   createTreatment : `${treatmentConfig.routes.create}`,
   updateTreatment : `${treatmentConfig.routes.update}`,
+  deleteTreatment : `${treatmentConfig.routes.deleteTreatment}`,
+  getTreatment : `${treatmentConfig.routes.getTreatment}`,
+  
   createTreatmentMeter : `${treatmentConfig.routes.createTreatmentMeter}`,
   createTreatmentChecklist : `${treatmentConfig.routes.createTreatmentChecklist}`,
+  
   getDiagnosisList: `${treatmentConfig.routes.getDiagnosisList}`,
   patientUpdate: `${treatmentConfig.routes.patientUpdate}`,
   queryWidgets: `${treatmentConfig.routes.queryWidgets}`,
