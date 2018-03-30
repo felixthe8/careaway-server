@@ -13,6 +13,7 @@ module.exports = {
     createTreatmentMeter: '/treatment_plan/api/createTreatmentMeter',
     createTreatmentChecklist: '/treatment_plan/api/createTreatmentChecklist',
     deleteTreatment: '/treatment_plan/api/deleteTreatement',
+    getTreatment: '/treatment_plan/api/getTreatment',
     getSingleDiagnosis: '/treatment_plan/api/getSingleDiagnosis',
     getTreatmentMeter: '/treatment_plan/api/getTreatmentMeter',
     getSingleTreatmentmeter: '/treatment_plan/api/getSingleTreatmentmeter',

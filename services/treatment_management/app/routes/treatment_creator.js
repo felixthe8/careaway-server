@@ -11,4 +11,5 @@ module.exports = (app) => {
   app.route(config.routes.createTreatmentMeter).get(api.createTreatmentMeter(models.TreatmentRepo, models.DB));
   app.route(config.routes.createTreatmentChecklist).get(api.createTreatmentChecklist(models.TreatmentRepo, models.DB));
   app.route(config.routes.deleteTreatment).get(api.deleteTreatment(models.TreatmentRepo, models.DB));
+  app.route(config.routes.getTreatment).get(api.getTreatment(models.TreatmentRepo, models.DB));
 }

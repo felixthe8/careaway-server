@@ -69,13 +69,24 @@ api.deleteTreatment = (TreatmentRepo,DB) => (req,res) => {
 
 }
 
+api.getTreatment = (TreatmentRepo,DB) => (req,res) => {
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.getPatientTreatment(req.query.username).then(result => {
+      res.json(result);
+    });
+  })
+
+}
+
 api.getDiagnosisList = (TreatmentRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
     treatmentRepo.getDiagnosisList().then(function(value) {
-        // Response will be an array inside an object
-        res.send(value);
+      // Response will be an array inside an object
+      res.send(value);
     });
     res.json({ success: true });
   })
