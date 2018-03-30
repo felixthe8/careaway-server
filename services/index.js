@@ -1,28 +1,25 @@
 require('module-alias/register');
-var path = require('path');
 const http = require('http');
-const httpProxy = require('http-proxy');
-const httpProxyRules = require('http-proxy-rules');
 
-// APIs
-const accountAPI = require('@accountAPI');
-const appointmentAPI = require('@appointmentAPI');
-const treatmentAPI = require('@treatmentAPI');
+// The individual service apps (modules).
+const accountAPP = require('@accountAPP');
+const appointmentAPP = require('@appointmentAPP');
+const treatmentAPP = require('@treatmentAPP');
 
-// Configuration files
+// Configuration files for each service.
 const accountConfig = require('@accountConfig');
 const appointmentConfig = require('@appointmentConfig');
 const treatmentConfig = require('@treatmentConfig');
 
-// Server ports
+// Server ports for each service.
 const accountPORT = accountConfig.server.port;
 const appointmentPORT = appointmentConfig.server.port;
 const treatmentPORT = treatmentConfig.server.port;
 
-// Creating the servers
-const accountServer = http.Server(accountAPI);
-const appointmentServer = http.Server(appointmentAPI);
-const treatmentServer = http.Server(treatmentAPI);
+// Creating the servers for each service.
+const accountServer = http.Server(accountAPP);
+const appointmentServer = http.Server(appointmentAPP);
+const treatmentServer = http.Server(treatmentAPP);
 
 // Starting the account manager server 
 accountServer.listen(accountPORT, () => {
@@ -40,18 +37,19 @@ treatmentServer.listen(treatmentPORT, () => {
 });
 
 // Configuration server.
-const configServer = require('./configserver');
+const configServer = require('@configServerAPP');
 // Configuration for configuration server.
-const config = require('./config');
+const config = require('@configServerConfig');
 
 // Create the configuration server.
 const server = http.Server(configServer);
 
 // Start the proxy server.
 server.listen(config.server.port, () => {
-  console.log(`Config server running on  port ${config.server.port}`);
+  console.log(`Config server running on port ${config.server.port}`);
 });
 
+// Do we still need this???
 // Listens for a breach request to shut down all servers.
 server.on('request', (req, res) => {
  
