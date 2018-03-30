@@ -54,7 +54,6 @@ api.createTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
     treatmentRepo.CreateTreatment(req.body.user, checklist);
-
     res.json({ success: true });
   })
 

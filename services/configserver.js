@@ -297,15 +297,21 @@ app.use('/createTreatment', CsrfValidation, proxy(config.url.treatment, {
   }
 }));
 
-app.use('/deleteTreatment', CsrfValidation, proxy(config.url.treatment, {
+app.use('/createTreatmentMeter', CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
-    return config.routes.deleteTreatment;
+    return config.routes.createTreatmentMeter;
   }
 }));
 
 app.use('/createTreatmentChecklist', CsrfValidation, proxy(config.url.treatment, {
   proxyReqPathResolver: function(req) {
     return config.routes.createTreatmentChecklist;
+  }
+}));
+
+app.use('/deleteTreatment', CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.deleteTreatment;
   }
 }));
 
