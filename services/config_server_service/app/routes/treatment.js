@@ -96,7 +96,7 @@ module.exports = (app) => {
     }
   }));
 
-  app.route('/saveDiagnosis').post(proxy(config.url.treatment, {
+  app.route('/saveDiagnosis').put(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return config.routes.saveDiagnosis;
     }

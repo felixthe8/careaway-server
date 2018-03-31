@@ -375,4 +375,12 @@ app.use('/getSingleTreatmentchecklist', CsrfValidation,proxy(config.url.treatmen
   }
 }));
 
+app.use('/saveDiagnosis',CsrfValidation, proxy(config.url.treatment, {
+  proxyReqPathResolver: function(req) {
+    return config.routes.saveDiagnosis;
+  }
+}));
+
+
+
 module.exports = app;
