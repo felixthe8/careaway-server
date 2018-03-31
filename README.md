@@ -20,39 +20,61 @@ Currently in the package.json:
 * promise
 * mongodb
 * consign
+* crypto-js
+* csurf
+* csrf
+* moment
+* passport
+* passport-local
+
 ## Module Aliases
 #### Description
 The `module-alias` library allows the following aliases to be used throughout the files on the server. It encapsulates the routes to each of these locations within the server to make the importing files both cleaner and less error-prone.
 `@root` .
 
 #### Account API
-| Alias           | Route                                             | 
-| :-------------: |---------------------------------------------------| 
-| `@account`      | ./services/account_management                     | 
-| `@accountModels`| ./services/account_management/app/models          |
-| `@accountConfig`| ./services/account_management/config/index.js     |
-| `@accountAPI`   | ./services/account_management/config/app.js       |
+| Alias           | Route                                                     | 
+| :-------------: |-----------------------------------------------------------| 
+| `@account`      | ./services/account_management_service                     | 
+| `@accountModels`| ./services/account_management_service/app/setup           |
+| `@accountConfig`| ./services/account_management_service/config/index.js     |
+| `@accountAPI`   | ./services/account_management_service/app/api             |
+| `@accountAPP`   | ./services/account_management_service/config/app.js       |
+
 
 #### Appointment API
-| Alias                | Route                                                 | 
-| :-------------------:|-------------------------------------------------------| 
-| `@appointment`       | ./services/appointment_scheduling                     |
-| `@appointmentModels` | ./services/appointment_scheduling/app/models          |
-| `@appointmentConfig` | ./services/appointment_scheduling/config/index.js     |
-| `@appointmentAPI`    | ./services/appointment_scheduling/config/app.js       |
+| Alias                | Route                                                     | 
+| :-------------------:|-----------------------------------------------------------| 
+| `@appointment`       | ./services/appointment_scheduling_service                 |
+| `@appointmentModels` | ./services/appointment_scheduling_service/app/setup       |
+| `@appointmentConfig` | ./services/appointment_scheduling_service/config/index.js |
+| `@appointmentAPI`    | ./services/appointment_scheduling_service/app/api         |
+| `@appointmentAPI`    | ./services/appointment_scheduling_service/config/app.js   |
 
 
 
 #### Treatment Plan API
-| Alias             | Route                                            | 
-| :---------------: |--------------------------------------------------| 
-| `@treatment`      | ./services/treatment_management                  |
-| `@treatmentModels`| ./services/treatment_management/app/models       |
-| `@treatmentConfig`| ./services/treatment_management/config/index.js  |
-| `@treatmentAPI`   | ./services/treatment_management/config/app.js    |
+| Alias             | Route                                                    | 
+| :---------------: |----------------------------------------------------------| 
+| `@treatment`      | ./services/treatment_management_service                  |
+| `@treatmentModels`| ./services/treatment_management_service/app/setup        |
+| `@treatmentConfig`| ./services/treatment_management_service/config/index.js  |
+| `@treatmentAPI`   | ./services/treatment_management_service/app/api          |
+| `@treatmentAPP`   | ./services/treatment_management_service/config/app.js    |
 
 
 
+#### Config Server API
+| Alias                | Route                                                | 
+| :------------------: |------------------------------------------------------| 
+| `@configServer`      | ./services/config_server_service                     | 
+| `@configServerConfig`| ./services/config_server_service/config/index.js     |
+| `@configServerAPI`   | ./services/config_server_service/app/api             |
+| `@configServerAPP`   | ./services/config_server_service/config/app.js       |
 
 
-
+#### Miscellaneous Aliases
+| Alias              | Route          | 
+| :----------------: |----------------| 
+| `@models`          | ./models       | 
+| `@dataAccess`      | ./data_access  | 
