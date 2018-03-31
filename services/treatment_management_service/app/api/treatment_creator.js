@@ -64,22 +64,7 @@ api.getTreatment = (TreatmentRepo,DB) => (req,res) => {
       res.json(result);
     });
   })
-
 }
-
-api.getDiagnosisList = (TreatmentRepo,DB) => (req,res) => {
-
-  DB.then(database => {
-    var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.getDiagnosisList().then(function(value) {
-      // Response will be an array inside an object
-      res.send(value);
-    });
-    res.json({ success: true });
-  })
-
-}
-
 
 api.getDiagnosisList = (TreatmentRepo, DB) => (req,res) => {
   DB.then(database => {
