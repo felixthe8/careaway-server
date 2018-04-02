@@ -60,7 +60,7 @@ api.getTreatment = (TreatmentRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.getPatientTreatment(req.query.username).then(result => {
+    treatmentRepo.GetPatientTreatment(req.query.username).then(result => {
       res.json(result);
     });
   })
