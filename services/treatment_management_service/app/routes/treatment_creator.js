@@ -7,7 +7,7 @@ module.exports = (app) => {
 
   app.route(config.routes.createTreatmentMeter).post(api.createTreatmentMeter(models.TreatmentRepo, models.DB));
   app.route(config.routes.createTreatmentChecklist).post(api.createTreatmentChecklist(models.TreatmentRepo, models.DB));
-  app.route(config.routes.deleteTreatment).get(api.deleteTreatment(models.TreatmentRepo, models.DB));
+  app.route(config.routes.deleteTreatment).post(api.deleteTreatment(models.TreatmentRepo, models.DB));
   app.route(config.routes.getTreatment).get(api.getTreatment(models.TreatmentRepo, models.DB));
   app.route(config.routes.saveDiagnosis).put(api.saveDiagnosis(models.UserRepo, models.DB));
 }
