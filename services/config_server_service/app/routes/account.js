@@ -18,7 +18,20 @@ module.exports = (app) => {
       return config.routes.ssoResetPassword;
     }
   }));
+
+  app.route('/Sso/Login').post(csrf.createCSRFToken, proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.ssoLogin;
+    }
+  }));
     
+  app.route('/getLoginInfo').get(csrf.createCSRFToken,proxy(url, {
+    proxyReqPathResolver: function(req) {
+      return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`; 
+    }
+  }));
+
+
   app.use(csrf.CsrfValidation);
   // TODO: refactor registration in passport
   // Proxies POST request to register a patient the account management module. 
@@ -36,22 +49,10 @@ module.exports = (app) => {
     }
   }));
 
-  app.route('/Sso/Login').post(csrf.createCSRFToken, proxy(url, {
-    proxyReqPathResolver: function() {
-      return config.routes.ssoLogin;
-    }
-  }));
-  
-
 
 
   
-  app.route('/ssoRegisterPatient').post(proxy(url, {
-    proxyReqPathResolver: function() {
-      return config.routes.ssoRegisterPatient;
-    }
-  }));
-  
+
   app.route('/validate-username').post(proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.validateUsername;
@@ -104,12 +105,7 @@ module.exports = (app) => {
       return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`
     }
   }));
-  // What is this again?
-  app.route('/getLoginInfo').get(proxy(url, {
-    proxyReqPathResolver: function(req) {
-      return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`; 
-    }
-  }));
+
 
   // Shouldn't this be in user management????
   app.route('/returnCode').get(proxy(url, {
