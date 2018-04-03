@@ -18,7 +18,7 @@ module.exports = {
     getSingleTreatmentmeter: '/treatment_plan/api/getSingleTreatmentmeter',
     getTreatmentChecklist: '/treatment_plan/api/getTreatmentChecklist',
     getSingleTreatmentchecklist: '/treatment_plan/api/getSingleTreatmentchecklist',
-    treatmentBreach: 'http://localhost:4400/breach', // Why is this the full url?
+    treatmentBreach: 'http://localhost:4400/breach', 
     queryWidgets: '/treatment_plan/api/widgets',
     patientUpdate: '/treatment_plan/api/patient_edit',
     getDiagnosisList: '/treatment_plan/api/getDiagnosislist',
