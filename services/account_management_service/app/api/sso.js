@@ -21,22 +21,19 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
-      if(value.username){
-        var username = value.username;
-        var password = value.password;
-        var roleType = value.roleType;
+      if(value.username && value.password && value.roleType){
         // If the message was decoded successfully check if the username already exist in our system
-        userRepo.FindUser(value.username).then(function(value){
+        userRepo.FindUser(value.username).then(function(query){
           // Checks if the user does exist within our system
-          if(value.User.length === 0){
+          if(query.User.length === 0){
             // If the user is new begin making a new salt and save the password and username into the database
             var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
             // use value.password than saving it to a variable
-            var passHashed = CryptoJS.HmacSHA256(password, saltStrPass).toString();
+            var passHashed = CryptoJS.HmacSHA256(value.password, saltStrPass).toString();
             // Saves all salt to an object
             var identifier = new Salt(saltStrPass);
             // Generates a new user using the received username and password from sso
-            var newUser = new User.User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
+            var newUser = new User.User(value.username, passHashed, {'role': 'SSO', 'roleType': value.roleType}, {}, identifier);
             userRepo.Create(newUser);
             // Return success message
             res.json({success: true});           
@@ -72,29 +69,22 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
-      if(value.err){
-        res.status(401); // Return a 401 bad request back to the sender
-        res.end();
-      } else {
-        var username = value.username;
-        var password = value.password;
-        userRepo.FindUser(username).then(function(value){
+      if(value.username && value.password){
+        userRepo.FindUser(value.username).then(function(query){
           // Gets the users queried for from the username
-          var queriedUser = value.User;
+          var queriedUser = query.User;
           // Checks if a user was found
-          if (queriedUser.length === 0) {
-            // User was not found
-            res.status(401);
-            res.end();
-          } else {
+          if (queriedUser.length > 0) {
+            console.log("HUH");
             // User was found
             var user = queriedUser[0];
             var salt = user.identifier.salt;
             // Hash password from request and compare with hashed password in db
-            const passHashed = CryptoJS.HmacSHA256(password,salt).toString();
+            const passHashed = CryptoJS.HmacSHA256(value.password, salt).toString();
             // Checks if password matches with that in the database
             if (passHashed === user.password) {
-              var loginInfo = transformer.createToken(username);
+              console.log("HUH?!");
+              var loginInfo = transformer.createToken(value.username);
               if(user.accountType.role === "medical-professional"){
                 res.writeHead(301,
                   {Location: 'http://localhost:8081/MedicHome/'+ "?jwt="+loginInfo}
@@ -123,8 +113,15 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
               res.status(401);
               res.end();
             }
+          } else {
+            // User was not found
+            res.status(401);
+            res.end();            
           }
         });
+      } else {
+        res.status(401); // Return a 401 bad request back to the sender
+        res.end();
       }
     });
   });
@@ -146,20 +143,18 @@ api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
-      if(value.username) {
-        var username = value.username;
-        var password = value.password;
+      if(value.username && value.password) {
         // Finds the existing user in the database
-        userRepo.FindUser(username).then(function(value){
-          var queriedUser = value.User;
+        userRepo.FindUser(value.username).then(function(query){
+          var queriedUser = query.User;
           if (queriedUser.length > 0) {
             var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
-            var passHashed = CryptoJS.HmacSHA256(password, saltStrPass).toString();
+            var passHashed = CryptoJS.HmacSHA256(value.password, saltStrPass).toString();
             // Update db with new hashed password and salt
-            userRepo.ResetCredential(username,passHashed,saltStrPass);
+            userRepo.ResetCredential(value.username, passHashed, saltStrPass);
             res.json({success: true});
           } else {
-            // User does not exist return an error
+            // User does not exist return an error or token didn't have all information
             res.status(401);
             res.end();            
           }
@@ -188,8 +183,7 @@ api.getLoginInfo = (UserRepo, DB,Transformer) => (req, res) => {
     var transformer = new Transformer(database);
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
-      var username = value.username;
-      userRepo.FindUser(username).then(function(value){
+      userRepo.FindUser(value.username).then(function(value){
         var user = value.User[0];       
         const obj = {csrfToken : req.query.csrfToken, username : user.username, role : user.accountType.role, 'cookie': user._id};
         res.json(obj);
