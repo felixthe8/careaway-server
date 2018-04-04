@@ -32,15 +32,8 @@ api.login = (passport) => (req, res, next) => {
 }
 
 //This finds if the username inputted exist within the system
-api.validateUsername = (UserRepo, DB, passport) => (req, res) => {
-  //TESTING: can I call passport.verifyUser here?
-  passport.verifyUsername('random').then(response => {
-    if(response.exists) {
-      console.log("Yes")
-    } else {
-      console.log("No");
-    }
-  })
+api.validateUsername = (UserRepo, DB) => (req, res) => {
+
   // grab username form body
   const username = req.body.username;
 
