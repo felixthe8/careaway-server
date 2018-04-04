@@ -120,13 +120,9 @@ api.ssoRegisterMed = (User, Security, Salt,MedicalProfessional, UserRepo, DB) =>
       userRepo.FindUser(username).then(
         function(value){
           var newUser = User.createGenericUser(Security, Salt, req.body);
-          console.log("HERE");
           var accountType = new MedicalProfessional(firstName,lastName,medicalCode);
-          console.log("HERE2");
           var security = newUser.security;
-          console.log("HERE3");
           var identifier = newUser.identifier;
-          console.log("HERE4");
           identifier.salt = value.User[0].identifier.salt;
           console.log(identifier);
           // update db with new hashed account type

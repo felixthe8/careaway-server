@@ -9,6 +9,7 @@ function Database(){}
  * Databaseit returns a fucntion in order to ensure the
  * connection to the database before proceeding to the next
  * operation
+ * @returns {*} database connection string
  */
 Database.prototype.Connect = function()
 {
@@ -26,12 +27,12 @@ Database.prototype.Connect = function()
         }
         //return the connection
         else{
-          fulfill(db) 
+          fulfill(db);
         }
       }
-    )
+    );
   });
-}
+};
 
 
 

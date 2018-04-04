@@ -24,6 +24,21 @@ TokenAccess.prototype.addToken = function(token){
   });
 };
 /**
+ * This saves a bad token into a seperate list of bad tokens
+ * @param {*} token the bad token received
+ */
+TokenAccess.prototype.addBadToken = function(token){
+  const collection = this.db.collection('BadJsonWebTokens');
+  collection.insertOne({"token":token}, function(err, result)
+  {
+    if(err){
+      console.log(err); 
+    } else{
+      console.log('Inserted Json Web Token');
+    }
+  });
+};
+/**
  * This function finds all existing JWT in the database,
  * and returns it as an object if found
  * @returns {*} the array of Json Web Tokens

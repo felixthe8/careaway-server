@@ -15,30 +15,23 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
   // The message received from the third party service
   var token = req.headers.token;
   DB.then(database => {
-    var userRepo = new UserRepo(database);
+    const userRepo = new UserRepo(database);
     // Transfomer for the message received
-    var transformer = new Transformer(database);
+    const transformer = new Transformer(database);
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
-      if(value.err){
-        console.log(value.err);
-        res.status(400); // Return a 400 bad request back to the sender
-        res.json({'err': value});
-      } else {
+      if(value.username){
         var username = value.username;
         var password = value.password;
         var roleType = value.roleType;
         // If the message was decoded successfully check if the username already exist in our system
         userRepo.FindUser(value.username).then(function(value){
           // Checks if the user does exist within our system
-          if(value.User.length > 0){
-            console.log('User already exist in our system');
-            res.status(400);
-            res.json({'err' : 'User already exist'});
-          } else {
+          if(value.User.length === 0){
             // If the user is new begin making a new salt and save the password and username into the database
             var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
+            // use value.password than saving it to a variable
             var passHashed = CryptoJS.HmacSHA256(password, saltStrPass).toString();
             // Saves all salt to an object
             var identifier = new Salt(saltStrPass);
@@ -46,9 +39,16 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
             var newUser = new User.User(username,passHashed, {'role': 'SSO', 'roleType': roleType}, {} ,identifier);
             userRepo.Create(newUser);
             // Return success message
-            res.json({success: true});
+            res.json({success: true});           
+          } else {
+            res.status(401);
+            res.end();
           }
         });
+      } else {
+        // make this a variable at the end
+        res.status(401); // Return a 401 bad request back to the sender
+        res.end();
       }
     });
   });
@@ -64,8 +64,6 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
 api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
   // var token = req.headers.token;
-  //var obj = Object.keys(req.body)[0];
-  //var token = JSON.parse(req.body);
   var token = req.body.token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
@@ -75,9 +73,8 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
       if(value.err){
-        console.log(value.err);
-        res.status(400); // Return a 400 bad request back to the sender
-        res.json({'err': value});
+        res.status(401); // Return a 401 bad request back to the sender
+        res.end();
       } else {
         var username = value.username;
         var password = value.password;
@@ -87,8 +84,8 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
           // Checks if a user was found
           if (queriedUser.length === 0) {
             // User was not found
-            res.status(400)
-            res.json({error: 'User does not exist.'});
+            res.status(401);
+            res.end();
           } else {
             // User was found
             var user = queriedUser[0];
@@ -123,8 +120,8 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
                 res.end();
               }
             } else {
-              res.status(400);
-              res.json({error: 'Password was incorrect'});     
+              res.status(401);
+              res.end();
             }
           }
         });
@@ -149,34 +146,39 @@ api.ssoResetPassword= (UserRepo, DB,Transformer) => (req, res) => {
     // This morphs the message received to a generic user object for our system
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
-      if(value.err) {
-        res.status(400); // Return a 400 bad request back to the sender
-        res.json({'err': value}); 
-      } else {
+      if(value.username) {
         var username = value.username;
         var password = value.password;
         // Finds the existing user in the database
         userRepo.FindUser(username).then(function(value){
           var queriedUser = value.User;
-          if (queriedUser.length === 0) {
-            // User does not exist return an error
-            res.status(400);
-            res.json({'err' : 'User does not exist'});
-          } else {
+          if (queriedUser.length > 0) {
             var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
             var passHashed = CryptoJS.HmacSHA256(password, saltStrPass).toString();
             // Update db with new hashed password and salt
             userRepo.ResetCredential(username,passHashed,saltStrPass);
-            res.status(200);
             res.json({success: true});
+          } else {
+            // User does not exist return an error
+            res.status(401);
+            res.end();            
           }
         });
-      }
+      } else {
+        res.status(401); // Return a 401 bad request back to the sender
+        res.end();
+      } 
     });
   });
  };
 
-
+/**
+ * This provides the client the information needed for the user to log into SSO
+ * @param {*} UserRepo is the user repository to create and get users
+ * @param {*} DB the database connection
+ * @param {*} Transformer the JWT decoder
+ * @returns {*} The username, accountType, cookie, and csurfToken
+ */
 api.getLoginInfo = (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
   var token = req.query.token;
@@ -190,11 +192,10 @@ api.getLoginInfo = (UserRepo, DB,Transformer) => (req, res) => {
       userRepo.FindUser(username).then(function(value){
         var user = value.User[0];       
         const obj = {csrfToken : req.query.csrfToken, username : user.username, role : user.accountType.role, 'cookie': user._id};
-        console.log(JSON.stringify(obj));
         res.json(obj);
     });
   });
 });
-}
+};
 
 module.exports = api;
