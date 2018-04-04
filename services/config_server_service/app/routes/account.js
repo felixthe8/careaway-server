@@ -77,7 +77,7 @@ module.exports = (app) => {
   }));
   
   app.route('/security-questions').get(proxy(url, {
-    proxyReqPathResolver: function() {
+    proxyReqPathResolver: function(req) {
       return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
     }
   }));
