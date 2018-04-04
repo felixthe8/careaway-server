@@ -25,12 +25,23 @@ module.exports = (app) => {
     }
   }));
     
-  app.route('/getLoginInfo').get(csrf.createCSRFToken,proxy(url, {
+  app.route('/getLoginInfo').get(proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`; 
     }
   }));
 
+  app.route('/ssoRegisterMed').post(proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.ssoRegisterMed;
+    }
+  }));
+
+  app.route('/ssoRegisterPatient').post(proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.ssoRegisterPatient;
+    }
+  }));
 
   app.use(csrf.CsrfValidation);
   // TODO: refactor registration in passport
