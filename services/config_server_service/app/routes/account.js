@@ -4,7 +4,7 @@ const csrf = require('@configServerAPI/csrfMiddleware');
 const url = config.url.account;
 /**
  * This router routes all requests to the account management module.
- * @param {*} app 
+ * @param {*} app the routes
  */
 module.exports = (app) => {
   app.route('/Sso/Registration').post(proxy(url, {
@@ -19,13 +19,13 @@ module.exports = (app) => {
     }
   }));
 
-  app.route('/Sso/Login').post(csrf.createCSRFToken, proxy(url, {
+  app.route('/Sso/Login').post(proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.ssoLogin;
     }
   }));
     
-  app.route('/getLoginInfo').get(proxy(url, {
+  app.route('/getLoginInfo').get(csrf.createCSRFToken, proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`; 
     }
@@ -113,7 +113,7 @@ module.exports = (app) => {
   
   app.route('/patient-appointment-info').get(proxy(url, {
     proxyReqPathResolver: function(req) {
-      return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`
+      return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`;
     }
   }));
 
@@ -124,4 +124,4 @@ module.exports = (app) => {
       return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
     }
   }));
-}
+};
