@@ -1,15 +1,17 @@
 const moment = require('moment');
-// TODO: Rename these functions
+
 /**
  * Tests whether the date and times of two appointments overlap.
  * @param {*} firstAppointment The first appointment object.
  * @param {*} secondAppointment The second appointment object.
- * @return {*} True if the two appointments do overlap, false if they don't.
+ * @return {*} True if the two appointments' dates and times 
+ * do overlap, false if they don't.
  */
 const timesConflict = (firstAppointment, secondAppointment) => {
   // Construct moment objects for the existing appointment's times.
   const firstStartTime = moment(firstAppointment.startTime);
   const firstEndTime = moment(firstAppointment.endTime);
+
   // Construct moment objects for the new appointment's times.
   const secondStartTime = moment(secondAppointment.startTime);
   const secondEndTime = moment(secondAppointment.endTime);
@@ -28,16 +30,27 @@ const timesConflict = (firstAppointment, secondAppointment) => {
   return firstTest || secondTest || thirdTest || fourthTest;
 };
 
-// Validates whether or not the appointment conflicts with existing appointments.
-const validateCreate = (appointment, appointmentList) => {
+
+/**
+ * Validates if a newly created appointment (the one passed in) does not
+ * conflict with any of the appointments that already exist in the database
+ * (the appointment list).
+ * @param {*} appointment The newly created appointment.
+ * @param {*} appointmentList The list of appointments that already exist in the database.
+ * @return {*} True if the new appointment doesn't conflict with any of the existing
+ * appointments, false otherwise.
+ */
+const noConflicts_Create = (appointment, appointmentList) => {
   let valid = true;
   for(let i in appointmentList) {
     // Check if overlapping appointment times.
     if(timesConflict(appointmentList[i], appointment)) {
       // Invalid time.
       valid = false;
+      break;
     }
   }
+  console.log(valid);
   return valid;
 };
 
@@ -47,17 +60,27 @@ const validateCreate = (appointment, appointmentList) => {
  * @param {*} newAppointment 
  * @param {*} appointmentList 
  */
-const validateModification = (appointments, appointmentList) => {
+const noConflicts_Modify = (appointments, appointmentList) => {
   let valid = true;
+
+  // The modified appointment.
   const newAppointment = appointments.modified;
+
+  // The original appointment.
   const original = appointments.original;
+
+  // Goes through list of existing appointments and tests if the modified appointment conflicts with an existing one.
   for(let i in appointmentList) {
+    // Tests if this appointment is the same as the original appointment.
     const match = isSame(appointmentList[i], original);
+
+    // Only checks for conflicts if the appointment is not the original appointment.
     if(!match) {
       // Check if overlapping appointment times.
       if(timesConflict(appointmentList[i], newAppointment)) {
         // Invalid time.
         valid = false;
+        break;
       }
     } 
   }
@@ -101,7 +124,7 @@ const validate = (repo, appointment, initiator, appointee, validateFunction) => 
  */
 const validate_modification = (repo, appointments, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
-    validate(repo, appointments, initiator, appointee, validateModification).then(result => {
+    validate(repo, appointments, initiator, appointee, noConflicts_Modify).then(result => {
       fulfill(result);
     });
   });
@@ -117,7 +140,7 @@ const validate_modification = (repo, appointments, initiator, appointee) => {
  */
 const validate_creation = (repo, appointment, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
-    validate(repo, appointment, initiator, appointee, validateCreate).then(result => {
+    validate(repo, appointment, initiator, appointee, noConflicts_Create).then(result => {
       fulfill(result);
     });
   });
