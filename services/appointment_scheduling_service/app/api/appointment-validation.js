@@ -16,7 +16,7 @@ const timesConflict = (firstAppointment, secondAppointment) => {
   const secondStartTime = moment(secondAppointment.startTime);
   const secondEndTime = moment(secondAppointment.endTime);
   
-  // The tests - if any are true, then the appointments overlap.
+  // The tests - if any are true, then the appointments overlap (conflict).
 
   // The end time of the new appointment is between an existing appointment's start and end time.
   const firstTest = (firstStartTime).isBefore(secondEndTime) && (firstEndTime).isAfter(secondEndTime);
@@ -55,10 +55,10 @@ const noConflicts_Create = (appointment, appointmentList) => {
 };
 
 /**
- * Returns true if the appointment is a valid one.
- * @param {*} original 
- * @param {*} newAppointment 
- * @param {*} appointmentList 
+ * Returns true if the appointment doesn't conflict with any
+ * existing appointments.
+ * @param {*} appointments The original and modified appointments.
+ * @param {*} appointmentList The list of all the appointments this user has.
  */
 const noConflicts_Modify = (appointments, appointmentList) => {
   let valid = true;
@@ -87,16 +87,25 @@ const noConflicts_Modify = (appointments, appointmentList) => {
   return valid;
 };
 
-const validate = (repo, appointment, initiator, appointee, validateFunction) => {
+/**
+ * Validates if the appointment is at a valid time, aka it doesn't conflict
+ * with any other appointments that either the initiator or appointee has.
+ * @param {*} repo The repository.
+ * @param {*} appointment The appointment object.
+ * @param {*} initiator The initiator of this appointment.
+ * @param {*} appointee The user this appointment is being requested with.
+ * @param {*} noTimeConflicts The function used to check for time conflicts.
+ */
+const validate = (repo, appointment, initiator, appointee, noTimeConflicts) => {
   return new Promise((fulfill, reject) => {
     // Gets all initiator's appointments. 
     repo.GetAppointment(initiator).then(initiatorResult => {
       // Validates no conflicting appointment times for initiator.
-      if(initiatorResult === null || validateFunction(appointment, initiatorResult.appointments)) {
+      if(initiatorResult === null || noTimeConflicts(appointment, initiatorResult.appointments)) {
         // Gets all appointee's appointments.
         repo.GetAppointment(appointee).then(appointeeResult => {
           // Validates no conflicting appointment times for appointee.
-          if(appointeeResult === null || validateFunction(appointment, appointeeResult.appointments)) {
+          if(appointeeResult === null || noTimeConflicts(appointment, appointeeResult.appointments)) {
             // No conflicting times.
             fulfill({success: true, reason: ""});
           } else {
@@ -115,12 +124,13 @@ const validate = (repo, appointment, initiator, appointee, validateFunction) => 
 };
 
 /**
- * Helper function for validation. Passes in the correct validating function.
+ * Helper function for checking for conflicts. 
+ * Passes in the modification function to check.
  * Appointment modification.
- * @param {*} repo 
- * @param {*} appointments 
- * @param {*} initiator 
- * @param {*} appointee 
+ * @param {*} repo The repository.
+ * @param {*} appointments The appointments (original and modified appointments).
+ * @param {*} initiator The user who initiated the appointment.
+ * @param {*} appointee The user who's being requested this appointment.
  */
 const validate_modification = (repo, appointments, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
