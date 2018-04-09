@@ -75,7 +75,6 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
           var queriedUser = query.User;
           // Checks if a user was found
           if (queriedUser.length > 0) {
-            console.log("HUH");
             // User was found
             var user = queriedUser[0];
             var salt = user.identifier.salt;
@@ -83,7 +82,6 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
             const passHashed = CryptoJS.HmacSHA256(value.password, salt).toString();
             // Checks if password matches with that in the database
             if (passHashed === user.password) {
-              console.log("HUH?!");
               var loginInfo = transformer.createToken(value.username);
               if(user.accountType.role === "medical-professional"){
                 res.writeHead(301,
