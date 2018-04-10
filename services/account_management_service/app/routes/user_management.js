@@ -15,4 +15,12 @@ module.exports = (app) => {
 
   // GET
   app.route(config.routes.returnCode).get(api.returnCode(models.UserRepo, models.DB));
+
+  // POST 
+  // New mp request
+  app.route(config.routes.newMpRequest).post(api.newMpRequest);
+
+  // PUT
+  // Modifying the original change mp request.
+  app.route(config.routes.modifyMpRequest).put(api.modifyNewMpRequest);
 }

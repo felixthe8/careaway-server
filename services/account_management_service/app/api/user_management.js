@@ -86,4 +86,45 @@ api.returnCode = (UserRepo,DB) => (req,res) => {
   })
 }
 
+// This is only when the mp wants to create a new change mp request.
+api.newMpRequest = (UserRepo, Request, RequestRepo, DB) => (req, res) => {
+  // Check if the mp code is real.
+  const code = req.body.request.mpCode;
+  DB.then(database => {
+    const userRepo = new UserRepo(database);
+    userRepo.FindMP(code).then(foundMP => {
+      if(foundMP) {
+        // Found the medical professional.
+        // TODO: log this object to see what it is, probably a user object.
+        RequestRepo.connect(database);
+        RequestRepo.GetRequestPatient(request.patient).then(result => {
+          if(result.exists) {
+            // Patient already has a change mp request. 
+            // already exists but give them the option to modify
+
+          } else {
+            // Store as a request.
+            const request = Request.requestFromObject(req.body.request);
+            RequestRepo.StoreRequest(request);
+            // End with response.
+          }
+        });
+      } else {
+        // MP code dne, send back error.
+        res.json({success: false, message: "MP code does not exist."});
+      }
+    });
+  });
+  // Create a new request object.
+  const request = Request.requestFromObject(req.body.request);
+  // Add in check to see if the request already exists.
+
+  // Store in the request repo.
+
+}
+
+api.modifyNewMpRequest = (Request, RequestRepo, DB) => (req, res) => {
+
+}
+
 module.exports = api;
