@@ -1,5 +1,5 @@
 const moment = require('moment');
-// TODO: Rename these functions
+
 /**
  * Tests whether the date and times of two appointments overlap.
  * @param {*} firstAppointment The first appointment object.
@@ -29,6 +29,11 @@ const timesConflict = (firstAppointment, secondAppointment) => {
 };
 
 // Validates whether or not the appointment conflicts with existing appointments.
+/**
+ * Function for validating a new appointment being created.
+ * @param {*} appointment The appointment object.
+ * @param {*} appointmentList The appointment objects from the database.
+ */
 const validateCreate = (appointment, appointmentList) => {
   let valid = true;
   for(let i in appointmentList) {
@@ -43,9 +48,8 @@ const validateCreate = (appointment, appointmentList) => {
 
 /**
  * Returns true if the appointment is a valid one.
- * @param {*} original 
- * @param {*} newAppointment 
- * @param {*} appointmentList 
+ * @param {*} appointments The appointments (original and modified)
+ * @param {*} appointmentList The list of appointments that exist in the database.
  */
 const validateModification = (appointments, appointmentList) => {
   let valid = true;
@@ -64,6 +68,15 @@ const validateModification = (appointments, appointmentList) => {
   return valid;
 };
 
+/**
+ * Validates the appointment doesn't conflict with any other appointments and
+ * is therefore a valid appointment.
+ * @param {*} repo The appointment repository.
+ * @param {*} appointment The appointment to be checked.
+ * @param {*} initiator The initiator of the appointments.
+ * @param {*} appointee The person this initiator is requesting an appointment with.
+ * @param {*} validateFunction The function to validate if the appointment is valid.
+ */
 const validate = (repo, appointment, initiator, appointee, validateFunction) => {
   return new Promise((fulfill, reject) => {
     // Gets all initiator's appointments. 
@@ -77,11 +90,13 @@ const validate = (repo, appointment, initiator, appointee, validateFunction) => 
             // No conflicting times.
             fulfill({success: true, reason: ""});
           } else {
+            // Conflicting appointments with the appointee.
             console.log("Error appointment time unavailable for appointee.");
             fulfill({success: false, reason: "Appointment time conflicts with the appointee's existing appointment."});
           }
         });
       } else {
+        // Conflicting appointments with the initiator.
         console.log("Error appointment time unavailable for initiator.");
         fulfill({success: false, reason: "Appointment time conflicts with your existing appointment."});
       }
@@ -92,15 +107,15 @@ const validate = (repo, appointment, initiator, appointee, validateFunction) => 
 };
 
 /**
- * Helper function for validation. Passes in the correct validating function.
- * Appointment modification.
- * @param {*} repo 
- * @param {*} appointments 
- * @param {*} initiator 
- * @param {*} appointee 
+ * Helper function for validating modified functions. Passes in the correct validating function.
+ * @param {*} repo The appointment repo.
+ * @param {*} appointments The appointments (original and modified).
+ * @param {*} initiator The initiator of the appointment.
+ * @param {*} appointee The person being requested of the appointment.
  */
 const validate_modification = (repo, appointments, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
+    // Validates the appointment with the correct validation function.
     validate(repo, appointments, initiator, appointee, validateModification).then(result => {
       fulfill(result);
     });
@@ -108,12 +123,11 @@ const validate_modification = (repo, appointments, initiator, appointee) => {
 }
 
 /**
- * Helper function for validation. Passes in the correct validation function.
- * Create appointment.
- * @param {*} repo 
- * @param {*} appointment 
- * @param {*} initiator 
- * @param {*} appointee 
+ * Helper function for validating appointment creation. Passes in the correct validation function.
+ * @param {*} repo The appointment repository.
+ * @param {*} appointment The appointment object that was created.
+ * @param {*} initiator The initiator of the appointment.
+ * @param {*} appointee The person this appointment is requested.
  */
 const validate_creation = (repo, appointment, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
