@@ -4,8 +4,7 @@ function Feedback (feedback) {
   this.seen = false;
 }
 
-// add single question objects to checklist
-Checklist.prototype.setSeen = function (seen) {
+Feedback.prototype.setSeen = function (seen) {
   this.seen = seen;
 }
 
