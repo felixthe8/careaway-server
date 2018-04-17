@@ -26,6 +26,8 @@ config.routes = {
   patientAppointmentInfo : `${accountConfig.routes.getAllInfoForPatientAppointment}`,
   getLoginInfo : `${accountConfig.routes.getLoginInfo}`,
   returnCode : `${accountConfig.routes.returnCode}`,
+  mpTransfer: `${accountConfig.routes.mpTransfer}`,
+  removeTransfer: `${accountConfig.routes.removeTransfer}`,
   
   // Appointment routes.
   getAppt : `${appointmentConfig.routes.get}`,
