@@ -1,7 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const models = require('@accountModels');
 const CryptoJS = require('crypto-js');
-const request = require('request');
+const requestPromise = require('request-promise');
 const passport = require('passport');
 const service = {};
 const UserRepo = models.UserRepo;
@@ -19,19 +19,18 @@ module.exports = () => {
     const passHashed = CryptoJS.SHA1(password).toString();
     const passPrefix = passHashed.substring(0,5);
     const passSuffix = passHashed.slice(5);
-    var goodPasswordCheck = false;
-    console.log("header:", passPrefix);
-    console.log("suffix:", passSuffix, typeof(passSuffix));
-    request.get('https://api.pwnedpasswords.com/range/'+ passPrefix,function(error,response,body){
-  
-      console.log('statusCode', response && response.statusCode);
+    var goodPasswordCheck = true;
+    return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
+      
       const hashList = body.split("\r\n");
       hashList.forEach(element => {
         if (element.split(":")[0]===passSuffix){
-            console.log(passSuffix);
-            return goodPasswordCheck;
+            console.log("here")
+            goodPasswordCheck = false;
         };
       });
+      
+      console.log( goodPasswordCheck);
 
     });
 
