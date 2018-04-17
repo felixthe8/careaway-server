@@ -62,7 +62,7 @@ api.getPatientUserNames= (UserRepo, DB) => (req,res) => {
        // Create an array to hold all patients of the medical professional
       var patientUserName = [];
         for (var p of value.patients) {
-          patientUserName.push({fullName: p.accountType.firstName + ' '+p.accountType.lastName, userName: p.username, diagnosis: p.accountType.diagnosis});
+          patientUserName.push({fullName: p.accountType.firstName + ' '+p.accountType.lastName, userName: p.username, diagnosis: p.accountType.diagnosis, transfer: p.accountType.transfer});
         }
         //send patient First Name and UserName
         res.json(patientUserName);

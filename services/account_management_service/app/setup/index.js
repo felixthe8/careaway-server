@@ -2,6 +2,7 @@ const dbConnection = require('@dataAccess/db_connection');
 
 // user repository
 const UserRepo = require('@dataAccess/user_repository');
+const TransferRepo = require('@dataAccess/transfers_repository');
 
 // all user models
 const User = require('@models/users')
@@ -15,6 +16,7 @@ const Transformer = require('@root/services/transformer');
 const models = {
 	DB: new dbConnection().Connect(), // not model, but service/object
     UserRepo: UserRepo,
+    TransferRepo: TransferRepo,
     User: User,
     Security: Security,
     Salt: Salt,

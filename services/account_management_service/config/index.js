@@ -32,7 +32,10 @@ module.exports = {
     getPatients: '/account/api/get-all-patients',
     getAllInfoForPatientAppointment: '/account/api/get-patient-appointment-info',
     returnCode: '/account/api/returnCode',
-
+    mpTransfer: '/account/api/newTransfer',
+    removeTransfer: '/account/api/removeTransfer',
+    acceptTransfer: '/account/api/acceptTransfer',
+    
     accountBreach: 'http://localhost:4100/breach', // Why is this the full url???
   },
   server: {

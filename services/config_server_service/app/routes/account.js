@@ -124,4 +124,15 @@ module.exports = (app) => {
       return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
     }
   }));
+
+  app.route('/mpTransfer').post(proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.mpTransfer;
+    }
+  }));
+  app.route('/removeTransfer').get(proxy(url,{
+    proxyReqPathResolver: function(req) {
+      return `${config.routes.removeTransfer}${req._parsedOriginalUrl.search}`;
+    }
+  }));
 };

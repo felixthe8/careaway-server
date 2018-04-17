@@ -30,5 +30,23 @@ api.updateDiagnosis = (UserRepo, DB) => (req, res) => {
   });
 }
 
+/**
+ * Changes the patient's medical professional.
+ * @param {*} UserRepo 
+ * @param {*} DB 
+ */
+api.changeMedicalProfessional = (UserRepo, RequestRepo, DB) => (req, res) => {
+  // Get the patient object.
+  const patient = req.body.patient;
+  // Get the new medical professional's code.
+  const code = req.body.request.mp.code;
+  const accept = req.body.status;
+  if(accept) {
+    // Update patient's object in db to this mp.
+    // TODO: Finish this by updating patient object in db.
+  } 
+  // Delete request from db.
+  RequestRepo.DeleteRequest(patient);
+}
 
 module.exports = api;

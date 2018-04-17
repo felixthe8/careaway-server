@@ -86,4 +86,72 @@ api.returnCode = (UserRepo,DB) => (req,res) => {
   })
 }
 
+// This is only when the mp wants to create a new change mp request.
+api.mpTransfer = (UserRepo, TransferRepo, DB) => (req, res) => {
+  const transfer = req.body.transfer;
+  // Check if the mp code is real.
+  const code = transfer.mpCode;
+  
+  DB.then(database => {
+    const userRepo = new UserRepo(database);
+    // Test if the mpcode is real.
+    userRepo.FindMP(code).then(foundMP => {
+      
+      if(foundMP) {
+        // Assigns the mp's first and last name.
+        transfer.newMp = `${foundMP.accountType.firstName} ${foundMP.accountType.lastName}`;
+        // Request contains the patient's username and the transfer request.
+        const request = {
+          patient: req.body.patient,
+          transfer: transfer // Contains new mp username and their mp code
+        }
+        //console.log(JSON.stringify(request));
+        // Found the medical professional, store the request.
+        // TODO: log this object to see what it is, probably a user object.
+        TransferRepo.connect(database);
+        TransferRepo.Update(request).then(result => {
+          console.log("Handling transfer in user management " + JSON.stringify(result));
+          if(result.success) {
+            // Successfully stored the transfer
+            res.json({success: result.success, transfer: result.transfer});
+            console.log("Successfully inserted new transfer request");
+          } 
+        });
+      } else {
+        // MP code dne, send back error.
+        res.json({success: false, message: "MP code does not exist."});
+      }
+    });
+  });
+}
+
+// When a patient accepts a transfer request.
+api.acceptTransfer = (UserRepo, DB) => (req, res) => {
+  DB.then(database => {
+    const userRepo = new UserRepo(database);
+    const username = req.body.patient;
+    const newMp = req.body.transfer.mpCode;
+    // Changes their mp to the new one.
+    userRepo.ChangeMP(username, newMp);
+  })
+}
+
+api.removeMpTransfer = (TransferRepo, DB) => (req, res) => {
+  DB.then(database => {
+    const transfer = {
+      inProgress: false,
+      newMp: '',
+      mpcode: ''
+    }
+    const request = {
+      patient: req.query.patient,
+      transfer: transfer
+    }
+    TransferRepo.connect(database);
+    TransferRepo.Update(request).then(result => {
+      res.json({success: result.success, transfer: result.transfer});
+    });
+  });
+}
+
 module.exports = api;

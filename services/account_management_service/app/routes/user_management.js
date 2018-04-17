@@ -15,4 +15,17 @@ module.exports = (app) => {
 
   // GET
   app.route(config.routes.returnCode).get(api.returnCode(models.UserRepo, models.DB));
+
+  // POST 
+  // Creating or updating a Medical Professional transfer.
+  app.route(config.routes.mpTransfer).post(api.mpTransfer(models.UserRepo, models.TransferRepo, models.DB));
+
+  // TODO: put in config server routes (config and account)
+  // GET
+  // Removes the mp transfer request.
+  app.route(config.routes.removeTransfer).get(api.removeMpTransfer(models.TransferRepo, models.DB));
+
+  // POST
+  // Acceptance of mp transfer, then removes that mp transfer request.
+  app.route(config.routes.acceptTransfer).post(api.acceptTransfer(models.UserRepo, models.DB), api.removeMpTransfer(models.TransferRepo, models.DB));
 }

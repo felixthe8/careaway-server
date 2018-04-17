@@ -84,6 +84,21 @@ UserAccess.prototype.ResetCredential = function(username,password,salt){
   );
 };
 /**
+ * This function edits a patient's mp.
+ * @param {*} username the user that wants to reset their password
+ * @param {*} mpcode The new medical professional's code.
+ */
+UserAccess.prototype.ChangeMP = function(username, mpcode){
+  const collection = this.db.collection('Users');
+  collection.updateOne(
+    {'username' : username},//looks for username in the database
+    { $set: {'accountType.medicalcode':mpcode}},//inserts new mpcode
+    function(err, result){
+      console.log('Updated MP code');
+    }
+  );
+};
+/**
  * This function finds an existing user in the database
  * it will return the user info as an object if found or 
  * return an empty object if the user does not exist 
