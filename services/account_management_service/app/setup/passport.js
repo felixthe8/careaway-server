@@ -1,6 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy;
 const models = require('@accountModels');
-var CryptoJS = require('crypto-js');
+const CryptoJS = require('crypto-js');
+const request = require('request');
 const passport = require('passport');
 const service = {};
 const UserRepo = models.UserRepo;
@@ -13,6 +14,29 @@ module.exports = () => {
     done(null, user);
   });
 
+  function getPasswordList(password){
+
+    const passHashed = CryptoJS.SHA1(password).toString();
+    const passPrefix = passHashed.substring(0,5);
+    const passSuffix = passHashed.slice(5);
+    var goodPasswordCheck = false;
+    console.log("header:", passPrefix);
+    console.log("suffix:", passSuffix, typeof(passSuffix));
+    request.get('https://api.pwnedpasswords.com/range/'+ passPrefix,function(error,response,body){
+  
+      console.log('statusCode', response && response.statusCode);
+      const hashList = body.split("\r\n");
+      hashList.forEach(element => {
+        if (element.split(":")[0]===passSuffix){
+            console.log(passSuffix);
+            return goodPasswordCheck;
+        };
+      });
+
+    });
+
+  };
+  
   // Deserializes a user. Never used??
   passport.deserializeUser((id, done) => {
     DB.then(database => {
@@ -88,6 +112,7 @@ module.exports = () => {
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         // create user object with patient role
+
         var newUser = User.createGenericUser(Security, Salt, req.body);
         var role = new Patient(firstName, lastName, medicalCode);
         newUser.accountType = role;
@@ -126,12 +151,16 @@ module.exports = () => {
       
       newUser.accountType = role;
       // put user in db
+      if(getPasswordList(req.body.password)){
       userRepo.Create(newUser).then(res => {
         userRepo.FindUser(newUser.username).then(result => {
           const id = result.User[0]._id;
           fulfill({success: true, user: id});
         })
       })
+    }else{
+      fulfill({"Bad-Password":true});
+    }
     });
     
   }
