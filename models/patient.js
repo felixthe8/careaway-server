@@ -19,6 +19,13 @@ function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appoint
   this.treatment = treatment || [];
   this.role = 'patient';
   this.roleType = 'public';
+  // This is an object for keeping track of whether or not the patient
+  // is being transferred to a new medical professional.
+  this.transfer = {
+    inProgress: false,
+    newMp: '',
+    mpCode: ''
+  }
 }
 // Function to return patient name
 Patient.prototype.DisplayName = function () {
