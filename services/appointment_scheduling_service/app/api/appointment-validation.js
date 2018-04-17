@@ -1,5 +1,12 @@
 const moment = require('moment');
 
+const isSame = (firstAppointment, secondAppointment) => {
+  const sameInitiator = firstAppointment.initiator === secondAppointment.initiator;
+  const sameAppointee = firstAppointment.appointee === secondAppointment.appointee;
+  const sameTime = moment(firstAppointment.startTime).isSame(secondAppointment.startTime);
+
+  return sameAppointee && sameInitiator && sameTime;
+}
 /**
  * Tests whether the date and times of two appointments overlap.
  * @param {*} firstAppointment The first appointment object.

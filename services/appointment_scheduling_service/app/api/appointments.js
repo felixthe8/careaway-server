@@ -64,7 +64,7 @@ api.modify = (Appointment, AppointmentRepo, DB) => (req, res) => {
     const initiator = originalAppointment.initiator;
 
     // Validates the appointment doesn't conflict with any other appointment the initiator/appointee has.
-    validator.validate_modification(repo, initiator, appointee, originalAppointment, newAppointment)
+    validator.validate_modification(repo, appointments, initiator, appointee)
       .then(result => {
         if(result.success) {
           // No conflicting times, can successfully modify appointment.
