@@ -38,6 +38,7 @@ api.create = (Appointment, AppointmentRepo, DB) => (req, res) => {
     res.send({success: false, reason: "Server error. Your request cannot be handled at this time."});
   });
 };
+
 /**
  * Modifies an existing appointment if the appointment does not conflict with either
  * party's existing appointment times. Sends a response back to the requestor
@@ -63,7 +64,7 @@ api.modify = (Appointment, AppointmentRepo, DB) => (req, res) => {
     const initiator = originalAppointment.initiator;
 
     // Validates the appointment doesn't conflict with any other appointment the initiator/appointee has.
-    validator.validate_modification(repo, initiator, appointee, originalAppointment, newAppointment)
+    validator.validate_modification(repo, appointments, initiator, appointee)
       .then(result => {
         if(result.success) {
           // No conflicting times, can successfully modify appointment.
@@ -95,6 +96,7 @@ api.get = (AppointmentRepo, DB) => (req, res) => {
     });
   });
 }
+
 /**
  * Deletes the appointment
  * @param {*} Appointment the appointment model

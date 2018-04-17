@@ -1,5 +1,12 @@
 const moment = require('moment');
 
+const isSame = (firstAppointment, secondAppointment) => {
+  const sameInitiator = firstAppointment.initiator === secondAppointment.initiator;
+  const sameAppointee = firstAppointment.appointee === secondAppointment.appointee;
+  const sameTime = moment(firstAppointment.startTime).isSame(secondAppointment.startTime);
+
+  return sameAppointee && sameInitiator && sameTime;
+}
 /**
  * Tests whether the date and times of two appointments overlap.
  * @param {*} firstAppointment The first appointment object.
@@ -88,12 +95,12 @@ const noConflicts_Modify = (appointments, appointmentList) => {
 };
 
 /**
- * Validates if the appointment is at a valid time, aka it doesn't conflict
- * with any other appointments that either the initiator or appointee has.
- * @param {*} repo The repository.
- * @param {*} appointment The appointment object.
- * @param {*} initiator The initiator of this appointment.
- * @param {*} appointee The user this appointment is being requested with.
+ * Validates the appointment doesn't conflict with any other appointments and
+ * is therefore a valid appointment.
+ * @param {*} repo The appointment repository.
+ * @param {*} appointment The appointment to be checked.
+ * @param {*} initiator The initiator of the appointments.
+ * @param {*} appointee The person this initiator is requesting an appointment with.
  * @param {*} noTimeConflicts The function used to check for time conflicts.
  */
 const validate = (repo, appointment, initiator, appointee, noTimeConflicts) => {
@@ -109,11 +116,13 @@ const validate = (repo, appointment, initiator, appointee, noTimeConflicts) => {
             // No conflicting times.
             fulfill({success: true, reason: ""});
           } else {
+            // Conflicting appointments with the appointee.
             console.log("Error appointment time unavailable for appointee.");
             fulfill({success: false, reason: "Appointment time conflicts with the appointee's existing appointment."});
           }
         });
       } else {
+        // Conflicting appointments with the initiator.
         console.log("Error appointment time unavailable for initiator.");
         fulfill({success: false, reason: "Appointment time conflicts with your existing appointment."});
       }
@@ -141,12 +150,11 @@ const validate_modification = (repo, appointments, initiator, appointee) => {
 }
 
 /**
- * Helper function for validation. Passes in the correct validation function.
- * Create appointment.
- * @param {*} repo 
- * @param {*} appointment 
- * @param {*} initiator 
- * @param {*} appointee 
+ * Helper function for validating appointment creation. Passes in the correct validation function.
+ * @param {*} repo The appointment repository.
+ * @param {*} appointment The appointment object that was created.
+ * @param {*} initiator The initiator of the appointment.
+ * @param {*} appointee The person this appointment is requested.
  */
 const validate_creation = (repo, appointment, initiator, appointee) => {
   return new Promise((fulfill, reject) => {
