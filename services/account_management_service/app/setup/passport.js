@@ -153,18 +153,17 @@ module.exports = () => {
       newUser.accountType = role;
       // put user in db
       getPasswordList(req.body.password).then(body => {
-          console.log(body);
+          if(body){
+            userRepo.Create(newUser).then(res => {
+              userRepo.FindUser(newUser.username).then(result => {
+                const id = result.User[0]._id;
+                fulfill({success: true, user: id});
+              })
+            });
+          } else{
+            fulfill({"Bad-Password":true});
+          }
       });
-      if(false){
-      userRepo.Create(newUser).then(res => {
-        userRepo.FindUser(newUser.username).then(result => {
-          const id = result.User[0]._id;
-          fulfill({success: true, user: id});
-        })
-      })
-    }else{
-      fulfill({"Bad-Password":true});
-    }
     });
     
   }
