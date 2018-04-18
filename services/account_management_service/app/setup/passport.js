@@ -18,19 +18,21 @@ module.exports = () => {
 
     const passHashed = CryptoJS.SHA1(password).toString();
     const passPrefix = passHashed.substring(0,5);
-    const passSuffix = passHashed.slice(5);
-    var goodPasswordCheck = true;
+    const passSuffix = passHashed.slice(5).toUpperCase();
+    console.log("header:", passPrefix);
+    console.log("suffix:", passSuffix, typeof(passSuffix));
     return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
-      
+      var goodPasswordCheck = true;
+      var i = 0;
       const hashList = body.split("\r\n");
       hashList.forEach(element => {
+        console.log(element.split(":")[0])
         if (element.split(":")[0]===passSuffix){
-            console.log("here")
+            console.log('here');
             goodPasswordCheck = false;
         };
       });
-      
-      console.log( goodPasswordCheck);
+      return goodPasswordCheck;
 
     });
 
@@ -150,7 +152,10 @@ module.exports = () => {
       
       newUser.accountType = role;
       // put user in db
-      if(getPasswordList(req.body.password)){
+      getPasswordList(req.body.password).then(body => {
+          console.log(body);
+      });
+      if(false){
       userRepo.Create(newUser).then(res => {
         userRepo.FindUser(newUser.username).then(result => {
           const id = result.User[0]._id;
