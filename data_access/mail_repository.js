@@ -12,9 +12,9 @@ function MailAccess(dbConnection)
 }
 
 /**
- * This appends a new appointment into the appointment
+ * This appends a new message into the user
  * attribute of the appointee and initiator
- * appointment list
+ * mail list
  *
  * @param {*} initiator the initiator username
  * @param {*} appointee the appointee username
@@ -30,8 +30,8 @@ MailAccess.prototype.CreateMail = function(initiator, appointee, message){
     }
   );
   collection.updateOne(
-    {'username' : appointee},//looks for appointee username in the database
-    { $push: {'accountType.mail': message}},//inserts new message on the array
+    {'username' : appointee}, //looks for appointee username in the database
+    { $push: {'accountType.mail': message}}, //inserts new message on the array
     function(err, result){
       console.log('Added appointment');
    }
@@ -39,9 +39,9 @@ MailAccess.prototype.CreateMail = function(initiator, appointee, message){
 };
 
 /**
- * This gets all appointments of a particular user in the system
+ * This gets all mail of a particular user in the system
  * @param {*} username the user identifier
- * @returns {*} a promise that returns a list of appointments of a user
+ * @returns {*} a promise that returns a list of messages on a user
  */
 MailAccess.prototype.GetMail= function(username){
   const collection = this.db.collection('Users');
@@ -60,7 +60,7 @@ MailAccess.prototype.GetMail= function(username){
         console.log('Successfully got query');
         if(result !== null){
           var messages = result.accountType.mail;
-          //return an object containing all the appointments of the user
+          //return an object containing all the messages of the user
           var messageList = {'mail' : messages};
           fullfill(messageList);
         }
@@ -79,19 +79,19 @@ MailAccess.prototype.GetMail= function(username){
  *
  * @param {*} initiator the initiator username
  * @param {*} appointee the appointee username
- * @param {*} appointment the appointment object that will be deleted
+ * @param {*} message the message object that will be deleted
  */
 MailAccess.prototype.DeleteMail= function(initiator, appointee, message){
   const collection = this.db.collection('Users');
   collection.updateOne(
-    {'username' : initiator },//looks for username in the database
-    { $pull: {'accountType.mail': message}},//deletes the appointment
+    {'username' : initiator }, //looks for username in the database
+    { $pull: {'accountType.mail': message}}, //deletes the message
       function(err, result){
         console.log('Remove message');
     }
   );
-  collection.updateOne({'username' : message},//looks for username in the database
-    { $pull: {'accountType.mail': message}},//deletes the message
+  collection.updateOne({'username' : message}, //looks for username in the database
+    { $pull: {'accountType.mail': message}}, //deletes the message
       function(err, result){
       console.log('Remove message');
   });
