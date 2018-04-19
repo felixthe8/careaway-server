@@ -40,11 +40,36 @@ FeedbackAccess.prototype.Create = function(feedback)
 FeedbackAccess.prototype.EditFeedback = function(feedback){
   const collection = this.db.collection('Feedbacks');
   collection.updateOne(
-    {'_id' : feedback._id },//looks for id in the database
+    {'_id' : new objectID(feedback._id) },//looks for id in the database
     { $set: {'seen': feedback.seen }},//inserts new seen value
     function(err, result){
       console.log('Updated Feedback');
     }
   );
+};
+/** 
+ * This function is used to gather a list of feedbacks
+ * @returns {*} the promise to return the feedbacks
+*/
+FeedbackAccess.prototype.GetFeedbacks = function(){
+  const collection = this.db.collection('Feedbacks');
+  return new promise(function(fullfill,reject)
+  { 
+    //This is the filter to locate any user with the role  medical professional
+    collection.find().toArray(function(err, res) 
+    {
+      if(err)
+      {
+        console.log('Failed to get query');
+        reject(err);
+      }
+      else
+      {
+        console.log('Successfully got query');
+        fullfill({'result' : res});
+      } 
+    });
+  });
+
 };
 module.exports = FeedbackAccess;
