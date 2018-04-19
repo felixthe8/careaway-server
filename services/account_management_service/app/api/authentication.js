@@ -1,6 +1,27 @@
 var CryptoJS = require('crypto-js');
+const requestPromise = require('request-promise');
 const api = {};
 
+function getPasswordList(password){
+  const passHashed = CryptoJS.SHA1(password).toString();
+  const passPrefix = passHashed.substring(0,5);
+  const passSuffix = passHashed.slice(5).toUpperCase();
+  console.log("header:", passPrefix);
+  console.log("suffix:", passSuffix, typeof(passSuffix));
+  return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
+    var goodPasswordCheck = true;
+    var i = 0;
+    const hashList = body.split("\r\n");
+    hashList.forEach(element => {
+      if (element.split(":")[0]===passSuffix){
+          goodPasswordCheck = false;
+      };
+    });
+    return goodPasswordCheck;
+
+  });
+
+};
 /**
  * Authenticates a client using passport's local login function.
  * @param {*} passport - The passport module.
@@ -132,22 +153,29 @@ api.resetCreds = (UserRepo, DB) => (req, res) => {
   const password = req.body.password;
 
   DB.then(database => {
-    var userRepo = new UserRepo(database);
-    userRepo.FindUser(username).then(function(value){
-      var queriedUser = value.User;
-      if (queriedUser.length === 0) {
-        // user does not exist
-        res.json({error: 'User does not exist.'});
-      } else {
-        // generate new salt and hash new password with new salt
-        queriedUser = queriedUser[0];
-        const newSalt = CryptoJS.lib.WordArray.random(128/8).toString();
-        const passHashed = CryptoJS.HmacSHA256(password,newSalt).toString();
-        // update db with new hashed password and salt
-        userRepo.ResetCredential(username,passHashed,newSalt);
-        res.json({success: true});
+    const userRepo = new UserRepo(database);
+    getPasswordList(req.body.password).then(body => {
+      if(body){
+        userRepo.FindUser(username).then(function(value){
+          var queriedUser = value.User;
+          if (queriedUser.length === 0) {
+            // user does not exist
+            res.json({error: 'User does not exist.'});
+          } else {
+            // generate new salt and hash new password with new salt
+            queriedUser = queriedUser[0];
+            const newSalt = CryptoJS.lib.WordArray.random(128/8).toString();
+            const passHashed = CryptoJS.HmacSHA256(password,newSalt).toString();
+            // update db with new hashed password and salt
+            userRepo.ResetCredential(username,passHashed,newSalt);
+            res.json({success: true});
+          }
+        });
+      } else{
+        res.json({error:"Bad Password"});
       }
-    });
+  });
+    
   });
 }
 

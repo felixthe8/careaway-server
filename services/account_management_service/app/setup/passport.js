@@ -12,10 +12,7 @@ module.exports = () => {
   // Serializes an authenticated user.
   passport.serializeUser((user, done) => {
     done(null, user);
-  });
-
-  function getPasswordList(password){
-
+  });function getPasswordList(password){
     const passHashed = CryptoJS.SHA1(password).toString();
     const passPrefix = passHashed.substring(0,5);
     const passSuffix = passHashed.slice(5).toUpperCase();
@@ -28,7 +25,28 @@ module.exports = () => {
       hashList.forEach(element => {
         console.log(element.split(":")[0])
         if (element.split(":")[0]===passSuffix){
-            console.log('here');
+            goodPasswordCheck = false;
+        };
+      });
+      return goodPasswordCheck;
+
+    });
+
+  };
+
+  function getPasswordList(password){
+    const passHashed = CryptoJS.SHA1(password).toString();
+    const passPrefix = passHashed.substring(0,5);
+    const passSuffix = passHashed.slice(5).toUpperCase();
+    console.log("header:", passPrefix);
+    console.log("suffix:", passSuffix, typeof(passSuffix));
+    return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
+      var goodPasswordCheck = true;
+      var i = 0;
+      const hashList = body.split("\r\n");
+      hashList.forEach(element => {
+        console.log(element.split(":")[0])
+        if (element.split(":")[0]===passSuffix){
             goodPasswordCheck = false;
         };
       });
@@ -118,12 +136,18 @@ module.exports = () => {
         var role = new Patient(firstName, lastName, medicalCode);
         newUser.accountType = role;
         // put user in db
-        userRepo.Create(newUser).then(res => {
-          userRepo.FindUser(newUser.username).then(result => {
-            const id = result.User[0]._id;
-            fulfill({success: true, user: id});
-          });
-        })
+        getPasswordList(req.body.password).then(body => {
+          if(body){
+            userRepo.Create(newUser).then(res => {
+              userRepo.FindUser(newUser.username).then(result => {
+                const id = result.User[0]._id;
+                fulfill({success: true, user: id});
+              })
+            });
+          } else{
+            fulfill({"Bad-Password":true});
+          }
+      });
       }
     })
     
