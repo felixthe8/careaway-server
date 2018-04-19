@@ -1,9 +1,7 @@
-var moment = require('moment');
-
 const api = {};
 
 // ajax post request to mail document
-api.createMail = (MailRepo, DB) => (req,res) {
+api.createMail = (MailRepo, DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);

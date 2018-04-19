@@ -1,6 +1,7 @@
 const accountConfig = require('@accountConfig');
 const treatmentConfig = require('@treatmentConfig');
 const appointmentConfig = require('@appointmentConfig');
+const mailConfig = require('@mailConfig');
 
 const config = {};
 

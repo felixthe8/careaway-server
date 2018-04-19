@@ -37,9 +37,6 @@ app.use('/breach', function(req,res){
   breached = true;
  });
 
-
-
-
 // Makes sure setup, api, and routes are loaded before anything else .
 consign({ cwd: 'services' })
   .include('mail_service/app/setup')
