@@ -5,9 +5,9 @@ module.exports = {
     dbName: 'users'
   },
   routes: {
-    create: '/mail_service/api/create',
-    get: '/mail_service/api/get',
-    delete: '/mail_service/api/delete'
+    createMail: '/mail_service/api/createMail',
+    getMail: '/mail_service/api/getMail',
+    deleteMail: '/mail_service/api/deleteMail'
   },
   server: {
     port: 4500,
