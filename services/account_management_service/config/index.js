@@ -19,7 +19,8 @@ module.exports = {
 
     // Patient
     updateDiagnosis: '/account/api/update-diagnosis',
-
+    getTransferInformation: '/account/api/transfer-info',
+    
     // sso
     ssoLogin: '/SSO/login',
     ssoRegistration: '/SSO/registration',

@@ -28,6 +28,7 @@ config.routes = {
   returnCode : `${accountConfig.routes.returnCode}`,
   mpTransfer: `${accountConfig.routes.mpTransfer}`,
   removeTransfer: `${accountConfig.routes.removeTransfer}`,
+  getTransferInformation: `${accountConfig.routes.getTransferInformation}`,
   
   // Appointment routes.
   getAppt : `${appointmentConfig.routes.get}`,

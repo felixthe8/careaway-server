@@ -11,4 +11,5 @@ module.exports = (app) => {
   //TODO: Add route for updating med pro and patient 
   // TODO: think of route for med's request.
   //TODO: get route for request
+  app.route(config.routes.getTransferInformation).get(api.getTransfer(models.TransferRepo, models.DB));
 }

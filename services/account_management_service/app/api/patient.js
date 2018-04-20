@@ -30,6 +30,21 @@ api.updateDiagnosis = (UserRepo, DB) => (req, res) => {
   });
 }
 
+// Gets a patient's transfer information.
+api.getTransfer = (TransferRepo, DB) => (req, res) => {
+  const patient = req.query.patient;
+  DB.then(database => {
+    TransferRepo.connect(database);
+    TransferRepo.GetTransferPatient(patient).then(result => {
+      if(result.success) {
+        res.json({success: true, info: result.transfer});
+      } else {
+        res.json({success: false, reason: "Error, couldn't get transfer information."});
+      }
+    });
+  });
+  
+}
 /**
  * Changes the patient's medical professional.
  * @param {*} UserRepo 

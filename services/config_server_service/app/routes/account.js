@@ -135,4 +135,10 @@ module.exports = (app) => {
       return `${config.routes.removeTransfer}${req._parsedOriginalUrl.search}`;
     }
   }));
+
+  app.route('/getTransferInfo').get(proxy(url, {
+    proxyReqPathResolver: function(req) {
+      return `${config.routes.getTransferInformation}${req._parsedOriginalUrl.search}`;
+    }
+  }))
 };

@@ -6,10 +6,10 @@ transfers.connect = (connection) => {
 
 // TODO: figure out how to make it into one thing
 // 
-transfers.GetRequestPatient = (username) => {
-  const collection = transfers.db.connection('transfers');
+transfers.GetTransferPatient = (username) => {
+  const collection = transfers.db.collection('Users');
   return new Promise((fulfill, reject) => {
-    collection.findOne({patient : username}, (error, result) => {
+    collection.findOne({username : username}, (error, result) => {
       if(error) {
         console.log("Error, couldn't get query.");
         reject(error);
@@ -17,25 +17,9 @@ transfers.GetRequestPatient = (username) => {
         console.log("Successfully completed db access. " + result);
         // Result is an object that has username, new MP: (code and name), status
         if(result) {
-          fulfill({exists: true, result: result});
+          fulfill({exists: true, transfer: result.accountType.transfer});
         }
         fulfill({exists: false});
-      }
-    })
-  });
-}
-
-transfers.GetRequestByMP = (username) => {
-  const collection = transfers.db.connection('transfers');
-  return new Promise((fulfill, reject) => {
-    collection.findOne({'username' : user}, (error, result) => {
-      if(error) {
-        console.log("Error, couldn't get query.");
-        reject(error);
-      } else {
-        console.log("Successfully completed db access. " + result);
-        // Result is an object that has username, new MP: (code and name), status
-        fulfill(result);
       }
     })
   });
