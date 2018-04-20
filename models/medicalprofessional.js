@@ -1,6 +1,6 @@
 var appointment = require('./appointment');
 /*
-  Model for medical professionals on the CareAway system. The Medical Professional 
+  Model for medical professionals on the CareAway system. The Medical Professional
   object will be stored inside the User accountType attribute of the User
 */
 function MedicalProfessional (firstName, lastName , medicalcode, appointment) {
@@ -12,6 +12,7 @@ function MedicalProfessional (firstName, lastName , medicalcode, appointment) {
   this.appointment = appointment || [];
   this.role = 'medical-professional';
   this.roleType = 'public';
+  this.mail = [];
 }
 // Function to display the medical professional name
 MedicalProfessional.prototype.DisplayName = function ()  {

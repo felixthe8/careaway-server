@@ -48,7 +48,7 @@ app.use(session({
 
 // Allows only one cross origin site.
 app.use(cors(corsOptions));
-app.use(helmet()); 
+app.use(helmet());
 app.use(cookieParser());
 
 // Sets headers to allow cross origin site (client)
@@ -76,7 +76,7 @@ app.get('/isBreached', csrf.createCSRFToken, function(req,res) {
 
 
 
-app.use('/breach', function (req,res){   
+app.use('/breach', function (req,res){
   // Create System admin from response
   const systemAdmin = {
     username:req.body.username,
@@ -86,7 +86,7 @@ app.use('/breach', function (req,res){
   request.post({
     url:     config.url.accountValidation,
     form:   systemAdmin
-  }, function(err,httpResponse,body){ 
+  }, function(err,httpResponse,body){
       // Check if valid system admin
       if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
         // Close all modules
@@ -94,21 +94,28 @@ app.use('/breach', function (req,res){
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
-        
+
         request(config.routes.appointmentBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
+
         request(config.routes.treatmentBreach, function (error, response, body) {
           console.log('error:', error); // Print the error if one occurred and handle it
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
+
+        request(config.routes.mail_service, function(error, response, body){
+            console.log('error', error);
+            console.log('statusCode', response && response.statusCode);
+        });
+        
         // Set MiddleWare Boolean to true
         breached = true;
-      
+
         }
   });
-  res.send('Server has been breached'); 
+  res.send('Server has been breached');
 });
 
 app.use(morgan('dev'));
