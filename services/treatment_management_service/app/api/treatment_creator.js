@@ -6,44 +6,16 @@ api.create = () => (req, res) => {
   console.log('Create treatment');
 }
 
-// Returns the MP code of the medical professional
-// Function takes in a meter as a parameter
-api.createTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
-  var meter = {
-      label: req.body.treatment.label,
-      question: req.body.treatment.question,
-      scale: req.body.treatment.scale,
-      due_date: req.body.treatment.due_date,
-      patient_input: null,
-      created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
-      updated_at: null
-  }
+/* Treatment API Calls */
+
+api.getTreatment = (TreatmentRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.CreateTreatment(req.body.user, meter);
-    res.json({ success: true });
+    treatmentRepo.GetPatientTreatment(req.query.username).then(result => {
+      res.json(result);
+    });
   })
-
-}
-
-// Returns the MP code of the medical professional
-// Function takes in a meter as a parameter
-api.createTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
-  var checklist = {
-      label: req.body.treatment.label,
-      list: req.body.treatment.list,
-      due_date: req.body.treatment.due_date,
-      created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
-      updated_at: null
-  }
-
-  DB.then(database => {
-    var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.CreateTreatment(req.body.user, checklist);
-    res.json({ success: true });
-  })
-
 }
 
 api.deleteTreatment = (TreatmentRepo,DB) => (req,res) => {
@@ -56,15 +28,87 @@ api.deleteTreatment = (TreatmentRepo,DB) => (req,res) => {
 
 }
 
-api.getTreatment = (TreatmentRepo,DB) => (req,res) => {
+/* Treatment Meter API Calls */
+
+// Returns the MP code of the medical professional
+// Function takes in a meter as a parameter
+api.createTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
+  var meter = {
+    label: req.body.treatment.label,
+    question: req.body.treatment.question,
+    scale: req.body.treatment.scale,
+    due_date: req.body.treatment.due_date,
+    patient_input: null,
+    created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
+    updated_at: null
+  }
 
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.GetPatientTreatment(req.query.username).then(result => {
-      res.json(result);
-    });
+    treatmentRepo.CreateTreatment(req.body.user, meter);
+    res.json({ success: true });
   })
+
 }
+
+api.updateTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
+  var meter = {
+    label: req.body.treatment.label,
+    question: req.body.treatment.question,
+    scale: req.body.treatment.scale,
+    due_date: req.body.treatment.due_date,
+    patient_input: null,
+    created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
+    updated_at: null
+  }
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.UpdateTreatment(req.body.user, meter);
+    res.json({ success: true });
+  })
+
+}
+
+/* Treatment Checklist API Calls */
+
+// Returns the MP code of the medical professional
+// Function takes in a meter as a parameter
+api.createTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
+  var checklist = {
+    label: req.body.treatment.label,
+    list: req.body.treatment.list,
+    due_date: req.body.treatment.due_date,
+    created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
+    updated_at: null
+  }
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.CreateTreatment(req.body.user, checklist);
+    res.json({ success: true });
+  })
+
+}
+
+api.updateTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
+  var checklist = {
+    label: req.body.treatment.label,
+    list: req.body.treatment.list,
+    due_date: req.body.treatment.due_date,
+    created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
+    updated_at: null
+  }
+
+  DB.then(database => {
+    var treatmentRepo = new TreatmentRepo(database);
+    treatmentRepo.UpdateTreatment(req.body.user, checklist);
+    res.json({ success: true });
+  })
+
+}
+
+/* Diagnosis API Calls */
 
 api.getDiagnosisList = (TreatmentRepo, DB) => (req,res) => {
   DB.then(database => {
@@ -87,4 +131,5 @@ api.saveDiagnosis = (UserRepo, DB) => (req,res) => {
      res.json({success: true});
   })
 }
+
 module.exports = api;

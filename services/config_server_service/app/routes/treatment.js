@@ -19,12 +19,6 @@ module.exports = (app) => {
     }
   }));
 
-  app.route('/deleteTreatment').post(proxy(config.url.treatment, {
-    proxyReqPathResolver: function(req) {
-      return config.routes.deleteTreatment;
-    }
-  }));
-
   app.route('/getTreatment').get(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getTreatment}${req._parsedOriginalUrl.search}`;
@@ -34,6 +28,12 @@ module.exports = (app) => {
   app.route('/updatePatientTreatment').put(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return config.routes.patientUpdate;
+    }
+  }));
+
+  app.route('/deleteTreatment').post(proxy(config.url.treatment, {
+    proxyReqPathResolver: function(req) {
+      return config.routes.deleteTreatment;
     }
   }));
 
@@ -47,6 +47,12 @@ module.exports = (app) => {
   app.route('/getTreatmentMeter').get(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getTreatmentMeter}${req._parsedOriginalUrl.search}`;
+    }
+  }));
+
+  app.route('/updateTreatmentMeter').put(proxy(config.url.treatment, {
+    proxyReqPathResolver: function(req) {
+      return config.routes.updateTreatmentMeter;
     }
   }));
 
@@ -72,6 +78,12 @@ module.exports = (app) => {
   app.route('/getTreatmentChecklist').get(proxy(config.url.treatment, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getTreatmentChecklist}${req._parsedOriginalUrl.search}`;
+    }
+  }));
+
+  app.route('/updateTreatmentChecklist').put(proxy(config.url.treatment, {
+    proxyReqPathResolver: function(req) {
+      return config.routes.updateTreatmentChecklist;
     }
   }));
 

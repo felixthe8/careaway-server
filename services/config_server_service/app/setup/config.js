@@ -59,11 +59,13 @@ config.routes = {
 
   // Treatment Meter Module Routes
   createTreatmentMeter : `${treatmentConfig.routes.createTreatmentMeter}`,
+  updateTreatmentMeter : `${treatmentConfig.routes.updateTreatmentMeter}`,
   getTreatmentMeter: `${treatmentConfig.routes.getTreatmentMeter}`,
   getSingleTreatmentmeter: `${treatmentConfig.routes.getSingleTreatmentmeter}`,
 
   // Treatment Checklist Module Routes
   createTreatmentChecklist : `${treatmentConfig.routes.createTreatmentChecklist}`,
+  updateTreatmentChecklist : `${treatmentConfig.routes.updateTreatmentChecklist}`,
   getTreatmentChecklist: `${treatmentConfig.routes.getTreatmentChecklist}`,
   getSingleTreatmentchecklist: `${treatmentConfig.routes.getSingleTreatmentchecklist}`,
 
