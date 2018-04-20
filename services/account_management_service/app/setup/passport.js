@@ -13,7 +13,11 @@ module.exports = () => {
   passport.serializeUser((user, done) => {
     done(null, user);
   });
-
+/**
+ * Connects to API to Retrieve and Compare to HIBP
+ * Returns Bool
+ * @param {*} password 
+ */
   function getPasswordList(password){
     const passHashed = CryptoJS.SHA1(password).toString();
     const passPrefix = passHashed.substring(0,5);
@@ -21,6 +25,7 @@ module.exports = () => {
     return requestPromise(badPasswordURL+ passPrefix).then(body =>{
       var goodPasswordCheck = true;
       var i = 0;
+      // Turns String List to Array
       const hashList = body.split("\r\n");
       hashList.forEach(element => {
         if (element.split(":")[0]===passSuffix){
@@ -112,9 +117,11 @@ module.exports = () => {
         var newUser = User.createGenericUser(Security, Salt, req.body);
         var role = new Patient(firstName, lastName, medicalCode);
         newUser.accountType = role;
-        // put user in db
+        // calls aync promise to retrieve and compare password
         getPasswordList(req.body.password).then(body => {
+          // if bad password not detected
           if(body){
+              // put user in db
             userRepo.Create(newUser).then(res => {
               userRepo.FindUser(newUser.username).then(result => {
                 const id = result.User[0]._id;
@@ -122,6 +129,7 @@ module.exports = () => {
               })
             });
           } else{
+            // Fulfill Promise with Bad Passord if detected
             fulfill({"BadPassword":true});
           }
       });
@@ -152,8 +160,10 @@ module.exports = () => {
       var role = new MedicalProfessional(firstName, lastName, medicalCode);
       
       newUser.accountType = role;
-      // put user in db
+      // calls aync promise to retrieve and compare password
       getPasswordList(req.body.password).then(body => {
+        // put user in db
+        // if bad password not detected
           if(body){
             userRepo.Create(newUser).then(res => {
               userRepo.FindUser(newUser.username).then(result => {
@@ -162,6 +172,7 @@ module.exports = () => {
               })
             });
           } else{
+             // Fulfill Promise with Bad Passord if detected
             fulfill({"BadPassword":true});
           }
       });
