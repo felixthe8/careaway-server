@@ -1,7 +1,31 @@
 var CryptoJS = require('crypto-js');
 var jwt = require('jsonwebtoken');
+const requestPromise = require('request-promise');
 const api = {};
+/**
+ * 
+ * @param {*} password 
+ */
+function getPasswordList(password){
+  const passHashed = CryptoJS.SHA1(password).toString();
+  const passPrefix = passHashed.substring(0,5);
+  const passSuffix = passHashed.slice(5).toUpperCase();
+  console.log("header:", passPrefix);
+  console.log("suffix:", passSuffix, typeof(passSuffix));
+  return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
+    var goodPasswordCheck = true;
+    var i = 0;
+    const hashList = body.split("\r\n");
+    hashList.forEach(element => {
+      if (element.split(":")[0]===passSuffix){
+          goodPasswordCheck = false;
+      };
+    });
+    return goodPasswordCheck;
 
+  });
+
+};
 /**
  * Register a new user from third party source into the careaway system
  * @param {*} User is the model of the user in the careaway system
@@ -22,26 +46,34 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
     transformer.decodeJWT(token).then(function(value){
       // Checks if there were any errors during the message decoding
       if(value.username && value.password && value.roleType){
-        // If the message was decoded successfully check if the username already exist in our system
-        userRepo.FindUser(value.username).then(function(query){
-          // Checks if the user does exist within our system
-          if(query.User.length === 0){
-            // If the user is new begin making a new salt and save the password and username into the database
-            var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
-            // use value.password than saving it to a variable
-            var passHashed = CryptoJS.HmacSHA256(value.password, saltStrPass).toString();
-            // Saves all salt to an object
-            var identifier = new Salt(saltStrPass);
-            // Generates a new user using the received username and password from sso
-            var newUser = new User.User(value.username, passHashed, {'role': 'SSO', 'roleType': value.roleType}, {}, identifier);
-            userRepo.Create(newUser);
-            // Return success message
-            res.json({success: true});           
-          } else {
-            res.status(401);
+        getPasswordList(req.body.password).then(body => {
+          if(body){
+            userRepo.FindUser(value.username).then(function(query){
+              // Checks if the user does exist within our system
+              if(query.User.length === 0){
+                // If the user is new begin making a new salt and save the password and username into the database
+                var saltStrPass = CryptoJS.lib.WordArray.random(128/8).toString();
+                // use value.password than saving it to a variable
+                var passHashed = CryptoJS.HmacSHA256(value.password, saltStrPass).toString();
+                // Saves all salt to an object
+                var identifier = new Salt(saltStrPass);
+                // Generates a new user using the received username and password from sso
+                var newUser = new User.User(value.username, passHashed, {'role': 'SSO', 'roleType': value.roleType}, {}, identifier);
+                userRepo.Create(newUser);
+                // Return success message
+                res.json({success: true});           
+              } else {
+                res.status(401);
+                res.end();
+              }
+            });
+          } else{
+            res.json({error: "Bad Password"});
             res.end();
           }
-        });
+      });
+        // If the message was decoded successfully check if the username already exist in our system
+        
       } else {
         // make this a variable at the end
         res.status(401); // Return a 401 bad request back to the sender
