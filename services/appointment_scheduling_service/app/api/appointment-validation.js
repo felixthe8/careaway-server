@@ -1,6 +1,11 @@
 const moment = require('moment');
-
+/**
+ * Tests to see if two appointments are exactly the same.
+ * @param {*} firstAppointment The first appointment object.
+ * @param {*} secondAppointment The second appointment object.
+ */
 const isSame = (firstAppointment, secondAppointment) => {
+  // Tests if the two initiators are the same for both appointments.
   const sameInitiator = firstAppointment.initiator === secondAppointment.initiator;
   const sameAppointee = firstAppointment.appointee === secondAppointment.appointee;
   const sameTime = moment(firstAppointment.startTime).isSame(secondAppointment.startTime);
@@ -57,7 +62,6 @@ const noConflicts_Create = (appointment, appointmentList) => {
       break;
     }
   }
-  console.log(valid);
   return valid;
 };
 
