@@ -6,43 +6,23 @@ const passport = require('passport');
 const service = {};
 const UserRepo = models.UserRepo;
 const DB = models.DB;
-
+const badPasswordURL = require('../../config/index').routes.badPassword;
 var randomstring = require('randomstring');
 module.exports = () => {
   // Serializes an authenticated user.
   passport.serializeUser((user, done) => {
     done(null, user);
-  });function getPasswordList(password){
-    const passHashed = CryptoJS.SHA1(password).toString();
-    const passPrefix = passHashed.substring(0,5);
-    const passSuffix = passHashed.slice(5).toUpperCase();
-    return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
-      var goodPasswordCheck = true;
-      var i = 0;
-      const hashList = body.split("\r\n");
-      hashList.forEach(element => {
-        if (element.split(":")[0]===passSuffix){
-            goodPasswordCheck = false;
-        };
-      });
-      return goodPasswordCheck;
-
-    });
-
-  };
+  });
 
   function getPasswordList(password){
     const passHashed = CryptoJS.SHA1(password).toString();
     const passPrefix = passHashed.substring(0,5);
     const passSuffix = passHashed.slice(5).toUpperCase();
-    console.log("header:", passPrefix);
-    console.log("suffix:", passSuffix, typeof(passSuffix));
-    return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
+    return requestPromise(badPasswordURL+ passPrefix).then(body =>{
       var goodPasswordCheck = true;
       var i = 0;
       const hashList = body.split("\r\n");
       hashList.forEach(element => {
-        console.log(element.split(":")[0])
         if (element.split(":")[0]===passSuffix){
             goodPasswordCheck = false;
         };

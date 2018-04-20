@@ -1,27 +1,8 @@
 var CryptoJS = require('crypto-js');
 const requestPromise = require('request-promise');
+const badPasswordURL = require('../../config/index').routes.badPassword;
 const api = {};
 
-function getPasswordList(password){
-  const passHashed = CryptoJS.SHA1(password).toString();
-  const passPrefix = passHashed.substring(0,5);
-  const passSuffix = passHashed.slice(5).toUpperCase();
-  console.log("header:", passPrefix);
-  console.log("suffix:", passSuffix, typeof(passSuffix));
-  return requestPromise('https://api.pwnedpasswords.com/range/'+ passPrefix).then(body =>{
-    var goodPasswordCheck = true;
-    var i = 0;
-    const hashList = body.split("\r\n");
-    hashList.forEach(element => {
-      if (element.split(":")[0]===passSuffix){
-          goodPasswordCheck = false;
-      };
-    });
-    return goodPasswordCheck;
-
-  });
-
-};
 /**
  * Authenticates a client using passport's local login function.
  * @param {*} passport - The passport module.
@@ -172,12 +153,29 @@ api.resetCreds = (UserRepo, DB) => (req, res) => {
           }
         });
       } else{
-        res.json({error:"Bad Password"});
+        res.json({BadPassword:true});
       }
   });
     
   });
 }
+function getPasswordList(password){
+  const passHashed = CryptoJS.SHA1(password).toString();
+  const passPrefix = passHashed.substring(0,5);
+  const passSuffix = passHashed.slice(5).toUpperCase();
+  return requestPromise(badPasswordURL+ passPrefix).then(body =>{
+    var goodPasswordCheck = true;
+    var i = 0;
+    const hashList = body.split("\r\n");
+    hashList.forEach(element => {
+      if (element.split(":")[0]===passSuffix){
+          goodPasswordCheck = false;
+      };
+    });
+    return goodPasswordCheck;
 
+  });
+
+};
 
 module.exports = api;
