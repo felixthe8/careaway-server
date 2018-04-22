@@ -69,4 +69,6 @@ server.listen(config.server.port, () => {
 });
 
 // Create necessary collections in the backend
-const init = require('@init');
+var initialize = require('@init');
+var initializationObject = new initialize();
+initializationObject.init();
