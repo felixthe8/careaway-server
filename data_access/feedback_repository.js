@@ -54,8 +54,7 @@ FeedbackAccess.prototype.EditFeedback = function(feedback){
 FeedbackAccess.prototype.GetFeedbacks = function(){
   const collection = this.db.collection('Feedbacks');
   return new promise(function(fullfill,reject)
-  { 
-    //This is the filter to locate any user with the role  medical professional
+  {
     collection.find().toArray(function(err, res) 
     {
       if(err)
