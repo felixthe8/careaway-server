@@ -15,7 +15,7 @@ module.exports = (app) => {
   // Feedback CRUD Routes but without the D
   app.route('/feedback').get(proxy(config.url.feedback, {
     proxyReqPathResolver: function(req) {
-      return `${config.routes.feedback}${req._parsedOriginalUrl.search}`;
+      return `${config.routes.feedback}${req._parsedOriginalUrl.search || ''}`;
     }
   }));
 

@@ -31,9 +31,9 @@ api.editFeedback = (FeedbackRepo, DB) => (req, res) => {
   DB.then(database => { 
     const repo = new FeedbackRepo(database);
 
-    const feedbac = req.body.feedback;
+    const feedback = req.body;
 
-    repo.EditFeedback(newFeedback);
+    repo.EditFeedback(feedback);
     res.json({success: true});
   }).catch(err => {
     // An error occurred accessing the database.
