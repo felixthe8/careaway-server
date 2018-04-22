@@ -55,7 +55,7 @@ FeedbackAccess.prototype.GetFeedbacks = function(){
   const collection = this.db.collection('Feedbacks');
   return new promise(function(fullfill,reject)
   {
-    collection.find().toArray(function(err, res) 
+    collection.find().sort({_id:-1}).toArray(function(err, res) 
     {
       if(err)
       {
