@@ -60,4 +60,4 @@ server.listen(config.server.port, () => {
 });
 
 // Conditions to be stored in the backend
-const conditionSeed = require('./condition_seed');
+const conditionSeed = require('./conditions/condition_seed');
