@@ -78,3 +78,8 @@ The `module-alias` library allows the following aliases to be used throughout th
 | :----------------: |----------------| 
 | `@models`          | ./models       | 
 | `@dataAccess`      | ./data_access  | 
+
+## Mongo DB command to create Conditions array
+* use CareAway
+* db.createCollection(“Conditions”)
+* db.Conditions.insert({Condition: ["Asthma","Generalized Anxiety Disorder", "Diabetes", "High Blood Pressure", "Panic Disorder", "Social Anxiety Disorder" ]})

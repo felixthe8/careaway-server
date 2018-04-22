@@ -9,7 +9,7 @@ module.exports = {
     register: '/account/api/registration',
     ssoRegisterPatient: '/account/api/ssoregistration/patient',
     ssoRegisterMed: '/account/api/ssoregistration/medical-professional',
-
+    badPassword: 'https://api.pwnedpasswords.com/range/',
     // Authentication
     login: '/account/api/authentication',
     validateUsername: '/account/api/validate-username',

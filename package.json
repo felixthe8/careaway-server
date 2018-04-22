@@ -34,7 +34,11 @@
     "@configServerAPP": "./services/config_server_service/config/app.js",
     "@configServerConfig": "./services/config_server_service/config/index.js",
     "@models": "./models",
-    "@dataAccess": "./data_access"
+    "@dataAccess": "./data_access",
+    "@mailConfig": "./services/mail_service/config/index.js",
+    "@mailModel": "./services/mail_service/app/setup",
+    "@mailAPI": "./services/mail_service/app/api",
+    "@mailAPP": "./services/mail_service/config/app.js"
   },
   "bugs": {
     "url": "https://github.com/CrystalChun/careaway-server/issues"
@@ -67,6 +71,7 @@
     "passport-local": "^1.0.0",
     "promise": "^8.0.1",
     "randomstring": "^1.1.5",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
   }
 }

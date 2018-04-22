@@ -1,9 +1,9 @@
 var appointment = require('./appointment');
 var meter = require('./meter');
-var checklist = require('./checklist');    
+var checklist = require('./checklist');
 /*
-  Model for patients on the CareAway system. The Patient object will be 
-  stored inside the User accountType attribute of the User. 
+  Model for patients on the CareAway system. The Patient object will be
+  stored inside the User accountType attribute of the User.
 */
 function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appointment) {
   this.firstName = firstName || '';
@@ -14,7 +14,7 @@ function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appoint
   // This refers to an array to represent the appointments that the patient will have.
   // As appointments are added, they will be pushed into the array
   this.appointment = appointment || [];
-  // This refers to an array to represent the treatment widgets the patient will be 
+  // This refers to an array to represent the treatment widgets the patient will be
   // assigned. As treatment widgets are added, they will be pushed into the array
   this.treatment = treatment || [];
   this.role = 'patient';
@@ -26,6 +26,7 @@ function Patient (firstName, lastName, medicalcode, diagnosis, treatment,appoint
     newMp: '',
     mpCode: ''
   }
+  this.mail = [];
 }
 // Function to return patient name
 Patient.prototype.DisplayName = function () {
@@ -35,7 +36,7 @@ Patient.prototype.DisplayName = function () {
 Patient.prototype.DisplayDiagnosis = function () {
   return this.diagnosis;
 }
-// Function to add a widget. Takes in 'widget' object as a parameter 
+// Function to add a widget. Takes in 'widget' object as a parameter
 Patient.prototype.AddWidget = function (widget) {
   // Push 'widget' onto the array
   this.treatment.push(widget);

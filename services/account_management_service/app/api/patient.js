@@ -36,8 +36,9 @@ api.getTransfer = (TransferRepo, DB) => (req, res) => {
   DB.then(database => {
     TransferRepo.connect(database);
     TransferRepo.GetTransferPatient(patient).then(result => {
-      if(result.success) {
-        res.json({success: true, info: result.transfer});
+      if(result.exists) {
+        console.log(result.transfer);
+        res.json({success: true, transfer: result.transfer});
       } else {
         res.json({success: false, reason: "Error, couldn't get transfer information."});
       }

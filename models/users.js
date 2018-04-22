@@ -4,9 +4,10 @@ var mp = require('./medicalprofessional');
 var admin = require('./systemadmin');
 var identifier = require('./identifier');
 const CryptoJS = require('crypto-js');
+
 /*
   Model for user on the CareAway system. The User will be the top
-  level of the object hierarchy. 
+  level of the object hierarchy.
 */
 function User (username, password, role, security, identifier) {
   this.username = username || '';
@@ -19,8 +20,8 @@ function User (username, password, role, security, identifier) {
   this.security = security || [];
   // identifier is an array that will hold the user salt value
   this.identifier = identifier || {};
-  
 }
+
 // creates a user object that both patient and medical professional need for registration
 const createGenericUser = (Security, Salt, req) => {
   // grab all registration info from body
@@ -49,12 +50,12 @@ const createGenericUser = (Security, Salt, req) => {
   const a3Hashed = CryptoJS.HmacSHA256(securityA3,salt.saltA3).toString();
 
   // create array of security question objects
-  var sQ = [ 
+  var sQ = [
     new Security(securityQ1,a1Hashed),
     new Security(securityQ2,a2Hashed),
     new Security(securityQ3,a3Hashed)
   ]
-  
+
   // create user object and return it
   return new User(username, passHashed, null, sQ, salt);
 };

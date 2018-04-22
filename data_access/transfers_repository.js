@@ -14,7 +14,7 @@ transfers.GetTransferPatient = (username) => {
         console.log("Error, couldn't get query.");
         reject(error);
       } else {
-        console.log("Successfully completed db access. " + result);
+        console.log("Successfully completed db access. " + JSON.stringify(result.accountType.transfer));
         // Result is an object that has username, new MP: (code and name), status
         if(result) {
           fulfill({exists: true, transfer: result.accountType.transfer});
