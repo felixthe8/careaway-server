@@ -71,4 +71,14 @@ FeedbackAccess.prototype.GetFeedbacks = function(){
   });
 
 };
+
+FeedbackAccess.prototype.writeFeedbackCollection = function () {
+  this.db.createCollection("Feedbacks", function(err,res) {
+    if(err) {
+      console.log(err);
+      console.log("Failed to make Feedback collection")
+    }
+  });
+}
+
 module.exports = FeedbackAccess;

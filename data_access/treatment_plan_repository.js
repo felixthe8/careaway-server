@@ -151,7 +151,7 @@ TreatmentPlanAccess.prototype.getDiagnosisList = function() {
  * @param {*} diagnoses the array of diagnoses
  */
 
-TreatmentPlanAccess.prototype.writeDiagnosisList = function (diagnoses) {
+TreatmentPlanAccess.prototype.writeDiagnosisCollection = function (diagnoses) {
   this.db.createCollection("Conditions", function(err, res) {
     if(err) {
       console.log("Could not create collection")

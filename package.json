@@ -45,7 +45,8 @@
     "@mailAPI": "./services/mail_service/app/api",
     "@mailAPP": "./services/mail_service/config/app.js",
     "@init": "./services/init/init.js",
-    "@conditionInit" : "./services/init/conditions/condition_seed.js"
+    "@conditionInit" : "./services/init/conditions/condition_seed.js",
+    "@feedbackInit" : "./services/init/feedback/feedback.js"
   },
   "bugs": {
     "url": "https://github.com/CrystalChun/careaway-server/issues"

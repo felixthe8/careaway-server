@@ -9,19 +9,15 @@ var mongodb = require('../../../data_access/db_connection.js');
 
 var conditions = require('./conditions');
 
-var server = app.listen(8082 , function() {
-  var host = server.address().address
-  var port = server.address().port
-
   var connection = new mongodb();
   connection.Connect().then (function (value) {
     var supportedDiagnoses = conditions.list;
     db = value
     var accessTool = new Repo(db)
 
-    accessTool.writeDiagnosisList(supportedDiagnoses);
+    accessTool.writeDiagnosisCollection(supportedDiagnoses);
 
   })
-})
+
 
 
