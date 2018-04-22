@@ -152,7 +152,18 @@ TreatmentPlanAccess.prototype.writeDiagnosisList = function (diagnoses) {
       console.log("Could not create collection")
     } else {
       const collection = this.db.collection('Conditions');
-      collection.insertOne( {"Condition" : diagnoses})  
+      collection.count(function (err, count) {
+        // Collection is empty so write the collection to store the diagnoses
+        if (count === 0) {
+          collection.insertOne( {"Condition" : diagnoses})
+        } else {
+          // Otherwise, find the document and update it with the diagnoses
+          collection.findOneAndUpdate(
+            {'Condition' : {$exists:true}},
+            {$set:{"Condition" : diagnoses }}
+          )
+        }  
+      })
 
     }
   })
