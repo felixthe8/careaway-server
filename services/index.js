@@ -20,7 +20,7 @@ const mailConfig = require('@mailConfig');
 const accountPORT = accountConfig.server.port;
 const appointmentPORT = appointmentConfig.server.port;
 const treatmentPORT = treatmentConfig.server.port;
-const feedbackConfig = feedbackConfig.server.port;
+const feedbackPORT = feedbackConfig.server.port;
 const mailPORT = mailConfig.server.port;
 
 // Creating the servers for each service.
@@ -46,7 +46,7 @@ treatmentServer.listen(treatmentPORT, () => {
 });
 
 // Starting the feedback manager server.
-treatmentServer.listen(feedbackPORT, () => {
+feedbackServer.listen(feedbackPORT, () => {
   console.log(`Feedback manager API running on port ${feedbackPORT}.`);
 });
 

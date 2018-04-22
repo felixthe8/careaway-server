@@ -9,7 +9,7 @@ module.exports = (app) => {
     
     // POST /feedback/api/feedback
     // Create a feedback
-    app.route(config.routes.feedback).post(api.createFeedback(models.FeedbackRepo, models.DB));
+    app.route(config.routes.feedback).post(api.createFeedback(models.FeedbackRepo, models.Feedback, models.DB));
     
     // PUT /feedback/api/feedback
     // Edit a feedback
