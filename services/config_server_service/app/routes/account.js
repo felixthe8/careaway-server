@@ -130,15 +130,21 @@ module.exports = (app) => {
       return config.routes.mpTransfer;
     }
   }));
-  app.route('/removeTransfer').get(proxy(url,{
+  app.route('/removeTransfer').post(proxy(url,{
     proxyReqPathResolver: function(req) {
-      return `${config.routes.removeTransfer}${req._parsedOriginalUrl.search}`;
+      return config.routes.removeTransfer;
     }
   }));
 
   app.route('/getTransferInfo').get(proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getTransferInformation}${req._parsedOriginalUrl.search}`;
+    }
+  }));
+
+  app.route('/acceptTransfer').post(proxy(url, {
+    proxyReqPathResolver: function(req) {
+      return config.routes.acceptTransfer;
     }
   }))
 };

@@ -89,14 +89,19 @@ UserAccess.prototype.ResetCredential = function(username,password,salt){
  * @param {*} mpcode The new medical professional's code.
  */
 UserAccess.prototype.ChangeMP = function(username, mpcode){
-  const collection = this.db.collection('Users');
-  collection.updateOne(
-    {'username' : username},//looks for username in the database
-    { $set: {'accountType.medicalcode':mpcode}},//inserts new mpcode
-    function(err, result){
-      console.log('Updated MP code');
-    }
-  );
+  return new Promise ((fulfill, reject) => {
+    const collection = this.db.collection('Users');
+    collection.updateOne(
+      {'username' : username},//looks for username in the database
+      { $set: {'accountType.medicalcode':mpcode}},//inserts new mpcode
+      function(err, result){
+        if(err) console.log(err);
+        console.log('Updated MP code');
+        fulfill({success: true});
+      }
+    );
+  })
+  
 };
 /**
  * This function finds an existing user in the database

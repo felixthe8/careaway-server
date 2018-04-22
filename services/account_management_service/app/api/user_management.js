@@ -126,30 +126,39 @@ api.mpTransfer = (UserRepo, TransferRepo, DB) => (req, res) => {
 }
 
 // When a patient accepts a transfer request.
-api.acceptTransfer = (UserRepo, DB) => (req, res) => {
+api.acceptTransfer = (UserRepo, DB) => (req, res, next) => {
   DB.then(database => {
     const userRepo = new UserRepo(database);
     const username = req.body.patient;
     const newMp = req.body.transfer.mpCode;
     // Changes their mp to the new one.
-    userRepo.ChangeMP(username, newMp);
-  })
+    userRepo.ChangeMP(username, newMp).then(result => {
+      if(result.success) next();
+      else res.end();
+    });
+  });
 }
 
 api.removeMpTransfer = (TransferRepo, DB) => (req, res) => {
+  console.log("Here");
   DB.then(database => {
     const transfer = {
       inProgress: false,
       newMp: '',
       mpcode: ''
     }
+    
     const request = {
-      patient: req.query.patient,
+      patient: req.body.patient,
       transfer: transfer
     }
     TransferRepo.connect(database);
     TransferRepo.Update(request).then(result => {
-      res.json({success: result.success, transfer: result.transfer});
+      if(result.success) {
+        res.json({success: result.success, transfer: result.transfer});
+      } else {
+        res.json({success: false, message: "Error removing request."});
+      }
     });
   });
 }

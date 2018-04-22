@@ -23,7 +23,7 @@ module.exports = (app) => {
   // TODO: put in config server routes (config and account)
   // GET
   // Removes the mp transfer request.
-  app.route(config.routes.removeTransfer).get(api.removeMpTransfer(models.TransferRepo, models.DB));
+  app.route(config.routes.removeTransfer).post(api.removeMpTransfer(models.TransferRepo, models.DB));
 
   // POST
   // Acceptance of mp transfer, then removes that mp transfer request.

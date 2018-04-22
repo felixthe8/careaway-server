@@ -38,7 +38,8 @@ config.routes = {
   mpTransfer: `${accountConfig.routes.mpTransfer}`,
   removeTransfer: `${accountConfig.routes.removeTransfer}`,
   getTransferInformation: `${accountConfig.routes.getTransferInformation}`,
-  
+  acceptTransfer: `${accountConfig.routes.acceptTransfer}`,
+
   // Appointment routes.
   patientUpdate: `${treatmentConfig.routes.patientUpdate}`,
   getPatientUserNames: `${treatmentConfig.routes.getPatientUserNames}`,
