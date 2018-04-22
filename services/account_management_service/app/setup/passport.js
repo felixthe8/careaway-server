@@ -1,11 +1,12 @@
 const LocalStrategy = require('passport-local').Strategy;
 const models = require('@accountModels');
-var CryptoJS = require('crypto-js');
+const CryptoJS = require('crypto-js');
+const requestPromise = require('request-promise');
 const passport = require('passport');
 const service = {};
 const UserRepo = models.UserRepo;
 const DB = models.DB;
-
+const badPasswordURL = require('../../config/index').routes.badPassword;
 var randomstring = require('randomstring');
 module.exports = () => {
   // Serializes an authenticated user.
@@ -13,6 +14,25 @@ module.exports = () => {
     done(null, user);
   });
 
+  function getPasswordList(password){
+    const passHashed = CryptoJS.SHA1(password).toString();
+    const passPrefix = passHashed.substring(0,5);
+    const passSuffix = passHashed.slice(5).toUpperCase();
+    return requestPromise(badPasswordURL+ passPrefix).then(body =>{
+      var goodPasswordCheck = true;
+      var i = 0;
+      const hashList = body.split("\r\n");
+      hashList.forEach(element => {
+        if (element.split(":")[0]===passSuffix){
+            goodPasswordCheck = false;
+        };
+      });
+      return goodPasswordCheck;
+
+    });
+
+  };
+  
   // Deserializes a user. Never used??
   passport.deserializeUser((id, done) => {
     DB.then(database => {
@@ -88,16 +108,23 @@ module.exports = () => {
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
         // create user object with patient role
+
         var newUser = User.createGenericUser(Security, Salt, req.body);
         var role = new Patient(firstName, lastName, medicalCode);
         newUser.accountType = role;
         // put user in db
-        userRepo.Create(newUser).then(res => {
-          userRepo.FindUser(newUser.username).then(result => {
-            const id = result.User[0]._id;
-            fulfill({success: true, user: id});
-          });
-        })
+        getPasswordList(req.body.password).then(body => {
+          if(body){
+            userRepo.Create(newUser).then(res => {
+              userRepo.FindUser(newUser.username).then(result => {
+                const id = result.User[0]._id;
+                fulfill({success: true, user: id});
+              })
+            });
+          } else{
+            fulfill({"BadPassword":true});
+          }
+      });
       }
     })
     
@@ -126,12 +153,18 @@ module.exports = () => {
       
       newUser.accountType = role;
       // put user in db
-      userRepo.Create(newUser).then(res => {
-        userRepo.FindUser(newUser.username).then(result => {
-          const id = result.User[0]._id;
-          fulfill({success: true, user: id});
-        })
-      })
+      getPasswordList(req.body.password).then(body => {
+          if(body){
+            userRepo.Create(newUser).then(res => {
+              userRepo.FindUser(newUser.username).then(result => {
+                const id = result.User[0]._id;
+                fulfill({success: true, user: id});
+              })
+            });
+          } else{
+            fulfill({"BadPassword":true});
+          }
+      });
     });
     
   }
