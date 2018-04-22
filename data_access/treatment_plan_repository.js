@@ -146,5 +146,17 @@ TreatmentPlanAccess.prototype.getDiagnosisList = function() {
   } )
 }
 
+TreatmentPlanAccess.prototype.writeDiagnosisList = function (diagnoses) {
+  this.db.createCollection("Conditions", function(err, res) {
+    if(err) {
+      console.log("Could not create collection")
+    } else {
+      const collection = this.db.collection('Conditions');
+      collection.insertOne( {"Condition" : diagnoses})  
+
+    }
+  })
+}
+
 
 module.exports = TreatmentPlanAccess

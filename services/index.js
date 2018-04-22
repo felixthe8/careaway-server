@@ -58,3 +58,6 @@ const server = http.Server(configServer);
 server.listen(config.server.port, () => {
   console.log(`Config server running on port ${config.server.port}`);
 });
+
+// Conditions to be stored in the backend
+const conditionSeed = require('./condition_seed');
