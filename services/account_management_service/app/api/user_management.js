@@ -141,6 +141,7 @@ api.acceptTransfer = (UserRepo, DB) => (req, res, next) => {
 
 // Deletes the mp transfer request.
 api.removeMpTransfer = (TransferRepo, DB) => (req, res) => {
+  
   DB.then(database => {
     const transfer = {
       inProgress: false,
