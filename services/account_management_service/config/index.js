@@ -33,6 +33,8 @@ module.exports = {
     getPatients: '/account/api/get-all-patients',
     getAllInfoForPatientAppointment: '/account/api/get-patient-appointment-info',
     returnCode: '/account/api/returnCode',
+
+    // Transfer
     mpTransfer: '/account/api/newTransfer',
     removeTransfer: '/account/api/removeTransfer',
     acceptTransfer: '/account/api/acceptTransfer',

@@ -20,8 +20,7 @@ module.exports = (app) => {
   // Creating or updating a Medical Professional transfer.
   app.route(config.routes.mpTransfer).post(api.mpTransfer(models.UserRepo, models.TransferRepo, models.DB));
 
-  // TODO: put in config server routes (config and account)
-  // GET
+  // POST
   // Removes the mp transfer request.
   app.route(config.routes.removeTransfer).post(api.removeMpTransfer(models.TransferRepo, models.DB));
 
