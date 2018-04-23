@@ -19,7 +19,8 @@ module.exports = {
 
     // Patient
     updateDiagnosis: '/account/api/update-diagnosis',
-
+    getTransferInformation: '/account/api/transfer-info',
+    
     // sso
     ssoLogin: '/SSO/login',
     ssoRegistration: '/SSO/registration',
@@ -33,6 +34,11 @@ module.exports = {
     getAllInfoForPatientAppointment: '/account/api/get-patient-appointment-info',
     returnCode: '/account/api/returnCode',
 
+    // Transfer
+    mpTransfer: '/account/api/newTransfer',
+    removeTransfer: '/account/api/removeTransfer',
+    acceptTransfer: '/account/api/acceptTransfer',
+    
     accountBreach: 'http://localhost:4100/breach', // Why is this the full url???
   },
   server: {
