@@ -71,4 +71,5 @@ FeedbackAccess.prototype.GetFeedbacks = function(){
   });
 
 };
+
 module.exports = FeedbackAccess;

@@ -68,5 +68,7 @@ server.listen(config.server.port, () => {
   console.log(`Config server running on port ${config.server.port}`);
 });
 
-// Conditions to be stored in the backend
-const conditionSeed = require('./conditions/condition_seed');
+// Create necessary collections in the backend
+var initialize = require('@init');
+var initializationObject = new initialize();
+initializationObject.init();

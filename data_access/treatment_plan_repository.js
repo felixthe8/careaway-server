@@ -146,34 +146,5 @@ TreatmentPlanAccess.prototype.getDiagnosisList = function() {
   } )
 }
 
-/**
- * Writes the diagnoses to the database
- * @param {*} diagnoses the array of diagnoses
- */
-
-TreatmentPlanAccess.prototype.writeDiagnosisList = function (diagnoses) {
-  this.db.createCollection("Conditions", function(err, res) {
-    if(err) {
-      console.log("Could not create collection")
-    } else {
-      const collection = this.db.collection('Conditions');
-      collection.count(function (err, count) {
-        // Collection is empty so write the collection object to store the diagnoses
-        if (count === 0) {
-          collection.insertOne( {"Condition" : diagnoses})
-
-        } else {
-          // Otherwise, find the document and update it with the diagnoses
-          collection.findOneAndUpdate(
-            {'Condition' : {$exists:true}},
-            {$set:{"Condition" : diagnoses }}
-          )
-        }  
-      })
-
-    }
-  })
-}
-
 
 module.exports = TreatmentPlanAccess
