@@ -135,8 +135,10 @@ api.resetCreds = (UserRepo, DB) => (req, res) => {
 
   DB.then(database => {
     const userRepo = new UserRepo(database);
+    // Calls async to check password
     getPasswordList(req.body.password).then(body => {
       if(body){
+        // if bad password is not found
         userRepo.FindUser(username).then(function(value){
           var queriedUser = value.User;
           if (queriedUser.length === 0) {
@@ -153,12 +155,18 @@ api.resetCreds = (UserRepo, DB) => (req, res) => {
           }
         });
       } else{
+        // Returns bad password checker bool
         res.json({BadPassword:true});
       }
   });
     
   });
 }
+/**
+ * Connects to API to Retrieve and Compare to HIBP
+ * Returns Bool
+ * @param {*} password 
+ */
 function getPasswordList(password){
   const passHashed = CryptoJS.SHA1(password).toString();
   const passPrefix = passHashed.substring(0,5);
@@ -166,6 +174,7 @@ function getPasswordList(password){
   return requestPromise(badPasswordURL+ passPrefix).then(body =>{
     var goodPasswordCheck = true;
     var i = 0;
+    // Turns string list to array
     const hashList = body.split("\r\n");
     hashList.forEach(element => {
       if (element.split(":")[0]===passSuffix){
