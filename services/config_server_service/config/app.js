@@ -105,6 +105,11 @@ app.use('/breach', function (req,res){
           console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
         });
 
+        request(config.routes.feedbackBreach, function (error, response, body) {
+          console.log('error:', error); // Print the error if one occurred and handle it
+          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        });
+
         request(config.routes.mail_service, function(error, response, body){
             console.log('error', error);
             console.log('statusCode', response && response.statusCode);

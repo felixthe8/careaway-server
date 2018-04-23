@@ -1,6 +1,7 @@
 const accountConfig = require('@accountConfig');
 const treatmentConfig = require('@treatmentConfig');
 const appointmentConfig = require('@appointmentConfig');
+const feedbackConfig = require('@feedbackConfig');
 const mailConfig = require('@mailConfig');
 
 const config = {};
@@ -75,6 +76,9 @@ config.routes = {
   getSingleDiagnosis: `${treatmentConfig.routes.getSingleDiagnosis}`,
   saveDiagnosis: `${treatmentConfig.routes.saveDiagnosis}`,
 
+  // Feedback Module Routes
+  feedback: `${feedbackConfig.routes.feedback}`,
+
   // Mail Module Routes
   createMail: `${mailConfig.routes.createMail}`,
   getMail: `${mailConfig.routes.getMail}`,
@@ -87,6 +91,7 @@ config.url = {
   account : `${accountConfig.server.host}:${accountConfig.server.port}`,
   treatment : `${treatmentConfig.server.host}:${treatmentConfig.server.port}`,
   appointment : `${appointmentConfig.server.host}:${appointmentConfig.server.port}`,
+  feedback : `${feedbackConfig.server.host}:${feedbackConfig.server.port}`,
   mail: `${mailConfig.server.host}:${mailConfig.server.port}`
 };
 
