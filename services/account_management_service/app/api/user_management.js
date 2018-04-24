@@ -52,7 +52,7 @@ api.getAllPatients = (UserRepo, DB) => (req, res) => {
 api.getAppointmentPatientInfo = (UserRepo, DB) => (req, res) => {
   DB.then(database => {
     const userRepo = new UserRepo(database);
-    
+
     userRepo.FindUser(req.query.username).then(result => {
       // Construct the user object being returned.
       const patient = returnUser(result.User[0]);
@@ -60,7 +60,7 @@ api.getAppointmentPatientInfo = (UserRepo, DB) => (req, res) => {
         // Need to add this into the user repo
         const mp = [];
         mp.push(returnUser(result));
-        
+
         const returning = {success: true, patient: patient, mp: mp};
         res.json(returning);
       });
@@ -84,6 +84,22 @@ api.returnCode = (UserRepo,DB) => (req,res) => {
       res.json({medicalcode: value.User[0].accountType.medicalcode});
     })
   })
+}
+
+// Returns the MP username of the a patient's medical profesional
+// Function takes in a patient's username as a parameter
+api.getMedicalProfessional = (UserRepo, DB) => (req,res) => {
+  const username = req.query.username;
+  console.log(username);
+  DB.then(database => {
+    var userRepo = new UserRepo(database);
+    userRepo.FindUser(username).then(function(value) {
+      let currentMP = value.accountType.medicalcode;
+      userRepo.FindMP(currentMP).then(function(value) {
+        res.json(value.username);
+      })
+    });
+  });
 }
 
 module.exports = api;

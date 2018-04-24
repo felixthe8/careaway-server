@@ -24,10 +24,10 @@ module.exports = (app) => {
       return config.routes.ssoLogin;
     }
   }));
-    
+
   app.route('/getLoginInfo').get(csrf.createCSRFToken, proxy(url, {
     proxyReqPathResolver: function(req) {
-      return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`; 
+      return `${config.routes.getLoginInfo}${req._parsedOriginalUrl.search}&csrfToken=${req.csrfToken}`;
     }
   }));
 
@@ -45,12 +45,12 @@ module.exports = (app) => {
 
   app.use(csrf.CsrfValidation);
   // TODO: refactor registration in passport
-  // Proxies POST request to register a patient the account management module. 
+  // Proxies POST request to register a patient the account management module.
   // localhost:4100/account/api/registration
   app.route('/register').post(proxy(url, {
     proxyReqPathResolver: function(req) {
       return config.routes.register;
-    } 
+    }
   }));
 
   // Proxies login POST request.
@@ -60,40 +60,36 @@ module.exports = (app) => {
     }
   }));
 
-
-
-  
-
   app.route('/validate-username').post(proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.validateUsername;
     }
   }));
-  
+
   app.route('/validate-answers').post(proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.validateAnswers;
     }
   }));
-  
+
   app.route('/security-questions').get(proxy(url, {
     proxyReqPathResolver: function(req) {
-      return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`; 
+      return `${config.routes.securityQues}${req._parsedOriginalUrl.search}`;
     }
   }));
-  
+
   app.route('/reset-creds').put(proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.resetCreds;
     }
   }));
-  
+
   app.route('/ssoRegisterMed').post(proxy(url, {
     proxyReqPathResolver: function() {
       return config.routes.ssoRegisterMed;
     }
   }));
-  
+
   // Past this point, the requester needs to be authenticated
   const passportConfig = require('../api/authenticator');
   app.use(passportConfig.isAuthenticated);
@@ -104,13 +100,13 @@ module.exports = (app) => {
       return `${config.routes.getUser}${req._parsedOriginalUrl.search}`;
     }
   }));
-  
+
   app.route('/get-patients').get(proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getPatients}${req._parsedOriginalUrl.search}`;
     }
   }));
-  
+
   app.route('/patient-appointment-info').get(proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.patientAppointmentInfo}${req._parsedOriginalUrl.search}`;
@@ -121,7 +117,7 @@ module.exports = (app) => {
   // Shouldn't this be in user management????
   app.route('/returnCode').get(proxy(url, {
     proxyReqPathResolver: function(req) {
-      return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`; 
+      return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`;
     }
   }));
 };

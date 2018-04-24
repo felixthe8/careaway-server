@@ -15,4 +15,6 @@ module.exports = (app) => {
 
   // GET
   app.route(config.routes.returnCode).get(api.returnCode(models.UserRepo, models.DB));
+
+  app.route(config.routes.getMedicalProfessional).get(api.getMedicalProfessional(models.UserRepo, models.DB));
 }

@@ -37,6 +37,7 @@ config.routes = {
   returnCode : `${accountConfig.routes.returnCode}`,
   patientUpdate: `${treatmentConfig.routes.patientUpdate}`,
   getPatientUserNames: `${treatmentConfig.routes.getPatientUserNames}`,
+  getMedicalProfessional: `${accountConfig.routes.getMedicalProfessional}`,
 
   // Appointment Module Routes
   getAppt : `${appointmentConfig.routes.get}`,
