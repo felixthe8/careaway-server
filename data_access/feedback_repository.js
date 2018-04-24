@@ -7,7 +7,7 @@ const promise = require('promise');
  */
 function FeedbackAccess(dbConnection)
 {
-  //fetches the database client connection
+  // Fetches the database client connection
   this.db = dbConnection;
 }
 /**
@@ -40,8 +40,8 @@ FeedbackAccess.prototype.Create = function(feedback)
 FeedbackAccess.prototype.EditFeedback = function(feedback){
   const collection = this.db.collection('Feedbacks');
   collection.updateOne(
-    {'_id' : new objectID(feedback._id) },//looks for id in the database
-    { $set: {'seen': feedback.seen }},//inserts new seen value
+    {'_id' : new objectID(feedback._id) }, // Looks for id in the database
+    { $set: {'seen': feedback.seen }}, // Inserts new seen value
     function(err, result){
       console.log('Updated Feedback');
     }
