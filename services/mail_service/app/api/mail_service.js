@@ -3,6 +3,7 @@ const api = {};
 // ajax post request to mail document
 api.createMail = (MailRepo, DB) => (req,res) => {
 
+  console.log("in post");
   DB.then(database => {
     var mailRepo = new MailRepo(database);
     mailRepo.CreateMail(req.body.patient, req.body.mp, req.body.message);
