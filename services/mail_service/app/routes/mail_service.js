@@ -9,8 +9,4 @@ module.exports = (app) => {
   app.route(config.routes.getMail).get(api.getMail(models.MailRepo, models.DB));
   app.route(config.routes.deleteMail).get(api.deleteMail(models.MailRepo, models.DB));
 
-  // test server
-  app.route('/').get((req,res) => {
-     res.send('Test for mail service');
-  });
 }
