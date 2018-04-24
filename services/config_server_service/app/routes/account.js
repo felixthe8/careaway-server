@@ -113,11 +113,15 @@ module.exports = (app) => {
     }
   }));
 
-
-  // Shouldn't this be in user management????
   app.route('/returnCode').get(proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.returnCode}${req._parsedOriginalUrl.search}`;
+    }
+  }));
+
+  app.route('/getMedicalProfessional').get(proxy(url, {
+    proxyReqPathResolver: function(req) {
+      return `${config.routes.getMedicalProfessional}${req._parsedOriginalUrl.search}`;
     }
   }));
 };

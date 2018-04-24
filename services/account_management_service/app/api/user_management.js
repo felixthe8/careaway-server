@@ -90,11 +90,12 @@ api.returnCode = (UserRepo,DB) => (req,res) => {
 // Function takes in a patient's username as a parameter
 api.getMedicalProfessional = (UserRepo, DB) => (req,res) => {
   const username = req.query.username;
+  console.log("username:");
   console.log(username);
   DB.then(database => {
     var userRepo = new UserRepo(database);
     userRepo.FindUser(username).then(function(value) {
-      let currentMP = value.accountType.medicalcode;
+      let currentMP = value.User[0].accountType.medicalcode;
       userRepo.FindMP(currentMP).then(function(value) {
         res.json(value.username);
       })
