@@ -15,26 +15,18 @@ function MailAccess(dbConnection) {
  * attribute of the appointee and initiator
  * mail list
  *
- * @param {*} initiator the initiator username
- * @param {*} appointee the appointee username
+ * @param {*} sender the initiator username
+ * @param {*} receiver the appointee username
  * @param {*} message the message object that will be appended to the user
  */
-MailAccess.prototype.CreateMail = function(initiator, appointee, message) {
+MailAccess.prototype.CreateMail = function(sender, receiver, message) {
   const collection = this.db.collection('Users');
   collection.updateOne(
-    {'username' : initiator}, //looks for initiator in the database
-    { $push: {'accountType.mail': message}}, //inserts new message on the array
+    {'username' : receiver}, //looks for recipient in the database
+    { $push: {'accountType.mail': message }}, //inserts new message on the array
     function(err, result) {
       console.log('Added message');
-    }
-  );
-  collection.updateOne(
-    {'username' : appointee}, //looks for appointee username in the database
-    { $push: {'accountType.mail': message}}, //inserts new message on the array
-    function(err, result) {
-      console.log('Added message');
-    }
-  );
+    });
 };
 
 /**

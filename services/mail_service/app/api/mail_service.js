@@ -1,11 +1,12 @@
 const api = {};
 
 // ajax post request to mail document
-api.createMail = (MailRepo, DB) => (req,res) => {
+api.createMail = (MailRepo, MailModel, DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);
-    mailRepo.CreateMail(req.body.patient, req.body.mp, req.body.message);
+    var mail = new MailModel(req.body.sender, req.body.message);
+    mailRepo.CreateMail(req.body.sender, req.body.receiver, mail);
     res.json({ success: true });
   });
 }
