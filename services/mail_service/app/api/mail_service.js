@@ -15,7 +15,7 @@ api.getMail = (MailRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);
-    mailRepo.GetMail(req.body.patient, req.body.mp, req.body.message).then(result => {
+    mailRepo.GetMail(req.query.username).then(result => {
       res.json(result);
     });
   });

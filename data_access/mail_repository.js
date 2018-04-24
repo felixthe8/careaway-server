@@ -47,12 +47,13 @@ MailAccess.prototype.GetMail= function(username) {
 
   return new promise(function(fullfill,reject) {
     collection.findOne({'username' : username },function(err, result) {
+
       if(err) {
-        console.log('Failed to get query');
+        console.log('Failed to get mail query');
         reject(err);
       }
       else {
-        console.log('Successfully got query');
+        console.log('Successfully got mail query');
         if(result !== null) {
           var messages = result.accountType.mail;
           //return an object containing all the messages of the user
