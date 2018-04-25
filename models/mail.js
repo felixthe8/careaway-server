@@ -5,8 +5,8 @@ var patient = require('./patient');
   Model for mail on the CareAway system.
 */
 
-function Mail (receiver, message) {
-  this.receiver = receiver || '';
+function Mail (sender, message) {
+  this.sender = sender || '';
   this.message = message || '';
 }
 
