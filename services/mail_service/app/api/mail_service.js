@@ -1,11 +1,12 @@
 const api = {};
 
 // ajax post request to mail document
-api.createMail = (MailRepo, DB) => (req,res) => {
+api.createMail = (MailRepo, MailModel, DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);
-    mailRepo.CreateMail(req.patient, req.mp, req.message);
+    var mail = new MailModel(req.body.sender, req.body.message);
+    mailRepo.CreateMail(req.body.sender, req.body.receiver, mail);
     res.json({ success: true });
   });
 }
@@ -15,7 +16,7 @@ api.getMail = (MailRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);
-    mailRepo.GetMail(req.patient, req.mp, req.message).then(result => {
+    mailRepo.GetMail(req.query.username).then(result => {
       res.json(result);
     });
   });
@@ -26,7 +27,7 @@ api.deleteMail = (MailRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);
-    mailRepo.DeleteMail(req.patient, req.mp, req.message);
+    mailRepo.DeleteMail(req.body.patient, req.body.mp, req.body.message);
     res.json({ success: true });
   })
 

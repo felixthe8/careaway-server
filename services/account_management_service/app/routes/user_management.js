@@ -27,4 +27,6 @@ module.exports = (app) => {
   // POST
   // Acceptance of mp transfer, then removes that mp transfer request.
   app.route(config.routes.acceptTransfer).post(api.acceptTransfer(models.UserRepo, models.DB), api.removeMpTransfer(models.TransferRepo, models.DB));
+
+  app.route(config.routes.getMedicalProfessional).get(api.getMedicalProfessional(models.UserRepo, models.DB));
 }

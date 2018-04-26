@@ -5,8 +5,7 @@ const promise = require('promise');
  * Constructor of the User Repository
  * @param {*} dbConnection the database connection string
  */
-function MailAccess(dbConnection)
-{
+function MailAccess(dbConnection) {
   //fetches the database client connection
   this.db = dbConnection;
 }
@@ -16,26 +15,18 @@ function MailAccess(dbConnection)
  * attribute of the appointee and initiator
  * mail list
  *
- * @param {*} initiator the initiator username
- * @param {*} appointee the appointee username
+ * @param {*} sender the initiator username
+ * @param {*} receiver the appointee username
  * @param {*} message the message object that will be appended to the user
  */
-MailAccess.prototype.CreateMail = function(initiator, appointee, message){
+MailAccess.prototype.CreateMail = function(sender, receiver, message) {
   const collection = this.db.collection('Users');
   collection.updateOne(
-    {'username' : initiator}, //looks for initiator in the database
-    { $push: {'accountType.mail': message}}, //inserts new message on the array
-    function(err, result){
+    {'username' : receiver}, //looks for recipient in the database
+    { $push: {'accountType.mail': message }}, //inserts new message on the array
+    function(err, result) {
       console.log('Added message');
-    }
-  );
-  collection.updateOne(
-    {'username' : appointee}, //looks for appointee username in the database
-    { $push: {'accountType.mail': message}}, //inserts new message on the array
-    function(err, result){
-      console.log('Added appointment');
-   }
-  );
+    });
 };
 
 /**
@@ -43,28 +34,22 @@ MailAccess.prototype.CreateMail = function(initiator, appointee, message){
  * @param {*} username the user identifier
  * @returns {*} a promise that returns a list of messages on a user
  */
-MailAccess.prototype.GetMail= function(username){
+MailAccess.prototype.GetMail= function(username) {
   const collection = this.db.collection('Users');
 
-  return new promise(function(fullfill,reject)
-  {
-    collection.findOne({'username' : username },function(err, result)
-    {
-      if(err)
-      {
-        console.log('Failed to get query');
+  return new promise(function(fullfill,reject) {
+    collection.findOne({'username' : username },function(err, result) {
+      if(err) {
         reject(err);
       }
-      else
-      {
-        console.log('Successfully got query');
-        if(result !== null){
+      else {
+        if(result !== null) {
           var messages = result.accountType.mail;
           //return an object containing all the messages of the user
           var messageList = {'mail' : messages};
           fullfill(messageList);
         }
-        else{
+        else {
           fullfill(null);
         }
       }
@@ -81,18 +66,16 @@ MailAccess.prototype.GetMail= function(username){
  * @param {*} appointee the appointee username
  * @param {*} message the message object that will be deleted
  */
-MailAccess.prototype.DeleteMail= function(initiator, appointee, message){
+MailAccess.prototype.DeleteMail= function(initiator, appointee, message) {
   const collection = this.db.collection('Users');
-  collection.updateOne(
-    {'username' : initiator }, //looks for username in the database
+  collection.updateOne({'username' : initiator }, //looks for username in the database
     { $pull: {'accountType.mail': message}}, //deletes the message
-      function(err, result){
+      function(err, result) {
         console.log('Remove message');
-    }
-  );
+    });
   collection.updateOne({'username' : message}, //looks for username in the database
     { $pull: {'accountType.mail': message}}, //deletes the message
-      function(err, result){
+      function(err, result) {
       console.log('Remove message');
   });
 };

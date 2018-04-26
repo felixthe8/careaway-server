@@ -28,11 +28,11 @@ module.exports = {
 
     // User management
     getLoginInfo:'/account/api/getLoginInfo',
-    
     getUser: '/account/api/get-user',
     getPatients: '/account/api/get-all-patients',
     getAllInfoForPatientAppointment: '/account/api/get-patient-appointment-info',
     returnCode: '/account/api/returnCode',
+    getMedicalProfessional: '/account/api/getMedicalProfessional',
 
     // Transfer
     mpTransfer: '/account/api/newTransfer',

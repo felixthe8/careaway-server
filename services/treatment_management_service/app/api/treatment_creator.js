@@ -52,6 +52,7 @@ api.createTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
 }
 
 api.updateTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
+  console.log("FAGGOT");
   var meter = {
     label: req.body.treatment.label,
     question: req.body.treatment.question,
@@ -61,10 +62,10 @@ api.updateTreatmentMeter = (TreatmentRepo,DB) => (req,res) => {
     created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
     updated_at: null
   }
-
+  console.log(meter);
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.UpdateTreatment(req.body.user, meter);
+    treatmentRepo.EditTreatment(req.body.user, meter);
     res.json({ success: true });
   })
 
@@ -99,10 +100,11 @@ api.updateTreatmentChecklist = (TreatmentRepo,DB) => (req,res) => {
     created_at: moment(new Date(Date.now())).format("YYYY-MM-DD"),
     updated_at: null
   }
+  console.log(checklist);
 
   DB.then(database => {
     var treatmentRepo = new TreatmentRepo(database);
-    treatmentRepo.UpdateTreatment(req.body.user, checklist);
+    treatmentRepo.EditTreatment(req.body.user, checklist);
     res.json({ success: true });
   })
 
