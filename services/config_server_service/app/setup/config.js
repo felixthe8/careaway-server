@@ -1,6 +1,7 @@
 const accountConfig = require('@accountConfig');
 const treatmentConfig = require('@treatmentConfig');
 const appointmentConfig = require('@appointmentConfig');
+const feedbackConfig = require('@feedbackConfig');
 const mailConfig = require('@mailConfig');
 
 const config = {};
@@ -35,6 +36,13 @@ config.routes = {
   patientAppointmentInfo : `${accountConfig.routes.getAllInfoForPatientAppointment}`,
   getLoginInfo : `${accountConfig.routes.getLoginInfo}`,
   returnCode : `${accountConfig.routes.returnCode}`,
+  // Transfer Routes
+  mpTransfer: `${accountConfig.routes.mpTransfer}`,
+  removeTransfer: `${accountConfig.routes.removeTransfer}`,
+  getTransferInformation: `${accountConfig.routes.getTransferInformation}`,
+  acceptTransfer: `${accountConfig.routes.acceptTransfer}`,
+
+  // Appointment routes.
   patientUpdate: `${treatmentConfig.routes.patientUpdate}`,
   getPatientUserNames: `${treatmentConfig.routes.getPatientUserNames}`,
   getMedicalProfessional: `${accountConfig.routes.getMedicalProfessional}`,
@@ -76,6 +84,9 @@ config.routes = {
   getSingleDiagnosis: `${treatmentConfig.routes.getSingleDiagnosis}`,
   saveDiagnosis: `${treatmentConfig.routes.saveDiagnosis}`,
 
+  // Feedback Module Routes
+  feedback: `${feedbackConfig.routes.feedback}`,
+
   // Mail Module Routes
   createMail: `${mailConfig.routes.createMail}`,
   getMail: `${mailConfig.routes.getMail}`,
@@ -88,6 +99,7 @@ config.url = {
   account : `${accountConfig.server.host}:${accountConfig.server.port}`,
   treatment : `${treatmentConfig.server.host}:${treatmentConfig.server.port}`,
   appointment : `${appointmentConfig.server.host}:${appointmentConfig.server.port}`,
+  feedback : `${feedbackConfig.server.host}:${feedbackConfig.server.port}`,
   mail: `${mailConfig.server.host}:${mailConfig.server.port}`
 };
 

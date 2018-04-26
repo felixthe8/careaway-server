@@ -8,4 +8,8 @@ module.exports = (app) => {
   // update diagnosis data for patient
   app.route(config.routes.updateDiagnosis).put(api.updateDiagnosis(models.UserRepo, models.DB));
 
+  //TODO: Add route for updating med pro and patient 
+  // TODO: think of route for med's request.
+  //TODO: get route for request
+  app.route(config.routes.getTransferInformation).get(api.getTransfer(models.TransferRepo, models.DB));
 }

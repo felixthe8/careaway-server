@@ -9,7 +9,7 @@ module.exports = {
     register: '/account/api/registration',
     ssoRegisterPatient: '/account/api/ssoregistration/patient',
     ssoRegisterMed: '/account/api/ssoregistration/medical-professional',
-
+    badPassword: 'https://api.pwnedpasswords.com/range/',
     // Authentication
     login: '/account/api/authentication',
     validateUsername: '/account/api/validate-username',
@@ -19,7 +19,8 @@ module.exports = {
 
     // Patient
     updateDiagnosis: '/account/api/update-diagnosis',
-
+    getTransferInformation: '/account/api/transfer-info',
+    
     // sso
     ssoLogin: '/SSO/login',
     ssoRegistration: '/SSO/registration',
@@ -33,6 +34,11 @@ module.exports = {
     returnCode: '/account/api/returnCode',
     getMedicalProfessional: '/account/api/getMedicalProfessional',
 
+    // Transfer
+    mpTransfer: '/account/api/newTransfer',
+    removeTransfer: '/account/api/removeTransfer',
+    acceptTransfer: '/account/api/acceptTransfer',
+    
     accountBreach: 'http://localhost:4100/breach', // Why is this the full url???
   },
   server: {

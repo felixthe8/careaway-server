@@ -1,17 +1,21 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser'); // Parses request bodies
+
 const cors = require('cors');
 const helmet = require('helmet');
+const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const consign = require('consign');
+
 var breached = false;
-// Allows only one cross origin site
+
+// Options to allow only one cross origin site.
 const corsOptions = {
   origin: 'http://localhost:8081',
   optionsSuccessStatus: 200,
   credentials: true
 };
+
 app.all('*',function(req,res,next){
 // Middleware for breach notifcation
   if(breached){
@@ -21,10 +25,18 @@ app.all('*',function(req,res,next){
       next();
     }
 });
+
+// Allows one site (localhost:8081) from a different origin in.
 app.use(cors(corsOptions));
+
+// Security header.
 app.use(helmet());
+
+// Parses request bodies (either url encoded or json).
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Logger for requests.
 app.use(morgan('dev'));
 
 app.use('/breach', function(req,res){
@@ -32,10 +44,12 @@ app.use('/breach', function(req,res){
     breached = true;
 
 });
-// Makes sure setup, api, and routes are loaded before anything else.
+
+// Makes sure setup, api, and routes are loaded before the application.
 consign({ cwd: 'services' })
   .include('appointment_scheduling_service/app/setup')
   .then('appointment_scheduling_service/app/api')
   .then('appointment_scheduling_service/app/routes')
   .into(app);
+
 module.exports = app;

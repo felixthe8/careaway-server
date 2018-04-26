@@ -29,6 +29,11 @@
     "@treatmentConfig": "./services/treatment_management_service/config/index.js",
     "@treatmentAPI": "./services/treatment_management_service/app/api",
     "@treatmentAPP": "./services/treatment_management_service/config/app.js",
+    "@feedback": "./services/feedback_service",
+    "@feedbackModels": "./services/feedback_service/app/setup",
+    "@feedbackConfig": "./services/feedback_service/config/index.js",
+    "@feedbackAPI": "./services/feedback_service/app/api",
+    "@feedbackAPP": "./services/feedback_service/config/app.js",
     "@configServer": "./services/config_server_service",
     "@configServerAPI": "./services/config_server_service/app/api",
     "@configServerAPP": "./services/config_server_service/config/app.js",
@@ -38,7 +43,8 @@
     "@mailConfig": "./services/mail_service/config/index.js",
     "@mailModel": "./services/mail_service/app/setup",
     "@mailAPI": "./services/mail_service/app/api",
-    "@mailAPP": "./services/mail_service/config/app.js"
+    "@mailAPP": "./services/mail_service/config/app.js",
+    "@init": "./data_access/init_repository.js"
   },
   "bugs": {
     "url": "https://github.com/CrystalChun/careaway-server/issues"
@@ -71,6 +77,7 @@
     "passport-local": "^1.0.0",
     "promise": "^8.0.1",
     "randomstring": "^1.1.5",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2"
   }
 }

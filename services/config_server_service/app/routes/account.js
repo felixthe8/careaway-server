@@ -119,6 +119,29 @@ module.exports = (app) => {
     }
   }));
 
+  app.route('/mpTransfer').post(proxy(url, {
+    proxyReqPathResolver: function() {
+      return config.routes.mpTransfer;
+    }
+  }));
+  app.route('/removeTransfer').post(proxy(url,{
+    proxyReqPathResolver: function(req) {
+      return config.routes.removeTransfer;
+    }
+  }));
+
+  app.route('/getTransferInfo').get(proxy(url, {
+    proxyReqPathResolver: function(req) {
+      return `${config.routes.getTransferInformation}${req._parsedOriginalUrl.search}`;
+    }
+  }));
+
+  app.route('/acceptTransfer').post(proxy(url, {
+    proxyReqPathResolver: function(req) {
+      return config.routes.acceptTransfer;
+    }
+  }))
+
   app.route('/getMedicalProfessional').get(proxy(url, {
     proxyReqPathResolver: function(req) {
       return `${config.routes.getMedicalProfessional}${req._parsedOriginalUrl.search}`;
