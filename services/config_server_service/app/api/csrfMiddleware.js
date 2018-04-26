@@ -10,20 +10,17 @@ function CsrfValidation(req,res,next){
     if(csrfToken){
       tRepo.findExistingToken(csrfToken).then(function(value){
         if (!tokens.verify(value.token.secret, value.token.value)) {
-          console.log('BAD CRSF Token');
           res.statusCode(400);
           res.end();
         } else {
           next();
           }
         }, function(error){
-          console.log('BAD CRSF Token');
           res.statusCode(400);
           res.end();
         });
       }
       else{
-        console.log('BAD CRSF Token');
         res.statusCode(400);
         res.end();
       }

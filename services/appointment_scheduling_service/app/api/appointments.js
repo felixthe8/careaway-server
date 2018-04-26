@@ -34,7 +34,6 @@ api.create = (Appointment, AppointmentRepo, DB) => (req, res) => {
   }).catch(err => {
     // An error occurred accessing the database.
     console.log(err);
-    console.log("There was an error accessing the database.");
     res.send({success: false, reason: "Server error. Your request cannot be handled at this time."});
   });
 };
