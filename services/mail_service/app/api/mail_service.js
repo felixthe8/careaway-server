@@ -27,7 +27,8 @@ api.deleteMail = (MailRepo,DB) => (req,res) => {
 
   DB.then(database => {
     var mailRepo = new MailRepo(database);
-    mailRepo.DeleteMail(req.body.patient, req.body.mp, req.body.message);
+    console.log(req.body);
+    mailRepo.DeleteMail(req.body.sender, req.body.receiver, req.body.message);
     res.json({ success: true });
   })
 
