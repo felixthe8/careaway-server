@@ -6,7 +6,7 @@ module.exports = (app) => {
     //const passportConfig = require('@account/app/setup/passport');
     //const passport = passportConfig.run();
     const passport = app.passport;
-
+    
     // POST /account/api/authentication
     // authenticates user and determines account type
     app.route(config.routes.login).post(api.login(passport));
