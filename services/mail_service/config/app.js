@@ -8,7 +8,7 @@ const consign = require('consign');
 var breached = false;
 // Allows only one cross origin site
 const corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: ['http://localhost:8081','http://localhost:8085'],
   optionsSuccessStatus: 200,
   credentials: true
 };
@@ -25,6 +25,7 @@ app.use(cors(corsOptions));
 app.use(helmet());
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:8081");
+  res.header("Access-Control-Allow-Origin", "http://localhost:8085");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Credentials", "true");
   next();

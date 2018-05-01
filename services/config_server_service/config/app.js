@@ -17,7 +17,7 @@ var breached = false;
 
 // For cross origin requests (client)
 const corsOptions = {
-  origin: 'http://localhost:8081',
+  origin: ['http://localhost:8081', 'http://localhost:8085'],
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -54,6 +54,7 @@ app.use(cookieParser());
 // Sets headers to allow cross origin site (client)
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:8081");
+  res.header("Access-Control-Allow-Origin", "http://localhost:8085");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Credentials", "true");
   next();
