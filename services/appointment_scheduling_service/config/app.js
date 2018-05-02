@@ -11,7 +11,7 @@ var breached = false;
 
 // Options to allow only one cross origin site.
 const corsOptions = {
-  origin: ['http://localhost:8081','http://localhost:8085'],
+  origin: ['https://careaway.me','http://localhost:8081','http://localhost:8085'],
   optionsSuccessStatus: 200,
   credentials: true
 };

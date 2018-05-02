@@ -16,7 +16,7 @@ Database.prototype.Connect = function()
   return new promise( function(fulfill,reject)
   {
   //conects to localhost
-    MongoClient.connect('mongodb://192.168.99.100:27017', 
+    MongoClient.connect('mongodb://mongo:27017', 
       function(err, client)
       {
         var db=client.db('CareAway');

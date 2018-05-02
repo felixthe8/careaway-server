@@ -8,7 +8,7 @@ const passport = require('@accountModels/passport')();
 const consign = require('consign');
 
 const corsOptions = {
-    origin: ['http://localhost:8081', 'http://localhost:8085'],
+    origin: ['https://careaway.me','http://localhost:8081', 'http://localhost:8085'],
     optionsSuccessStatus: 200,
     credentials: true
 };

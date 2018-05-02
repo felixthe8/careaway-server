@@ -17,7 +17,7 @@ var breached = false;
 
 // For cross origin requests (client)
 const corsOptions = {
-  origin: ['http://localhost:8081', 'http://localhost:8085'],
+  origin: ['https://careaway.me','http://localhost:8081', 'http://localhost:8085'],
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -42,7 +42,7 @@ app.use(session({
     secure: false
   },
   store: new MongoStore({
-    url: 'mongodb://192.168.99.100:27017/test',
+    url: 'mongodb://mongo:27017/test',
   })
 }));
 
@@ -60,7 +60,9 @@ app.get('*',function(req, res, next) {
     next();
   }
 });
-
+app.get('/test', (req, res) => {
+  res.json({Success: true});
+})
 app.get('/isBreached', csrf.createCSRFToken, function(req,res) {
   // Middleware handle for breach for homepage
   res.send({ down : false, 'csrfToken' : req.csrfToken }); 
