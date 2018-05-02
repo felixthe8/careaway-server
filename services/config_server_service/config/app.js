@@ -42,7 +42,7 @@ app.use(session({
     secure: false
   },
   store: new MongoStore({
-    url: 'mongodb://localhost:27017/test',
+    url: 'mongodb://mongo:27017/test',
   })
 }));
 
