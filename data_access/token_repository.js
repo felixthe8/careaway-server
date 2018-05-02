@@ -51,7 +51,6 @@ TokenAccess.prototype.getAllTokens = function(){
         console.log('Failed to get query');
         reject(err);
       } else {
-        console.log('Successfully got query');
         var results = {'token' : docs};
         fullfill(results);
       }
@@ -72,7 +71,6 @@ TokenAccess.prototype.findExistingToken = function(token){
         console.log('Failed to get query');
           reject(err);
       } else {
-        console.log('Successfully got query');
         if(docs.length > 0){
           fullfill(true);
         } else {

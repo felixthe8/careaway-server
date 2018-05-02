@@ -1,6 +1,7 @@
 const mongoClient = require('mongodb').MongoClient;
 const promise = require('promise');
 /**
+ * @param {*} dbConnection the database connection string 
  * Constructor of the User Repository
  */
 function TreatmentPlanAccess(dbConnection)
@@ -61,6 +62,7 @@ TreatmentPlanAccess.prototype.DeleteTreatment= function(patient,treatment){
  * Gets all treatment plans of a particular patient
  *
  * @param {*} patient the username of the patient
+ * @return {*} the promise that returns a query of treatments
  */
 TreatmentPlanAccess.prototype.GetPatientTreatment = function(patient){
   const collection = this.db.collection('Users');
@@ -75,7 +77,6 @@ TreatmentPlanAccess.prototype.GetPatientTreatment = function(patient){
       }
       else
       {
-        console.log('Successfully got query');
         //Error check to see if the result is empty
         if(result!=null){
           var treatments = result.accountType.treatment;
@@ -97,6 +98,7 @@ TreatmentPlanAccess.prototype.GetPatientTreatment = function(patient){
  *
  * @param {*} MPCode the medical professional code
  * @param {*} Diagnosis the designated diagnosis
+ * @return {*} a promise on returning the treatments of a specific diagnosis
  */
 TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis){
   const collection = this.db.collection('Users');
@@ -112,7 +114,6 @@ TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis
       }
       else
       {
-        console.log('Successfully got query');
         //puts all treatment plans into one array
         var Treatments =[];
         for(var i=0; i<docs.length; i++)
@@ -130,6 +131,7 @@ TreatmentPlanAccess.prototype.GetTreatmentsDiagnosis = function(MPCode,Diagnosis
 /**
  * Gets the diagnose(s) supported by the CareAway Treatment Planner
  * that they medical professional can choose from  
+ * @return {*} a promise of the diagnosis list
 */
 TreatmentPlanAccess.prototype.getDiagnosisList = function() {
   const collection = this.db.collection('Conditions');
@@ -147,4 +149,4 @@ TreatmentPlanAccess.prototype.getDiagnosisList = function() {
 }
 
 
-module.exports = TreatmentPlanAccess
+module.exports = TreatmentPlanAccess;

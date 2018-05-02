@@ -42,7 +42,7 @@ app.use(session({
     secure: false
   },
   store: new MongoStore({
-    url: 'mongodb://localhost:27017/test',
+    url: 'mongodb://192.168.99.100:27017/test',
   })
 }));
 
@@ -51,16 +51,7 @@ app.use(cors(corsOptions));
 app.use(helmet());
 app.use(cookieParser());
 
-// // Sets headers to allow cross origin site (client)
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:8081");
-//   res.header("Access-Control-Allow-Origin", "http://localhost:8085");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   res.header("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
 
-// What is this used for??? Why a wildcard???
 app.get('*',function(req, res, next) {
   // Middleware handler for breach
   if (breached) {
@@ -72,7 +63,7 @@ app.get('*',function(req, res, next) {
 
 app.get('/isBreached', csrf.createCSRFToken, function(req,res) {
   // Middleware handle for breach for homepage
-  res.send({ down : false, 'csrfToken' : req.csrfToken }); // ? Shouldn't this send breached? res.send({down:breached})
+  res.send({ down : false, 'csrfToken' : req.csrfToken }); 
 });
 
 
