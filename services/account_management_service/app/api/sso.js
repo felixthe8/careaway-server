@@ -92,8 +92,8 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
  */
 api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
-  // var token = req.headers.token;
-  var token = req.body.token;
+  var token = req.headers.token;
+  // var token = req.body.token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
