@@ -24,7 +24,6 @@ UserAccess.prototype.Create = function(user)
     collection.insertOne(user, function(err, result)
     {
       if(err === null){
-        console.log('Inserted User');
         fulfill(true);
       }
       else{
@@ -96,7 +95,6 @@ UserAccess.prototype.ChangeMP = function(username, mpcode){
       { $set: {'accountType.medicalcode':mpcode}},//inserts new mpcode
       function(err, result){
         if(err) console.log(err);
-        console.log('Updated MP code');
         fulfill({success: true});
       }
     );
@@ -124,7 +122,6 @@ UserAccess.prototype.FindUser= function(username)
       }
       else
       {
-        console.log('Successfully got query');
         var results = {"User" : docs};
         fullfill(results);
       }
@@ -152,7 +149,6 @@ UserAccess.prototype.FindUserById= function(id)
       }
       else
       {
-        console.log('Successfully got query');
         var results = {"User" : docs};
         fullfill(results);
       }
@@ -180,7 +176,6 @@ UserAccess.prototype.FindMP = function(mpcode)
       }
       else
       {
-        console.log('Successfully got query');
         fullfill(result);
       }
     });
@@ -205,7 +200,6 @@ UserAccess.prototype.FindPatient = function(MPCode){
       }
       else
       {
-        console.log('Successfully got query');
         //return the array of patients in a object 
         var patients = {'patients' : docs};
         fullfill(patients);
@@ -232,7 +226,6 @@ UserAccess.prototype.GetMedicalCodes = function(){
       }
       else
       {
-        console.log('Successfully got query');
         //grabs just the Medical Professional Code and save it to an array
         var mpCode = [];
         for(var i=0; i<docs.length; i++){

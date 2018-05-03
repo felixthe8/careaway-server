@@ -67,8 +67,3 @@ const server = http.Server(configServer);
 server.listen(config.server.port, () => {
   console.log(`Config server running on port ${config.server.port}`);
 });
-
-// Create necessary collections in the backend
-var initialize = require('@init');
-var initializationObject = new initialize();
-initializationObject.init();

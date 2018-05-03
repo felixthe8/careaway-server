@@ -15,6 +15,7 @@ function FeedbackAccess(dbConnection)
  * mongodb database with received information
  * 
  * @param {*} feedback object to be inserted
+ * @return {*} the promise that returns true if successfully inserted patient
  */
 FeedbackAccess.prototype.Create = function(feedback)
 { 
@@ -64,7 +65,6 @@ FeedbackAccess.prototype.GetFeedbacks = function(){
       }
       else
       {
-        console.log('Successfully got query');
         fullfill({'result' : res});
       } 
     });

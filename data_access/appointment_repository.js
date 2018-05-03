@@ -107,7 +107,6 @@ AppointmentAccess.prototype.GetAppointment= function(username){
       }
       else
       {
-        console.log('Successfully got query');
         if(result !== null){        
           var appointments = result.accountType.appointment;
           //return an object containing all the appointments of the user

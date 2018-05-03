@@ -18,8 +18,6 @@ TokenAccess.prototype.addToken = function(token){
     {
         if(err){
             console.log(err); 
-        } else{
-            console.log('Inserted CSRF Token');
         }
     });
 };
