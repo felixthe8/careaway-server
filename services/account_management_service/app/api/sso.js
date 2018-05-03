@@ -117,25 +117,25 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
               var loginInfo = transformer.createToken(value.username);
               if(user.accountType.role === "medical-professional"){
                 res.writeHead(301,
-                  {Location: 'http://localhost:8081/MedicHome/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/8081/MedicHome/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
               else if(user.accountType.role === "patient"){
                 res.writeHead(301,
-                  {Location: 'http://localhost:8081/PatientHome/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/PatientHome/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
               else if(user.accountType.role === "system-admin"){
                 res.writeHead(301,
-                  {Location: 'http://localhost:8081/AdminHome/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/AdminHome/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
               else if(user.accountType.role === "SSO"){
                 res.writeHead(301,
-                  {Location: 'http://localhost:8081/Registration/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/Registration/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
