@@ -79,7 +79,7 @@ app.get('/isBreached', csrf.createCSRFToken, function(req,res) {
 
 
 
-app.use('/breach', function (req,res,next){
+app.post('/breach', function (req,res,next){
   // Create System admin from response
   const  username=req.body.username;
   const  password=req.body.password;
