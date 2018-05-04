@@ -3,13 +3,22 @@ const app = express();
 // npm library modules
 const cors = require('cors');
 const helmet = require('helmet');
+const bodyParser = require('body-parser'); 
 const session = require('express-session');
 const consign = require('consign');
 const morgan = require('morgan'); // logger
 const cookieParser = require('cookie-parser');
+const dbConnection = require('@dataAccess/db_connection');
+const UserRepo = require('@dataAccess/user_repository');
+const CryptoJs = require('crypto-js');
 
-const config = require('@configServerConfig')
+const config = require('@configServer/app/setup/config.js');
+
 const csrf = require('../app/api/csrfMiddleware');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 
 // breach stuff
 const request = require('request'); // For breaches
@@ -70,51 +79,56 @@ app.get('/isBreached', csrf.createCSRFToken, function(req,res) {
 
 
 
-app.use('/breach', function (req,res){
+app.use('/breach', function (req,res,next){
   // Create System admin from response
-  const systemAdmin = {
-    username:req.body.username,
-    password: req.body.password
-  }
-  // Use request module to validate System Admin
-  request.post({
-    url:     config.url.accountValidation,
-    form:   systemAdmin
-  }, function(err,httpResponse,body){
-      // Check if valid system admin
-      if(JSON.parse(httpResponse.body).accountType === 'system-admin'){
-        // Close all modules
-        request(config.routes.accountBreach, function (error, response, body) {
-          console.log('error:', error); // Print the error if one occurred and handle it
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        });
+  const  username=req.body.username;
+  const  password=req.body.password;
 
-        request(config.routes.appointmentBreach, function (error, response, body) {
-          console.log('error:', error); // Print the error if one occurred and handle it
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        });
+  new dbConnection().Connect().then(function(db){
+    const repo = new UserRepo(db);
+      repo.FindUser(username).then(function(value){
+        var queriedUser = value.User;
+          if (queriedUser.length === 0) {
+            // user was not found
+            return done(null, false, {error: 'User does not exist.'});
+          } else {
 
-        request(config.routes.treatmentBreach, function (error, response, body) {
-          console.log('error:', error); // Print the error if one occurred and handle it
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        });
+            // user was found
+            queriedUser = queriedUser[0];
+            // hash password from request and compare with hashed password in db
+            const passHashed = CryptoJs.HmacSHA256(password,queriedUser.identifier.salt).toString();
 
-        request(config.routes.feedbackBreach, function (error, response, body) {
-          console.log('error:', error); // Print the error if one occurred and handle it
-          console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        });
+            if (passHashed === queriedUser.password) { 
 
-        request(config.routes.mail_service, function(error, response, body){
-            console.log('error', error);
-            console.log('statusCode', response && response.statusCode);
-        });
-        
-        // Set MiddleWare Boolean to true
-        breached = true;
+              // Close all modules
+              request(config.routes.accountBreach, function (error, response, body) {
+                console.log('error:', error); // Print the error if one occurred and handle it
+                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+              });
 
-        }
-  });
-  res.send('Server has been breached');
+              request(config.routes.appointmentBreach, function (error, response, body) {
+                console.log('error:', error); // Print the error if one occurred and handle it
+                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+              });
+
+              request(config.routes.treatmentBreach, function (error, response, body) {
+                console.log('error:', error); // Print the error if one occurred and handle it
+                console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+              });
+              // Set MiddleWare Boolean to true
+              breached = true;
+              res.send('Server has been breached');
+              next();
+            } else {
+              res.statusCode(401);
+              res.end();
+              next();
+            }
+          }
+      })
+  })
+  
+  
 });
 
 app.use(morgan('dev'));
