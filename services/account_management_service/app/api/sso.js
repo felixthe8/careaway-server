@@ -92,8 +92,8 @@ api.ssoRegistration = (User,Salt,UserRepo,DB,Transformer) => (req, res) => {
  */
 api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
   // The message received from the third party service
-  var token = req.headers.token;
-  // var token = req.body.token;
+  //var token = req.headers.token;
+  var token = req.body.token;
   DB.then(database => {
     var userRepo = new UserRepo(database);
     // Transfomer for the message received
@@ -117,25 +117,25 @@ api.ssoLogin = (UserRepo, DB,Transformer) => (req, res) => {
               var loginInfo = transformer.createToken(value.username);
               if(user.accountType.role === "medical-professional"){
                 res.writeHead(301,
-                  {Location: 'https://careaway.me/8081/MedicHome/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/#/MedicHome/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
               else if(user.accountType.role === "patient"){
                 res.writeHead(301,
-                  {Location: 'https://careaway.me/PatientHome/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/#/PatientHome/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
               else if(user.accountType.role === "system-admin"){
                 res.writeHead(301,
-                  {Location: 'https://careaway.me/AdminHome/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/#/AdminHome/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
               else if(user.accountType.role === "SSO"){
                 res.writeHead(301,
-                  {Location: 'https://careaway.me/Registration/'+ "?jwt="+loginInfo}
+                  {Location: 'https://careaway.me/#/Registration/'+ "?jwt="+loginInfo}
                 );
                 res.end();
               }
